@@ -1,0 +1,21 @@
+title: Understanding Data
+slug: understanding-data
+chapterNumber: 2
+partNumber: 1
+partTitle: Data in the AI Era
+summary: >
+  Analytics professionals must understand structured, semi-structured, and
+  unstructured data — and which storage technology fits each type. This chapter
+  maps data types to real business examples and database choices.
+order: 2
+status: draft
+authorContext: |
+  Cover these data types with business examples:
+  - Structured: transactions, relational tables, SQL databases
+  - Semi-structured: JSON, XML, logs, APIs, MongoDB documents
+  - Unstructured: images, PDFs, emails, social media, video, audio
+  Business examples for each:
+  transactions (banks), social media (Twitter/X, Instagram), IoT sensor data,
+  images (computer vision), PDFs (document AI), emails (NLP pipelines).
+  Explain which database fits which data type and why.
+  Connect to analytics pipelines and AI training data requirements.

@@ -16,11 +16,12 @@ import {
   resolveChapterDir,
 } from './lib/paths.mjs';
 import {
+  loadBookCatalog,
   resolveSection,
   sectionFileName,
   buildAuthorPrompt,
   stripCodeFences,
-} from './lib/section-catalog.mjs';
+} from './lib/book-catalog.mjs';
 import { validateSection } from './lib/parse-section.mjs';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
@@ -69,13 +70,15 @@ if (!apiKey) {
 
 const bookMeta = loadBookMeta(args.book);
 const chapterMeta = loadChapterMeta(args.book, args.chapter);
-const section = resolveSection(args.section);
+const catalog = loadBookCatalog(args.book);
+const section = resolveSection(catalog, args.section);
 const model = args.model ?? process.env.OPENAI_MODEL ?? 'gpt-4o';
 const fileName = sectionFileName(section);
 const prompt = buildAuthorPrompt({
   bookMeta,
   chapterMeta,
   section,
+  catalog,
   extraInstructions: args.instructions ?? '',
 });
 

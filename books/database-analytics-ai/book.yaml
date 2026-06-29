@@ -1,0 +1,19 @@
+title: Database and Distributed Systems for Analytics in the Age of AI
+subtitle: A Practical Guide to Modern Data Management, SQL, NoSQL, Vector Databases, and AI Applications
+slug: database-analytics-ai
+description: >
+  A practical guide for Master in Analytics students to select, design, query,
+  and integrate the right data technologies for AI and analytics applications.
+audience: Master in Analytics students and analytics professionals
+philosophy: >
+  Learn the database ecosystem well enough to solve any analytics problem.
+  Goal is analytics professionals who know which technology fits which problem —
+  not database administrators.
+status: published
+partCount: 5
+chapterCount: 24
+authorVoice: >
+  Practical, technical but accessible. Use real companies (Netflix, Amazon,
+  Snowflake, OpenAI). Every chapter answers "which database for which problem?"
+  Include SQL examples where relevant. Emphasize trade-offs, CAP theorem,
+  consistency vs availability, and AI integration (RAG, vector DBs, text-to-SQL).

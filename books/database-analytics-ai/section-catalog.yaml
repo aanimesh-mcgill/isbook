@@ -1,0 +1,94 @@
+# Section catalog for Database & Distributed Systems for Analytics
+# Pedagogy: Industry Case → Concepts → AI Insight → Hands-on → Manager's Decision
+
+sections:
+  - order: 1
+    slug: opening-case
+    title: Industry Case
+    rules: |
+      Use :::case with a real company (Amazon, Netflix, Snowflake, OpenAI, etc.).
+      600–900 words. End with why an analytics professional should care.
+
+  - order: 2
+    slug: learning-objectives
+    title: Learning Objectives
+    rules: |
+      Use :::checklist with 4–6 measurable objectives.
+      Start with "After reading this chapter, you will be able to:"
+
+  - order: 3
+    slug: core-concepts
+    title: Core Concepts
+    rules: |
+      Main technical content. Introduce 3–5 concepts with :::callout for key insights.
+      Use code blocks for SQL or query examples where relevant. Explain before jargon.
+
+  - order: 4
+    slug: technical-deep-dive
+    title: Technical Deep Dive
+    rules: |
+      Deeper technical explanation with diagrams described in text.
+      Include comparison tables (e.g. SQL vs NoSQL, structured vs unstructured).
+      Note FIGURE NEEDED where a diagram would help.
+
+  - order: 5
+    slug: ai-insight
+    title: AI Insight
+    rules: |
+      How AI/LLMs change this topic. Use :::callout or :::research.
+      Address questions like why LLMs need vector DBs, text-to-SQL limits, RAG, etc.
+
+  - order: 6
+    slug: industry-examples
+    title: Industry Examples
+    rules: |
+      Two or three :::case blocks from different companies (~200 words each).
+      Show how real organizations solve data problems.
+
+  - order: 7
+    slug: hands-on-demo
+    title: Hands-on Demo
+    rules: |
+      Describe a practical lab exercise step-by-step.
+      Use :::exercise or code blocks. Specify tools (MySQL, MongoDB, Neo4j, etc.).
+      Students should be able to follow this in a lab session.
+
+  - order: 8
+    slug: managers-decision
+    title: Manager's Decision
+    rules: |
+      Business scenario requiring technology choice. Use :::manager block.
+      Student must justify which database(s), trade-offs, consistency, scalability, cost.
+      Format as a decision brief a CTO would read.
+
+  - order: 9
+    slug: ai-copilot-exercise
+    title: AI Copilot Exercise
+    rules: |
+      Two :::exercise blocks: use ChatGPT/Cursor/Copilot to generate SQL, schema,
+      or architecture — then critique and improve the output. Teach critical evaluation.
+
+  - order: 10
+    slug: key-takeaways
+    title: Key Takeaways
+    rules: |
+      5–7 bullet points summarizing the chapter. No new content.
+
+  - order: 11
+    slug: discussion-questions
+    title: Discussion Questions
+    rules: |
+      5 questions for classroom discussion. Include at least one architecture design question.
+
+  - order: 12
+    slug: further-reading
+    title: Further Reading
+    rules: |
+      8–12 references: academic papers, vendor docs, industry blogs.
+      Author, Year, Title, Source.
+
+  - order: 13
+    slug: instructor-notes
+    title: Instructor Notes
+    rules: |
+      Teaching tips, lab timing, common student misconceptions, 300–500 words.

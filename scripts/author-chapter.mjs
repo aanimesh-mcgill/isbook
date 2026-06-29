@@ -1,18 +1,11 @@
 #!/usr/bin/env node
 /**
  * Generate all sections for a chapter via OpenAI API.
- *
- * Usage:
- *   node scripts/author-chapter.mjs --book managing-organizations-ai --chapter 01-digital-organization-ai-revolution
- *   node scripts/author-chapter.mjs --book ... --chapter ... --force
- *   node scripts/author-chapter.mjs --book ... --chapter ... --from 4 --to 17
  */
-import { existsSync, writeFileSync, mkdirSync } from 'fs';
-import { join } from 'path';
-import OpenAI from 'openai';
-import { readFileSync } from 'fs';
+import { existsSync, writeFileSync, mkdirSync, readFileSync } from 'fs';
+import { join, resolve } from 'path';
 import { fileURLToPath } from 'url';
-import { resolve } from 'path';
+import OpenAI from 'openai';
 import {
   parseArgs,
   loadBookMeta,
@@ -20,11 +13,11 @@ import {
   resolveChapterDir,
 } from './lib/paths.mjs';
 import {
-  STANDARD_SECTIONS,
+  loadBookCatalog,
   sectionFileName,
   buildAuthorPrompt,
   stripCodeFences,
-} from './lib/section-catalog.mjs';
+} from './lib/book-catalog.mjs';
 import { validateSection } from './lib/parse-section.mjs';
 
 const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
@@ -60,20 +53,26 @@ if (!apiKey || apiKey.includes('your-key')) {
 
 const bookMeta = loadBookMeta(args.book);
 const chapterMeta = loadChapterMeta(args.book, args.chapter);
+const catalog = loadBookCatalog(args.book);
 const chapterDir = resolveChapterDir(args.book, args.chapter);
 const sectionsDir = join(chapterDir, 'sections');
 mkdirSync(sectionsDir, { recursive: true });
 
+const maxOrder = catalog.sections.length;
 const fromOrder = args.from ? Number(args.from) : 1;
-const toOrder = args.to ? Number(args.to) : 17;
+const toOrder = args.to ? Number(args.to) : maxOrder;
 const model = args.model ?? process.env.OPENAI_MODEL ?? 'gpt-4o';
 const openai = new OpenAI({ apiKey });
 
-const toGenerate = STANDARD_SECTIONS.filter(
-  (s) => s.order >= fromOrder && s.order <= toOrder,
-);
+const toGenerate = catalog.sections.filter((s) => s.order >= fromOrder && s.order <= toOrder);
+
+const systemRole =
+  bookMeta.slug === 'database-analytics-ai'
+    ? 'You are an expert author of database and analytics textbooks for graduate students. Output only the requested markdown file. Never output JSON or HTML.'
+    : 'You are an expert MIS textbook author. Output only the requested markdown file. Never output JSON or HTML.';
 
 console.log(`\nGenerating Chapter ${chapterMeta.chapterNumber}: ${chapterMeta.title}`);
+console.log(`  Book: ${bookMeta.title}`);
 console.log(`  Sections ${fromOrder}–${toOrder} (${toGenerate.length} total)\n`);
 
 let generated = 0;
@@ -97,6 +96,7 @@ for (const section of toGenerate) {
       bookMeta,
       chapterMeta,
       section,
+      catalog,
       extraInstructions: args.instructions ?? '',
     });
 
@@ -104,11 +104,7 @@ for (const section of toGenerate) {
       model,
       temperature: 0.7,
       messages: [
-        {
-          role: 'system',
-          content:
-            'You are an expert MIS textbook author. Output only the requested markdown file. Never output JSON or HTML.',
-        },
+        { role: 'system', content: systemRole },
         { role: 'user', content: prompt },
       ],
     });
@@ -128,7 +124,6 @@ for (const section of toGenerate) {
     console.log(`✓ (${tokens} tokens, ${validation.blocks?.length ?? 0} blocks)`);
     generated++;
 
-    // Brief pause to avoid rate limits
     await new Promise((r) => setTimeout(r, 1500));
   } catch (err) {
     console.log(`✗ ${err.message}`);

@@ -1,0 +1,22 @@
+title: Why Databases Still Matter in the Age of AI
+slug: why-databases-still-matter-ai
+chapterNumber: 1
+partNumber: 1
+partTitle: Data in the AI Era
+summary: >
+  AI runs on data. LLMs are useless without structured pipelines, storage, and
+  retrieval. This chapter explains why databases remain central in the AI era,
+  contrasts structured vs unstructured data, maps the modern data ecosystem,
+  and traces the evolution of enterprise data management.
+order: 1
+status: draft
+authorContext: |
+  Cover these topics:
+  - AI runs on data; LLMs cannot replace databases
+  - Why ChatGPT uses vector databases and retrieval (RAG)
+  - Structured vs unstructured data in analytics pipelines
+  - Modern data ecosystem (warehouses, lakes, lakehouse, vector DBs)
+  - Evolution of enterprise data (files → relational → distributed → AI-native)
+  Opening case: How Amazon uses hundreds of databases simultaneously
+  (DynamoDB, Aurora, Redshift, S3, etc.) for different workloads.
+  Target questions: Should I use SQL or MongoDB? Why does CAP theorem matter?
