@@ -8,7 +8,7 @@ summary: >
   to meet analytics and AI workloads. Understand why each paradigm emerged and
   what problems it solved.
 order: 3
-status: draft
+status: published
 authorContext: |
   Cover the evolution timeline with business and technical context:
   Flat files → Hierarchical → Network → Relational → Distributed → NoSQL →

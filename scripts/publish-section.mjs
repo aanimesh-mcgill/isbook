@@ -46,6 +46,9 @@ if (frontmatter.status !== 'published' && !args.force) {
   process.exit(0);
 }
 
+const chapterStatus =
+  args.force && bookMeta.status === 'published' ? 'published' : chapterMeta.status;
+
 const result = await publishSection({
   bookMeta: {
     title: bookMeta.title,
@@ -64,7 +67,7 @@ const result = await publishSection({
     chapterNumber: chapterMeta.chapterNumber,
     summary: chapterMeta.summary ?? null,
     order: chapterMeta.order,
-    status: chapterMeta.status,
+    status: chapterStatus,
   },
   sectionMeta: {
     title: frontmatter.title,

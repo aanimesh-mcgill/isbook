@@ -9,7 +9,7 @@ summary: >
   contrasts structured vs unstructured data, maps the modern data ecosystem,
   and traces the evolution of enterprise data management.
 order: 1
-status: draft
+status: published
 authorContext: |
   Cover these topics:
   - AI runs on data; LLMs cannot replace databases

@@ -8,7 +8,7 @@ summary: >
   unstructured data — and which storage technology fits each type. This chapter
   maps data types to real business examples and database choices.
 order: 2
-status: draft
+status: published
 authorContext: |
   Cover these data types with business examples:
   - Structured: transactions, relational tables, SQL databases

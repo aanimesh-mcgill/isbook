@@ -53,6 +53,9 @@ for (const file of sectionFiles) {
     continue;
   }
 
+  const chapterStatus =
+    args.force && bookMeta.status === 'published' ? 'published' : chapterMeta.status;
+
   const result = await publishSection({
     bookMeta: {
       title: bookMeta.title,
@@ -71,7 +74,7 @@ for (const file of sectionFiles) {
       chapterNumber: chapterMeta.chapterNumber,
       summary: chapterMeta.summary ?? null,
       order: chapterMeta.order,
-      status: chapterMeta.status,
+      status: chapterStatus,
     },
     sectionMeta: {
       title: frontmatter.title,

@@ -8,7 +8,7 @@ summary: >
   relationships, keys, and business rules. This chapter teaches relational
   modeling and ERDs — enough to design sound schemas for analytics workloads.
 order: 4
-status: draft
+status: published
 authorContext: |
   Cover relational modeling fundamentals for analytics professionals:
   - Entities, attributes, relationships (1:1, 1:N, M:N)
