@@ -37,6 +37,14 @@ npm run firebase:deploy
 
 See `SYSTEM_PROMPT.md` and `docs/CANONICAL_FORMAT.md`.
 
+### Generate sections with ChatGPT (OpenAI API)
+
+```bash
+npm run author -- --book managing-organizations-ai --chapter 01-digital-organization-ai-revolution --section learning-objectives
+```
+
+See `docs/author/OPENAI_AUTHOR.md` for setup.
+
 ## Quick Start
 
 ```bash

@@ -13,6 +13,7 @@
     "validate": "node scripts/validate.mjs",
     "publish": "node scripts/publish.mjs",
     "publish:section": "node scripts/publish-section.mjs",
+    "author": "node scripts/author-section.mjs",
     "firebase:deploy": "npm run build && firebase deploy",
     "firebase:rules": "firebase deploy --only firestore:rules,storage"
   },
@@ -27,6 +28,7 @@
     "firebase-admin": "^14.1.0",
     "gray-matter": "^4.0.3",
     "js-yaml": "^5.2.0",
+    "openai": "^6.45.0",
     "prettier": "^3.9.3",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.62.1",
