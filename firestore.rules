@@ -1,0 +1,101 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function userDoc() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid));
+    }
+
+    function hasRole(role) {
+      return isSignedIn() && userDoc().data.role == role;
+    }
+
+    function isStaff() {
+      return hasRole('author') || hasRole('editor') || hasRole('administrator');
+    }
+
+    function isPublished() {
+      return resource.data.status == 'published';
+    }
+
+    // Books: published content readable by all; staff can write
+    match /books/{bookId} {
+      allow read: if isPublished() || isStaff();
+      allow write: if isStaff();
+    }
+
+    match /chapters/{chapterId} {
+      allow read: if isPublished() || isStaff();
+      allow write: if isStaff();
+    }
+
+    match /sections/{sectionId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    match /contentBlocks/{blockId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    match /figures/{figureId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    match /references/{referenceId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    match /researchNotes/{noteId} {
+      allow read: if isStaff();
+      allow write: if isStaff();
+    }
+
+    match /cases/{caseId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    match /glossary/{entryId} {
+      allow read: if true;
+      allow write: if isStaff();
+    }
+
+    // User profile: owner read/write; admins can read all
+    match /users/{userId} {
+      allow read: if isSignedIn() && (request.auth.uid == userId || hasRole('administrator'));
+      allow create: if isSignedIn() && request.auth.uid == userId;
+      allow update: if isSignedIn() && request.auth.uid == userId;
+      allow delete: if hasRole('administrator');
+    }
+
+    // Student data: owner only
+    match /bookmarks/{bookmarkId} {
+      allow read, write: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /notes/{noteId} {
+      allow read, write: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /highlights/{highlightId} {
+      allow read, write: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+    }
+
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if hasRole('administrator');
+    }
+  }
+}

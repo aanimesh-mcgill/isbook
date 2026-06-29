@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run build
+        env:
+          VITE_FIREBASE_API_KEY: ${{ secrets.VITE_FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: istextbook-e8a3b.firebaseapp.com
+          VITE_FIREBASE_PROJECT_ID: istextbook-e8a3b
+          VITE_FIREBASE_STORAGE_BUCKET: istextbook-e8a3b.firebasestorage.app
+          VITE_FIREBASE_MESSAGING_SENDER_ID: 535236576965
+          VITE_FIREBASE_APP_ID: 1:535236576965:web:15cfe015f775fa8c2c92ac
+          VITE_FIREBASE_MEASUREMENT_ID: G-D5H656HE3P

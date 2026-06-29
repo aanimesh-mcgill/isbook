@@ -1,0 +1,15 @@
+---
+description: Core architecture rules for the IS Textbook Platform
+globs:
+alwaysApply: true
+---
+
+# Architecture Rules
+
+- Application code lives in GitHub. Book content lives in Firestore. Images live in Firebase Storage.
+- NEVER store textbook chapters as HTML or Markdown files in Git.
+- Content is stored as typed `contentBlocks` in Firestore with Markdown in the `content` field.
+- Design for multiple textbooks — never assume a single book.
+- Use feature folders under `src/features/`.
+- Follow `docs/ARCHITECTURE.md` and `docs/DATABASE.md` for schema decisions.
+- When architecture is unclear, STOP and ask for clarification. Do not invent contradictory architecture.

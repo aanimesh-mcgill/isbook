@@ -1,0 +1,16 @@
+---
+description: React and TypeScript coding standards
+globs: src/**
+---
+
+# React Standards
+
+- React 19 with strict TypeScript — no `any` types.
+- Material UI (MUI) for all UI components.
+- Mobile-first responsive design using MUI breakpoints.
+- Small reusable components in `src/components/`.
+- Custom hooks for shared logic in `src/hooks/`.
+- Pages in `src/pages/` are thin — they compose features and hooks.
+- Use TanStack Query for all server state; avoid fetching in useEffect.
+- Use path alias `@/` for imports from `src/`.
+- No unnecessary dependencies.

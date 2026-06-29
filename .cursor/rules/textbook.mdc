@@ -1,0 +1,15 @@
+---
+description: Textbook content and rendering conventions
+globs: src/features/reader/**,scripts/**
+---
+
+# Textbook Content Rules
+
+- Render content from Firestore `contentBlocks`, not static files.
+- Use `ContentBlockRenderer` for all block types.
+- Markdown content uses `react-markdown` with `remark-gfm`.
+- Each chapter follows the standard structure (Opening Case, Managerial Problem, Core Concepts, etc.).
+- Block types: heading, paragraph, image, figure, table, quote, callout, research_box, case, quiz, ai_exercise, checklist, reference.
+- Research boxes display "What Research Tells Us" header.
+- Case blocks display "Case Study" header.
+- AI exercises display "AI Exercise" header with distinct styling.

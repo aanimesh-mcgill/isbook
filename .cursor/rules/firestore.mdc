@@ -1,0 +1,15 @@
+---
+description: Firestore and data layer conventions
+globs: src/services/**,src/types/**,firestore.*,scripts/**
+---
+
+# Firestore Rules
+
+- All collections are top-level (books, chapters, sections, contentBlocks, users, etc.).
+- Every section supports unlimited content blocks with a `type` and `order` field.
+- Use ISO string timestamps for `createdAt` and `updatedAt`.
+- Slug fields must be URL-safe and unique within their parent scope.
+- Service functions in `src/services/` are the only place for Firestore queries.
+- Hooks in `src/hooks/` wrap services with TanStack Query.
+- Document any schema changes in `docs/DATABASE.md`.
+- Deploy index changes via `firestore.indexes.json`.
