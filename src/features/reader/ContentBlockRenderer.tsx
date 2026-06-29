@@ -16,6 +16,7 @@ import type { ContentBlock } from '@/types';
 
 interface ContentBlockRendererProps {
   blocks: ContentBlock[];
+  sectionTitle?: string;
 }
 
 function MarkdownContent({ content }: { content: string }) {
@@ -43,20 +44,38 @@ function MarkdownContent({ content }: { content: string }) {
             {children}
           </Typography>
         ),
-        ul: ({ children }) => (
-          <Box component="ul" sx={{ pl: 3, mb: 2 }}>
+        ol: ({ children }) => (
+          <Box
+            component="ol"
+            sx={{
+              pl: 3,
+              mb: 2,
+              listStyleType: 'decimal',
+              listStylePosition: 'outside',
+            }}
+          >
             {children}
           </Box>
         ),
-        ol: ({ children }) => (
-          <Box component="ol" sx={{ pl: 3, mb: 2 }}>
+        ul: ({ children }) => (
+          <Box
+            component="ul"
+            sx={{
+              pl: 3,
+              mb: 2,
+              listStyleType: 'disc',
+              listStylePosition: 'outside',
+            }}
+          >
             {children}
           </Box>
         ),
         li: ({ children }) => (
-          <Typography component="li" sx={{ mb: 0.5 }}>
-            {children}
-          </Typography>
+          <Box component="li" sx={{ mb: 0.75, display: 'list-item', pl: 0.5 }}>
+            <Typography component="span" variant="body1" sx={{ lineHeight: 1.75 }}>
+              {children}
+            </Typography>
+          </Box>
         ),
         table: ({ children }) => (
           <TableContainer component={Paper} variant="outlined" sx={{ mb: 3 }}>
@@ -219,8 +238,57 @@ function BlockRenderer({ block }: { block: ContentBlock }) {
   }
 }
 
+/** Merge paragraph blocks that form one markdown ordered list (avoids repeated "1."). */
+function coalesceNumberedLists(blocks: ContentBlock[]): ContentBlock[] {
+  const out: ContentBlock[] = [];
+  let i = 0;
+
+  while (i < blocks.length) {
+    const block = blocks[i];
+    if (block.type === 'paragraph' && block.content && /^\d+\.\s/.test(block.content.trim())) {
+      const parts = [block.content];
+      let j = i + 1;
+      while (j < blocks.length) {
+        const next = blocks[j];
+        if (next.type !== 'paragraph' || !next.content) break;
+        const trimmed = next.content.trim();
+        if (/^\d+\.\s/.test(trimmed)) {
+          parts.push(next.content);
+          j++;
+        } else if (/^[^\d]/.test(trimmed) && parts.length > 0) {
+          parts[parts.length - 1] += `\n\n${next.content}`;
+          j++;
+        } else {
+          break;
+        }
+      }
+      out.push({ ...block, content: parts.join('\n\n') });
+      i = j;
+    } else {
+      out.push(block);
+      i++;
+    }
+  }
+
+  return out;
+}
+
+function normalizeTitle(title: string): string {
+  return title.trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+function skipDuplicateHeading(blocks: ContentBlock[], sectionTitle?: string): ContentBlock[] {
+  if (!sectionTitle || blocks.length === 0) return blocks;
+  const target = normalizeTitle(sectionTitle);
+  const [first, ...rest] = blocks;
+  if (first.type === 'heading' && first.content && normalizeTitle(first.content) === target) {
+    return rest;
+  }
+  return blocks;
+}
+
 /** Renders an ordered list of Firestore content blocks as textbook content. */
-export function ContentBlockRenderer({ blocks }: ContentBlockRendererProps) {
+export function ContentBlockRenderer({ blocks, sectionTitle }: ContentBlockRendererProps) {
   if (blocks.length === 0) {
     return (
       <Typography color="text.secondary" sx={{ py: 4, textAlign: 'center' }}>
@@ -229,9 +297,11 @@ export function ContentBlockRenderer({ blocks }: ContentBlockRendererProps) {
     );
   }
 
+  const displayBlocks = coalesceNumberedLists(skipDuplicateHeading(blocks, sectionTitle));
+
   return (
-    <Box sx={{ maxWidth: 720, mx: 'auto' }}>
-      {blocks.map((block) => (
+    <Box>
+      {displayBlocks.map((block) => (
         <BlockRenderer key={block.id} block={block} />
       ))}
     </Box>

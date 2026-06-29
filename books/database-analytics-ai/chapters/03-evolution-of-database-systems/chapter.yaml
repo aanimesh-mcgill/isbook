@@ -1,0 +1,21 @@
+title: Evolution of Database Systems
+slug: evolution-of-database-systems
+chapterNumber: 3
+partNumber: 1
+partTitle: Data in the AI Era
+summary: >
+  From flat files to AI-native databases — trace how data management evolved
+  to meet analytics and AI workloads. Understand why each paradigm emerged and
+  what problems it solved.
+order: 3
+status: draft
+authorContext: |
+  Cover the evolution timeline with business and technical context:
+  Flat files → Hierarchical → Network → Relational → Distributed → NoSQL →
+  Cloud databases → Vector databases → Knowledge graphs → AI-native databases.
+  For each era: what problem it solved, limitations, and a real company example.
+  Opening case: How a modern enterprise (e.g. Netflix, Spotify, or OpenAI)
+  uses multiple database generations simultaneously.
+  Connect each stage to analytics use cases and why analytics professionals
+  must understand this history to choose the right tool today.
+  Address: Why did relational win? Why did NoSQL emerge? Why vector DBs now?

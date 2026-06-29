@@ -1,0 +1,23 @@
+title: Relational Thinking
+slug: relational-thinking
+chapterNumber: 4
+partNumber: 2
+partTitle: Relational Databases
+summary: >
+  Before writing SQL, analytics professionals must think in entities,
+  relationships, keys, and business rules. This chapter teaches relational
+  modeling and ERDs — enough to design sound schemas for analytics workloads.
+order: 4
+status: draft
+authorContext: |
+  Cover relational modeling fundamentals for analytics professionals:
+  - Entities, attributes, relationships (1:1, 1:N, M:N)
+  - Primary keys, foreign keys, composite keys
+  - Business rules and constraints
+  - Entity-Relationship Diagrams (ERD) — how to read and sketch them
+  - Mapping business questions to tables and joins
+  Opening case: A retail or fintech company designing a schema for customer
+  analytics, orders, and fraud detection.
+  Hands-on: sketch an ERD for a realistic analytics scenario.
+  Do NOT teach SQL syntax yet — that is Chapter 5. Focus on thinking in relations.
+  Connect to why banks and enterprises still rely on relational design.

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, Link as RouterLink } from 'react-router-dom';
 import {
   AppBar,
@@ -15,6 +15,8 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import { useThemeMode } from '@/theme/AppThemeProvider';
+
+const TOC_COLLAPSED_KEY = 'isbook-toc-collapsed';
 
 export function RootLayout() {
   const { mode, toggleMode } = useThemeMode();
@@ -70,9 +72,18 @@ export function RootLayout() {
 
 export function ReaderLayout() {
   const [tocOpen, setTocOpen] = useState(false);
+  const [tocCollapsed, setTocCollapsed] = useState(() => {
+    return localStorage.getItem(TOC_COLLAPSED_KEY) === 'true';
+  });
   const { mode, toggleMode } = useThemeMode();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  useEffect(() => {
+    localStorage.setItem(TOC_COLLAPSED_KEY, String(tocCollapsed));
+  }, [tocCollapsed]);
+
+  const toggleTocCollapse = () => setTocCollapsed((c) => !c);
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh' }}>
@@ -82,11 +93,11 @@ export function ReaderLayout() {
         sx={{ zIndex: (t) => t.zIndex.drawer + 1 }}
       >
         <Toolbar>
-          {isMobile && (
+          {(isMobile || tocCollapsed) && (
             <IconButton
               edge="start"
               color="inherit"
-              onClick={() => setTocOpen(true)}
+              onClick={() => (isMobile ? setTocOpen(true) : toggleTocCollapse())}
               aria-label="Open table of contents"
               sx={{ mr: 1 }}
             >
@@ -107,7 +118,15 @@ export function ReaderLayout() {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Outlet context={{ tocOpen, setTocOpen }} />
+      <Outlet
+        context={{
+          tocOpen,
+          setTocOpen,
+          tocCollapsed,
+          setTocCollapsed,
+          toggleTocCollapse,
+        }}
+      />
     </Box>
   );
 }
@@ -115,4 +134,7 @@ export function ReaderLayout() {
 export interface ReaderLayoutContext {
   tocOpen: boolean;
   setTocOpen: (open: boolean) => void;
+  tocCollapsed: boolean;
+  setTocCollapsed: (collapsed: boolean) => void;
+  toggleTocCollapse: () => void;
 }
