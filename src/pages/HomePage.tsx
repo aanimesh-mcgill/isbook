@@ -1,4 +1,3 @@
-import { Link as RouterLink } from 'react-router-dom';
 import { Box, Container, Grid, Typography } from '@mui/material';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import PsychologyIcon from '@mui/icons-material/Psychology';

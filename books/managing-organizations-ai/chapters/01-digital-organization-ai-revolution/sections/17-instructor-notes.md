@@ -3,7 +3,7 @@ title: Instructor Notes
 section: "1.17"
 order: 17
 slug: instructor-notes
-status: draft
+status: published
 learningObjectives:
   - Explore pedagogical strategies for teaching the impact of AI in organizations
   - Identify common misconceptions about digital transformation and AI

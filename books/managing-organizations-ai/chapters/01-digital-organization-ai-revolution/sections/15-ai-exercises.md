@@ -3,7 +3,7 @@ title: AI Exercises
 section: "1.15"
 order: 15
 slug: ai-exercises
-status: draft
+status: published
 learningObjectives:
   - Explore practical applications of AI in organizational contexts
   - Develop strategies for integrating AI to enhance decision-making

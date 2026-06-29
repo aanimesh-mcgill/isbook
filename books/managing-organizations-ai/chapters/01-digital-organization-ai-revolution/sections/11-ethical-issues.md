@@ -3,7 +3,7 @@ title: Ethical Issues
 section: "1.11"
 order: 11
 slug: ethical-issues
-status: draft
+status: published
 learningObjectives:
   - Understand the ethical dilemmas posed by AI in digital organizations
   - Evaluate the impact of AI on privacy and data security

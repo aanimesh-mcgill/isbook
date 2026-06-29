@@ -3,7 +3,7 @@ title: Manager Checklist
 section: "1.12"
 order: 12
 slug: manager-checklist
-status: draft
+status: published
 learningObjectives:
   - Identify key actions for leveraging AI in organizational management.
   - Apply digital technologies to enhance value creation.

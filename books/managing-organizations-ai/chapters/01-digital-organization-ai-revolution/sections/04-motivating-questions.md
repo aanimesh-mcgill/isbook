@@ -3,7 +3,7 @@ title: Motivating Questions
 section: "1.4"
 order: 4
 slug: motivating-questions
-status: draft
+status: published
 learningObjectives:
   - Understand the key questions managers must address when integrating AI into their organizations
   - Explore the implications of AI on organizational strategy and operations

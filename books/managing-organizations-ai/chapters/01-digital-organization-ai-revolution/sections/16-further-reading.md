@@ -3,7 +3,7 @@ title: Further Reading
 section: "1.16"
 order: 16
 slug: further-reading
-status: draft
+status: published
 learningObjectives:
   - Identify key academic sources on digital transformation and AI in organizations.
   - Explore foundational theories and current research trends in AI-driven management.

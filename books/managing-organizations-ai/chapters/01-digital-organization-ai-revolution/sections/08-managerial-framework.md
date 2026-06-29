@@ -3,7 +3,7 @@ title: Managerial Framework
 section: "1.8"
 order: 8
 slug: managerial-framework
-status: draft
+status: published
 learningObjectives:
   - Understand the components of a framework for managing AI-driven digital organizations
   - Identify the key managerial roles and responsibilities in an AI-first environment

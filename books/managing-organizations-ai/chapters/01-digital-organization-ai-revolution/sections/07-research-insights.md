@@ -3,7 +3,7 @@ title: Research Insights
 section: "1.7"
 order: 7
 slug: research-insights
-status: draft
+status: published
 learningObjectives:
   - Understand the impact of AI on organizational structure and strategy
   - Identify key research findings on AI-driven decision-making

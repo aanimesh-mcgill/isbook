@@ -3,7 +3,7 @@ title: Historical Evolution
 section: "1.5"
 order: 5
 slug: historical-evolution
-status: draft
+status: published
 learningObjectives:
   - Understand the key historical milestones in the integration of AI in organizations.
   - Analyze the progression of managerial strategies in response to AI advancements.

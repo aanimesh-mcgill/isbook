@@ -3,7 +3,7 @@ title: Discussion Questions
 section: "1.14"
 order: 14
 slug: discussion-questions
-status: draft
+status: published
 learningObjectives:
   - Explore the implications of AI on traditional business models.
   - Discuss the ethical considerations of AI in decision-making.

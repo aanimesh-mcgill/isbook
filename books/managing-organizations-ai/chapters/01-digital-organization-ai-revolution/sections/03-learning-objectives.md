@@ -3,7 +3,7 @@ title: Learning Objectives
 section: "1.3"
 order: 3
 slug: learning-objectives
-status: draft
+status: published
 learningObjectives:
   - Understand how digital technologies and AI are transforming organizational value creation.
   - Identify key strategies for integrating AI into business processes to enhance efficiency.

@@ -3,7 +3,7 @@ title: Key Takeaways
 section: "1.13"
 order: 13
 slug: key-takeaways
-status: draft
+status: published
 learningObjectives:
   - Understand the transformative impact of AI on organizational value creation.
   - Identify managerial strategies to leverage AI for competitive advantage.

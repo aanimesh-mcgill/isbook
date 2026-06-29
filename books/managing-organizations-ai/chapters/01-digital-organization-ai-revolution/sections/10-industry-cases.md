@@ -3,7 +3,7 @@ title: Industry Cases
 section: "1.10"
 order: 10
 slug: industry-cases
-status: draft
+status: published
 learningObjectives:
   - Understand how AI is applied in different industries to create value.
   - Analyze the managerial implications of AI integration in organizational strategies.
