@@ -1,8 +1,6 @@
 /**
- * Seeds sample textbook content into Firestore.
- * Uses gcloud CLI credentials, service account key, or application default credentials.
- *
- * Usage: npm run seed
+ * @deprecated Use `npm run publish` instead. Reads from books/ canonical manuscripts.
+ * Legacy seed script — kept for reference only.
  */
 import { execSync } from 'child_process';
 import { readFileSync, existsSync } from 'fs';

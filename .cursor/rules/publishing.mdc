@@ -1,0 +1,37 @@
+---
+description: Publishing engine rules — Cursor is NOT the author
+globs:
+alwaysApply: true
+---
+
+# Publishing Engine Rules
+
+Read `SYSTEM_PROMPT.md` before any content or publishing work.
+
+## Core Principles
+
+- **Git (`books/`) is the canonical manuscript archive.** Firestore is the runtime database only.
+- **Never modify or rewrite textbook content.** Only parse, validate, and transform.
+- **Canonical format is Markdown + YAML frontmatter + fenced blocks (ISBX).** Never ask ChatGPT for Firestore JSON.
+- **Publish one section at a time.** Never request a full chapter from the author in one prompt.
+- **Commit after every section.** Meaningful commit messages with section ID and editorial stage.
+
+## Your Job
+
+1. Validate incoming manuscripts (`npm run validate`)
+2. Save to `books/{book-slug}/chapters/{chapter}/sections/`
+3. Parse Markdown → Firestore (`npm run publish`)
+4. Upload figures to Storage when present
+5. Commit to Git and deploy
+
+## Author's Job (ChatGPT)
+
+Research, outlines, section drafts, reviews, pedagogy, architecture.
+
+## File Locations
+
+- Format spec: `docs/CANONICAL_FORMAT.md`
+- Editorial workflow: `docs/EDITORIAL_WORKFLOW.md`
+- Author prompt template: `docs/author/SECTION_PROMPT.md`
+- Parser: `scripts/lib/parse-section.mjs`
+- Publish CLI: `scripts/publish.mjs`

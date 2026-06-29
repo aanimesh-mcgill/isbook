@@ -14,11 +14,28 @@ Production-quality PWA for hosting AI-first Information Systems textbooks.
 
 | What | Where |
 |------|-------|
-| Application code | GitHub |
-| Textbook content (Markdown) | Firestore |
-| Images & figures | Firebase Storage |
+| Application code | GitHub (`src/`) |
+| **Canonical manuscripts** | GitHub (`books/`) — Markdown + YAML |
+| Runtime content | Firestore (parsed by publishing engine) |
+| Images & figures | `books/.../figures/` → Firebase Storage |
 
-**Never store textbook chapters as HTML files in Git.**
+**Never store textbook content as Firestore JSON or HTML in Git.**
+
+### Publishing Pipeline
+
+```
+ChatGPT (author)  →  Markdown section in books/
+       ↓
+Cursor (engine)   →  validate → parse → Firestore → deploy
+```
+
+```bash
+npm run validate -- --book <slug> --chapter <dir>
+npm run publish  -- --book <slug> --chapter <dir>
+npm run firebase:deploy
+```
+
+See `SYSTEM_PROMPT.md` and `docs/CANONICAL_FORMAT.md`.
 
 ## Quick Start
 

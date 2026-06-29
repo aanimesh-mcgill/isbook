@@ -54,11 +54,20 @@ App
 
 ## Data Flow
 
-1. Page component calls a custom hook (`useBook`, `useChapters`, etc.)
-2. Hook uses TanStack Query with a service function
-3. Service function queries Firestore
-4. Content blocks are rendered by `ContentBlockRenderer`
-5. Markdown blocks use `react-markdown` with GFM support
+1. **Author (ChatGPT)** writes one section at a time in ISBX format → `books/`
+2. **Publishing engine (Cursor)** validates with `npm run validate`
+3. Parser (`scripts/lib/parse-section.mjs`) transforms Markdown → content blocks
+4. `npm run publish` writes to Firestore (never edits author prose)
+5. React app reads Firestore via TanStack Query
+6. `ContentBlockRenderer` displays blocks with `react-markdown`
+
+### Separation of Concerns
+
+| Layer | Role |
+|-------|------|
+| `books/` (Git) | Canonical archive — PDF, EPUB, LMS can be generated from here |
+| Firestore | Optimized runtime database for the website |
+| `src/` | Application code only |
 
 ## PWA Strategy
 
