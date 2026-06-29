@@ -17,18 +17,31 @@ function mapDoc<T>(id: string, data: DocumentData): T {
 
 /** Fetch all published books, ordered by title. */
 export async function getPublishedBooks(): Promise<Book[]> {
-  const q = query(
-    collection(db, 'books'),
-    where('status', '==', 'published'),
-    orderBy('title'),
-  );
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map((d) => mapDoc<Book>(d.id, d.data()));
+  try {
+    const q = query(
+      collection(db, 'books'),
+      where('status', '==', 'published'),
+      orderBy('title'),
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((d) => mapDoc<Book>(d.id, d.data()));
+  } catch (err) {
+    // Fallback when composite index is still building — sort client-side
+    const q = query(collection(db, 'books'), where('status', '==', 'published'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs
+      .map((d) => mapDoc<Book>(d.id, d.data()))
+      .sort((a, b) => a.title.localeCompare(b.title));
+  }
 }
 
-/** Fetch a single book by slug. */
+/** Fetch a single published book by slug. */
 export async function getBookBySlug(slug: string): Promise<Book | null> {
-  const q = query(collection(db, 'books'), where('slug', '==', slug));
+  const q = query(
+    collection(db, 'books'),
+    where('slug', '==', slug),
+    where('status', '==', 'published'),
+  );
   const snapshot = await getDocs(q);
   if (snapshot.empty) return null;
   const d = snapshot.docs[0];
@@ -42,18 +55,31 @@ export async function getBookById(bookId: string): Promise<Book | null> {
   return mapDoc<Book>(snapshot.id, snapshot.data());
 }
 
-/** Fetch all chapters for a book, ordered by chapter number. */
+/** Fetch all chapters for a book, ordered by chapter number (published only). */
 export async function getChaptersByBookId(bookId: string): Promise<Chapter[]> {
-  const q = query(
-    collection(db, 'chapters'),
-    where('bookId', '==', bookId),
-    orderBy('order'),
-  );
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map((d) => mapDoc<Chapter>(d.id, d.data()));
+  try {
+    const q = query(
+      collection(db, 'chapters'),
+      where('bookId', '==', bookId),
+      where('status', '==', 'published'),
+      orderBy('order'),
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((d) => mapDoc<Chapter>(d.id, d.data()));
+  } catch {
+    const q = query(
+      collection(db, 'chapters'),
+      where('bookId', '==', bookId),
+      where('status', '==', 'published'),
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs
+      .map((d) => mapDoc<Chapter>(d.id, d.data()))
+      .sort((a, b) => a.order - b.order);
+  }
 }
 
-/** Fetch a chapter by book ID and slug. */
+/** Fetch a chapter by book ID and slug (published only). */
 export async function getChapterBySlug(
   bookId: string,
   slug: string,
@@ -62,6 +88,7 @@ export async function getChapterBySlug(
     collection(db, 'chapters'),
     where('bookId', '==', bookId),
     where('slug', '==', slug),
+    where('status', '==', 'published'),
   );
   const snapshot = await getDocs(q);
   if (snapshot.empty) return null;

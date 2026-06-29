@@ -9,10 +9,19 @@
       ]
     },
     {
+      "collectionGroup": "books",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "slug", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "chapters",
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "bookId", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
         { "fieldPath": "order", "order": "ASCENDING" }
       ]
     },
@@ -21,7 +30,8 @@
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "bookId", "order": "ASCENDING" },
-        { "fieldPath": "slug", "order": "ASCENDING" }
+        { "fieldPath": "slug", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" }
       ]
     },
     {

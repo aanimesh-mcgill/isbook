@@ -1,30 +1,31 @@
 /**
  * Seeds sample textbook content into Firestore.
- * Requires Firebase Admin credentials via GOOGLE_APPLICATION_CREDENTIALS
- * or `firebase login` with Application Default Credentials.
+ * Uses gcloud CLI credentials, service account key, or application default credentials.
  *
  * Usage: npm run seed
  */
-import { initializeApp, cert, getApps } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+import { execSync } from 'child_process';
 import { readFileSync, existsSync } from 'fs';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { Firestore } from '@google-cloud/firestore';
+import { OAuth2Client } from 'google-auth-library';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-function initAdmin() {
-  if (getApps().length > 0) return getFirestore();
-
+function initDb() {
   const serviceAccountPath = process.env.GOOGLE_APPLICATION_CREDENTIALS;
   if (serviceAccountPath && existsSync(serviceAccountPath)) {
-    const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));
-    initializeApp({ credential: cert(serviceAccount) });
-  } else {
-    initializeApp({ projectId: 'istextbook-e8a3b' });
+    return new Firestore({
+      projectId: 'istextbook-e8a3b',
+      keyFilename: serviceAccountPath,
+    });
   }
 
-  return getFirestore();
+  const token = execSync('gcloud auth print-access-token', { encoding: 'utf8' }).trim();
+  const authClient = new OAuth2Client();
+  authClient.setCredentials({ access_token: token });
+
+  return new Firestore({
+    projectId: 'istextbook-e8a3b',
+    authClient,
+  });
 }
 
 const now = new Date().toISOString();
@@ -179,7 +180,7 @@ Compare the AI's response with the framework above. What did it miss? What surpr
 ];
 
 async function seed() {
-  const db = initAdmin();
+  const db = initDb();
   console.log('Seeding Firestore…');
 
   const bookRef = db.collection('books').doc();
