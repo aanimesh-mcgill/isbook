@@ -71,6 +71,7 @@ Not yet cataloged for v2. v1 chapters 5–24 in `books/database-analytics-ai/cha
 | Cursor rule (`book-bible.mdc`) | ✅ Created |
 | OpenAI repo-context pipeline | ✅ Live |
 | Chapter 1 on website | ✅ https://istextbook-e8a3b.web.app/read/database-analytics-ai/why-data-still-matters |
+| Old Ch.1 archived | ✅ `why-databases-still-matter-ai` → `_archive/chapters/` + Firestore |
 | v2 chapters catalog YAML | ⬜ Not created |
 | Meridian Retail Group character bible | ⬜ Not created |
 | Part I chapter outline (detailed) | ⬜ Not created |
@@ -81,7 +82,7 @@ Not yet cataloged for v2. v1 chapters 5–24 in `books/database-analytics-ai/cha
 
 | Blocker | Owner | Notes |
 |---------|-------|-------|
-| Remove duplicate old Ch.1 (`why-databases-still-matter-ai`) from Firestore TOC | Chief Author | Old slug may still appear beside new v2 chapter |
+| Remove duplicate old Ch.1 (`why-databases-still-matter-ai`) from Firestore TOC | Chief Author | ~~Old slug may still appear beside new v2 chapter~~ **Resolved 2026-06-30** — archived in Firestore + Git |
 
 ---
 

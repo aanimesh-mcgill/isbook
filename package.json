@@ -13,6 +13,7 @@
     "validate": "node scripts/validate.mjs",
     "publish": "node scripts/publish.mjs",
     "publish:section": "node scripts/publish-section.mjs",
+    "archive:chapter": "node scripts/archive-chapter.mjs",
     "migrate:versions": "node scripts/migrate-versions.mjs",
     "import": "node scripts/import-deliverable.mjs",
     "atlas:assemble-tos": "node scripts/atlas-assemble-tos.mjs",

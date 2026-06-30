@@ -9,7 +9,9 @@ summary: >
   contrasts structured vs unstructured data, maps the modern data ecosystem,
   and traces the evolution of enterprise data management.
 order: 1
-status: published
+status: archived
+archivedAt: '2026-06-30'
+supersededBy: chapters/01-why-data-still-matters
 authorContext: |
   Cover these topics:
   - AI runs on data; LLMs cannot replace databases

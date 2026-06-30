@@ -17,7 +17,7 @@ Status: **Published** — refine content or start Chapter 2
 
 ## Immediate next task
 
-1. **Optional:** Remove/archive old Chapter 1 slug `why-databases-still-matter-ai` from Firestore (duplicate in TOC)
+1. ~~Remove/archive old Chapter 1 slug `why-databases-still-matter-ai`~~ **Done** — `_archive/chapters/` + Firestore `status: archived`
 2. **Refinement pass** on Chapter 1: `npm run author:revise -- --book database-analytics-ai --chapter 01-why-data-still-matters`
 3. **Chapter 2**: create catalog entry + `npm run author:chapter -- --chapter 02-... --from 1 --to 20 --force`
 
