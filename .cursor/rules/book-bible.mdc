@@ -1,0 +1,76 @@
+---
+description: Book Bible — OpenAI Chief Author with repository context (database-analytics-ai v2)
+globs: books/database-analytics-ai/**,atlas/learning-objects/**,scripts/author*.mjs,scripts/lib/repo-context.mjs
+alwaysApply: false
+---
+
+# Book Bible — OpenAI Chief Author Mode
+
+**Book:** *Modern Data Systems for Analytics and AI* (v2 rewrite)  
+**Constitution:** `books/database-analytics-ai/00_BOOK_BIBLE/`
+
+When writing or revising this book, **use OpenAI via the author pipeline** — do not hand-write prose in chat unless fixing a specific issue.
+
+---
+
+## How to write content
+
+```bash
+# Write one section (reads Book Bible + repo, writes to chapters/)
+npm run author:write -- --chapter 01-why-data-still-matters --section opening-story
+
+# With extra instructions
+npm run author:write -- --chapter 01-why-data-still-matters --section 2 --instructions "Use Meridian Retail Group"
+
+# Overwrite existing section
+npm run author:write -- --chapter 01-why-data-still-matters --section opening-story --force
+
+# Full chapter (all sections)
+npm run author:chapter -- --book database-analytics-ai --chapter 01-why-data-still-matters --catalog v2 --out chapter
+```
+
+**Requires:** `OPENAI_API_KEY` in `.env`
+
+---
+
+## What OpenAI reads (consistency)
+
+| Layer | Source |
+|-------|--------|
+| System prompt | All 4 Book Bible files (`SYSTEM_PROMPT`, `PROJECT_STATUS`, `AUTHOR_DECISIONS`, `CURRENT_CONTEXT`) |
+| Repo context | Prior sections in chapter (full text), all chapter summaries, learning objects, section outline |
+| Section rules | `section-catalog-v2.yaml` |
+
+After each write, `PROJECT_STATUS.md` and `CURRENT_CONTEXT.md` are updated automatically.
+
+---
+
+## Cursor agent workflow
+
+1. Read Book Bible files (if not using `npm run author:write` which loads them automatically)
+2. Run `npm run author:write` for the target section
+3. Review output in `books/database-analytics-ai/chapters/.../sections/`
+4. Fix validation issues if any; re-run with `--force` if regenerating
+5. Update `PROJECT_STATUS.md` manually if batch-writing multiple sections
+6. Commit to Git when a batch is ready (user requests commit explicitly)
+
+---
+
+## Authoring rules (summary)
+
+- WHY → WHAT → WHEN → HOW — never reverse
+- 20-section v2 structure (`section-catalog-v2.yaml`)
+- Meridian Retail Group for continuity; named companies for industry insight
+- ISBX format: YAML frontmatter + Markdown + fenced blocks
+- Production mode: full prose, not outlines
+
+---
+
+## Publishing vs authoring
+
+| Mode | When |
+|------|------|
+| **Authoring** (this rule) | `npm run author*` — OpenAI writes to `books/` |
+| **Publishing** | `npm run atlas:publish` — import/deploy only, never rewrite |
+
+See AD-016 in `AUTHOR_DECISIONS.md`.

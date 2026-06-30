@@ -1,14 +1,14 @@
 #!/usr/bin/env node
 /**
- * Generate one textbook section via OpenAI API (ChatGPT models).
+ * Generate one textbook section via OpenAI API.
+ * Reads Book Bible + repository manuscript for consistency, writes directly to chapters/.
  *
  * Usage:
- *   npm run author -- --book managing-organizations-ai --chapter 01-digital-organization-ai-revolution --section learning-objectives
+ *   npm run author -- --book database-analytics-ai --chapter 01-why-data-still-matters --section opening-story
+ *   npm run author:write -- --chapter 01-why-data-still-matters --section 2
  */
-import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'fs';
-import { join, resolve } from 'path';
-import { fileURLToPath } from 'url';
-import OpenAI from 'openai';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { join } from 'path';
 import {
   parseArgs,
   loadBookMeta,
@@ -20,112 +20,127 @@ import {
   resolveSection,
   sectionFileName,
   buildAuthorPrompt,
-  stripCodeFences,
 } from './lib/book-catalog.mjs';
+import { loadChapterInstance } from './lib/tos.mjs';
+import { buildRepoContextBlock, updateBookBibleAfterWrite, wordCount } from './lib/repo-context.mjs';
+import { generateManuscript, getModel, ROOT } from './lib/openai-author.mjs';
 import { validateSection } from './lib/parse-section.mjs';
 
-const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
-
-function loadEnv() {
-  const envPath = join(ROOT, '.env');
-  if (!existsSync(envPath)) return;
-  for (const line of readFileSync(envPath, 'utf8').split('\n')) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const eq = trimmed.indexOf('=');
-    if (eq === -1) continue;
-    const key = trimmed.slice(0, eq).trim();
-    const value = trimmed.slice(eq + 1).trim();
-    if (!process.env[key]) process.env[key] = value;
-  }
-}
-
 const args = parseArgs(process.argv.slice(2));
+const bookSlug = args.book ?? 'database-analytics-ai';
 
-if (!args.book || !args.chapter || !args.section) {
+if (!args.chapter || !args.section) {
   console.error(`
 Usage:
   npm run author -- --book <book-slug> --chapter <chapter-dir> --section <section-slug-or-number>
 
-Examples:
-  npm run author -- --book managing-organizations-ai --chapter 01-digital-organization-ai-revolution --section learning-objectives
-  npm run author -- --book managing-organizations-ai --chapter 01-digital-organization-ai-revolution --section 3
+Defaults (database-analytics-ai):
+  --catalog v2          20-section Book Bible structure
+  --out chapter         Write directly to chapters/ (not inbox)
 
 Options:
-  --model gpt-4o          OpenAI model (default: OPENAI_MODEL env or gpt-4o)
-  --instructions "..."    Extra instructions for the author
-  --out inbox             Save to books/_inbox/ (default) or chapter sections folder if --out chapter
-  --validate              Run validation after generation
+  --instance <id>       Chapter instance YAML
+  --catalog v2|tos|constitution|section-catalog
+  --model gpt-4o
+  --instructions "..."
+  --out inbox|chapter
+  --no-repo-context     Skip reading prior sections from repo
+  --validate
+  --force               Overwrite existing section file
+
+Examples:
+  npm run author -- --chapter 01-why-data-still-matters --section opening-story
+  npm run author -- --chapter 01-why-data-still-matters --section 2 --instructions "Focus on Meridian Retail Group"
 `);
   process.exit(1);
 }
 
-loadEnv();
+const defaultCatalog = bookSlug === 'database-analytics-ai' ? 'v2' : 'section-catalog';
+const defaultOut = bookSlug === 'database-analytics-ai' ? 'chapter' : 'inbox';
+const catalogName = args.catalog ?? defaultCatalog;
+const outMode = args.out ?? defaultOut;
 
-const apiKey = process.env.OPENAI_API_KEY;
-if (!apiKey) {
-  console.error('Missing OPENAI_API_KEY in .env — see docs/author/OPENAI_AUTHOR.md');
-  process.exit(1);
+const bookMeta = loadBookMeta(bookSlug);
+const chapterMeta = loadChapterMeta(bookSlug, args.chapter);
+const catalog = loadBookCatalog(bookSlug, { catalog: catalogName });
+const section = resolveSection(catalog, args.section);
+const model = getModel(args.model);
+
+const instanceId = args.instance ?? args.prompt;
+let chapterInstance = null;
+if (instanceId) {
+  chapterInstance = loadChapterInstance(bookSlug, instanceId);
 }
 
-const bookMeta = loadBookMeta(args.book);
-const chapterMeta = loadChapterMeta(args.book, args.chapter);
-const catalog = loadBookCatalog(args.book);
-const section = resolveSection(catalog, args.section);
-const model = args.model ?? process.env.OPENAI_MODEL ?? 'gpt-4o';
-const fileName = sectionFileName(section);
+const repoContext =
+  args['no-repo-context']
+    ? ''
+    : buildRepoContextBlock({
+        bookSlug,
+        chapterDir: args.chapter,
+        chapterMeta,
+        sectionOrder: section.order,
+        catalog,
+      });
+
 const prompt = buildAuthorPrompt({
   bookMeta,
   chapterMeta,
   section,
   catalog,
+  chapterPrompt: chapterInstance,
   extraInstructions: args.instructions ?? '',
+  repoContext,
 });
 
 console.log(`Authoring: ${bookMeta.title}`);
 console.log(`  Chapter ${chapterMeta.chapterNumber}: ${chapterMeta.title}`);
-console.log(`  Section ${section.sectionNum}: ${section.title}`);
+console.log(`  Section ${section.order}: ${section.title} (${section.slug})`);
+console.log(`  Catalog: ${catalogName}`);
+console.log(`  Book Bible + repo context: ${args['no-repo-context'] ? 'skipped' : 'loaded'}`);
+if (chapterInstance) console.log(`  Chapter instance: ${instanceId}`);
 console.log(`  Model: ${model}`);
+console.log(`  Output: ${outMode}`);
 console.log('  Calling OpenAI API…\n');
 
-const openai = new OpenAI({ apiKey });
-
-const response = await openai.chat.completions.create({
+const { content: manuscript, usage } = await generateManuscript({
+  userPrompt: prompt,
   model,
-  temperature: 0.7,
-  messages: [
-    {
-      role: 'system',
-      content:
-        'You are an expert MIS textbook author. Output only the requested markdown file. Never output JSON or HTML.',
-    },
-    { role: 'user', content: prompt },
-  ],
+  bookSlug,
 });
 
-const raw = response.choices[0]?.message?.content;
-if (!raw) {
-  console.error('No content returned from OpenAI.');
-  process.exit(1);
-}
-
-const manuscript = stripCodeFences(raw);
-
 let outPath;
-if (args.out === 'chapter') {
-  const chapterDir = resolveChapterDir(args.book, args.chapter);
+if (outMode === 'chapter') {
+  const chapterDir = resolveChapterDir(bookSlug, args.chapter);
   const sectionsDir = join(chapterDir, 'sections');
   mkdirSync(sectionsDir, { recursive: true });
-  outPath = join(sectionsDir, fileName);
+  outPath = join(sectionsDir, sectionFileName(section));
+  if (existsSync(outPath) && !args.force) {
+    console.error(`\nFile exists: ${outPath}`);
+    console.error('Use --force to overwrite, or choose a different section.');
+    process.exit(1);
+  }
 } else {
   const inboxDir = join(ROOT, 'books', '_inbox');
   mkdirSync(inboxDir, { recursive: true });
-  outPath = join(inboxDir, fileName);
+  outPath = join(inboxDir, sectionFileName(section));
 }
 
 writeFileSync(outPath, manuscript, 'utf8');
+const words = wordCount(manuscript);
+
 console.log(`Saved: ${outPath.replace(ROOT + '\\', '').replace(ROOT + '/', '')}`);
-console.log(`  Tokens: ${response.usage?.total_tokens ?? 'unknown'}`);
+console.log(`  Words: ${words}`);
+console.log(`  Tokens: ${usage?.total_tokens ?? 'unknown'}`);
+
+updateBookBibleAfterWrite({
+  bookSlug,
+  chapterDir: args.chapter,
+  chapterMeta,
+  section,
+  outPath,
+  usage,
+});
 
 if (args.validate) {
   const result = validateSection(manuscript);
@@ -138,14 +153,11 @@ if (args.validate) {
   console.log(`\n✓ Valid (${result.blocks?.length ?? 0} content blocks)`);
 }
 
+const nextSection = catalog.sections.find((s) => s.order === section.order + 1);
 console.log(`
 Next steps:
-  1. Review the manuscript (edit if needed — you are the editor)
-  2. Move to chapter folder if saved in _inbox:
-     books/${args.book}/chapters/${args.chapter}/sections/${fileName}
-  3. Set status: published in frontmatter when ready
-  4. Publish:
-     node scripts/publish-section.mjs --book ${args.book} --chapter ${args.chapter} --section ${section.slug}
-  5. Deploy:
-     npm run firebase:deploy
+  Review the manuscript in Cursor
+  Next section: ${nextSection ? `${nextSection.order} (${nextSection.slug})` : '(chapter complete — run author:chapter or next chapter)'}
+  Revise:  npm run author:revise -- --book ${bookSlug} --chapter ${args.chapter} --section ${section.slug}
+  Publish when status: published in frontmatter
 `);

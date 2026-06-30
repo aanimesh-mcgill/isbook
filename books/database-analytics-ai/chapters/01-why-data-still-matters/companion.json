@@ -1,0 +1,543 @@
+{
+  "quizBank": [
+    {
+      "id": "QUIZ-001",
+      "kind": "concept_check",
+      "prompt": "What is the primary purpose of an operational database?",
+      "options": [
+        "Store historical trends for executives",
+        "Process live business transactions reliably",
+        "Train large language models",
+        "Replace spreadsheets in finance"
+      ],
+      "correctIndex": 1,
+      "explanation": "Operational databases optimize for concurrent transactions, integrity, and low-latency reads/writes."
+    },
+    {
+      "id": "QUIZ-002",
+      "kind": "concept_check",
+      "prompt": "Which data type best describes a JSON product catalog export?",
+      "options": [
+        "Structured",
+        "Semi-structured",
+        "Unstructured",
+        "Reference"
+      ],
+      "correctIndex": 1,
+      "explanation": "JSON has structure but flexible schema — classic semi-structured data."
+    },
+    {
+      "id": "QUIZ-003",
+      "kind": "concept_check",
+      "prompt": "Master data primarily describes:",
+      "options": [
+        "Individual sales transactions",
+        "Core entities such as customers and products",
+        "Server log files",
+        "Temporary session cache"
+      ],
+      "correctIndex": 1,
+      "explanation": "Master data defines shared core entities used across systems."
+    },
+    {
+      "id": "QUIZ-004",
+      "kind": "concept_check",
+      "prompt": "Why do organizations use a data warehouse separate from operational databases?",
+      "options": [
+        "Warehouses are cheaper than MySQL",
+        "Analytical queries can slow transactional systems",
+        "Warehouses replace the need for AI",
+        "Excel cannot open warehouse files"
+      ],
+      "correctIndex": 1,
+      "explanation": "Mixing heavy analytics with OLTP risks performance and availability."
+    },
+    {
+      "id": "QUIZ-005",
+      "kind": "concept_check",
+      "prompt": "Metadata is best defined as:",
+      "options": [
+        "Data about data",
+        "Encrypted customer passwords",
+        "Only video files",
+        "Unused backup files"
+      ],
+      "correctIndex": 0,
+      "explanation": "Metadata describes structure, lineage, quality, and governance of data assets."
+    },
+    {
+      "id": "QUIZ-006",
+      "kind": "scenario",
+      "prompt": "A ride-sharing app records GPS pings every three seconds. Which category dominates?",
+      "options": [
+        "Reference data",
+        "Transactional/event operational data",
+        "Printed marketing brochures",
+        "Static HTML pages"
+      ],
+      "correctIndex": 1,
+      "explanation": "High-velocity events are operational/transactional data feeding real-time systems."
+    },
+    {
+      "id": "QUIZ-007",
+      "kind": "scenario",
+      "prompt": "Netflix wants quarterly retention analysis across five years. Where should analysts primarily query?",
+      "options": [
+        "Production payment API",
+        "Analytical warehouse or lakehouse",
+        "Employee email archive",
+        "ChatGPT without retrieval"
+      ],
+      "correctIndex": 1,
+      "explanation": "Long-range aggregates belong in analytical stores, not live transaction systems."
+    },
+    {
+      "id": "QUIZ-008",
+      "kind": "scenario",
+      "prompt": "A hospital shares patient summaries with insurers using standard codes. This illustrates:",
+      "options": [
+        "Unstructured social media",
+        "Master and reference data governance",
+        "Vector embeddings only",
+        "Eliminating databases with AI"
+      ],
+      "correctIndex": 1,
+      "explanation": "Standard codes and shared patient identity rely on governed master/reference data."
+    },
+    {
+      "id": "QUIZ-009",
+      "kind": "scenario",
+      "prompt": "A startup has 50 daily orders and one founder doing books in Excel. The CEO asks for real-time fraud scoring. What is the first gap?",
+      "options": [
+        "They need a graph database immediately",
+        "Excel cannot support integrated operational + analytical scale",
+        "They should delete all historical data",
+        "ChatGPT can store orders permanently"
+      ],
+      "correctIndex": 1,
+      "explanation": "Excel breaks down for integrated, concurrent, auditable operational workloads."
+    },
+    {
+      "id": "QUIZ-010",
+      "kind": "scenario",
+      "prompt": "Spotify playlists update for millions of users each hour. Which statement is most accurate?",
+      "options": [
+        "All playlist data lives inside the language model",
+        "Operational, analytical, and recommendation systems cooperate",
+        "One MySQL table is always sufficient",
+        "Databases are no longer needed"
+      ],
+      "correctIndex": 1,
+      "explanation": "Spotify combines transactional history, analytics, and ML — not a single tool."
+    },
+    {
+      "id": "QUIZ-011",
+      "kind": "architecture",
+      "prompt": "Which component should handle credit card authorization during checkout?",
+      "options": [
+        "Snowflake warehouse",
+        "Operational relational database",
+        "Slide deck repository",
+        "Static CSV on SharePoint"
+      ],
+      "correctIndex": 1,
+      "explanation": "Authorizations require ACID transactions and low latency — operational tier."
+    },
+    {
+      "id": "QUIZ-012",
+      "kind": "architecture",
+      "prompt": "Where should embedding vectors for semantic product search be stored?",
+      "options": [
+        "Excel workbook",
+        "Vector-capable search index or database",
+        "Email inbox",
+        "Printed catalog"
+      ],
+      "correctIndex": 1,
+      "explanation": "Vector workloads need specialized indexes — not spreadsheets."
+    },
+    {
+      "id": "QUIZ-013",
+      "kind": "architecture",
+      "prompt": "A nightly job copies orders from MySQL to Snowflake. This step is called:",
+      "options": [
+        "Normalization",
+        "ETL/ELT integration",
+        "Graph traversal",
+        "Prompt engineering"
+      ],
+      "correctIndex": 1,
+      "explanation": "Integrating operational data into analytical stores is ETL/ELT."
+    },
+    {
+      "id": "QUIZ-014",
+      "kind": "ai_critique",
+      "prompt": "ChatGPT states: 'Companies no longer need SQL databases because I can answer business questions.' Best critique?",
+      "options": [
+        "Correct — LLMs replace all storage",
+        "LLMs lack authoritative, concurrent, auditable records of organizational truth",
+        "SQL is illegal in 2026",
+        "Only Excel is enterprise-grade"
+      ],
+      "correctIndex": 1,
+      "explanation": "Models generate text; enterprises require governed systems of record."
+    },
+    {
+      "id": "QUIZ-015",
+      "kind": "ai_critique",
+      "prompt": "An AI lists Amazon's top-selling SKU yesterday without database access. Primary risk?",
+      "options": [
+        "Answer may hallucinate or use stale training data",
+        "AI always has live warehouse access by default",
+        "Databases cause hallucinations",
+        "SKU codes do not exist"
+      ],
+      "correctIndex": 0,
+      "explanation": "Without retrieval over current data, answers may be plausible but wrong."
+    },
+    {
+      "id": "QUIZ-016",
+      "kind": "reflection",
+      "prompt": "What assumption about databases changed most for you in this chapter?",
+      "options": [],
+      "open": true
+    },
+    {
+      "id": "QUIZ-017",
+      "kind": "reflection",
+      "prompt": "Would you recommend eliminating databases for a 500-person e-commerce company? Why or why not?",
+      "options": [],
+      "open": true
+    }
+  ],
+  "videos": [
+    {
+      "videoTitle": "MIT 6.830 Database Systems — Introduction",
+      "videoUrl": "https://ocw.mit.edu/courses/6-830-database-systems-fall-2010/",
+      "type": "university_lecture"
+    },
+    {
+      "videoTitle": "AWS — What is a Data Warehouse?",
+      "videoUrl": "https://aws.amazon.com/data-warehouse/",
+      "type": "official_docs"
+    },
+    {
+      "videoTitle": "Snowflake — Data Cloud Overview",
+      "videoUrl": "https://www.snowflake.com/en/data-cloud/",
+      "type": "industry"
+    },
+    {
+      "videoTitle": "CMU Database Group — Advanced Databases",
+      "videoUrl": "https://www.youtube.com/@CMUDatabaseGroup",
+      "type": "university_lecture"
+    },
+    {
+      "videoTitle": "OpenAI — GPT Best Practices",
+      "videoUrl": "https://platform.openai.com/docs/guides/gpt-best-practices",
+      "type": "official_docs"
+    }
+  ],
+  "references": [
+    {
+      "permanentId": "REF-001",
+      "type": "academic",
+      "title": "Date, C.J. — An Introduction to Database Systems",
+      "citation": "Classic foundation for relational theory."
+    },
+    {
+      "permanentId": "REF-002",
+      "type": "industry",
+      "title": "Kimball & Ross — The Data Warehouse Toolkit",
+      "citation": "Dimensional modeling for analytics."
+    },
+    {
+      "permanentId": "REF-003",
+      "type": "documentation",
+      "title": "MySQL 8.0 Reference Manual",
+      "url": "https://dev.mysql.com/doc/"
+    },
+    {
+      "permanentId": "REF-004",
+      "type": "documentation",
+      "title": "Snowflake Documentation",
+      "url": "https://docs.snowflake.com/"
+    },
+    {
+      "permanentId": "REF-005",
+      "type": "interactive",
+      "title": "SQLBolt — Interactive SQL Lessons",
+      "url": "https://sqlbolt.com/"
+    },
+    {
+      "permanentId": "REF-006",
+      "type": "github",
+      "title": "awesome-databases",
+      "url": "https://github.com/eventuallyawesome/db-readings"
+    }
+  ],
+  "instructorNotes": "Timing: 45 min Opening Story + Think First discussion; 60 min Core Concepts and ecosystem diagram; 45 min Amazon worked example; 30 min hands-on classification lab; 30 min AI critique breakout; 30 min architecture challenge. Emphasize driving question throughout. Do not resolve CEO question until after Section 6.",
+  "slideDeckOutline": [
+    {
+      "slide": 1,
+      "title": "Driving Question",
+      "notes": "Poll: Can we eliminate databases?"
+    },
+    {
+      "slide": 2,
+      "title": "CEO Scenario",
+      "notes": "Leave unresolved — build tension"
+    },
+    {
+      "slide": 3,
+      "title": "Enterprise Data Ecosystem",
+      "notes": "FIG-001 animated build"
+    },
+    {
+      "slide": 4,
+      "title": "Operational vs Analytical",
+      "notes": "Netflix example"
+    },
+    {
+      "slide": 5,
+      "title": "Data Categories",
+      "notes": "Structured / semi / unstructured"
+    },
+    {
+      "slide": 6,
+      "title": "Amazon Order Journey",
+      "notes": "FIG-003 walkthrough"
+    },
+    {
+      "slide": 7,
+      "title": "AI vs Database",
+      "notes": "FIG-005 contrast"
+    },
+    {
+      "slide": 8,
+      "title": "Technology Decision Matrix",
+      "notes": "Startup scenario"
+    },
+    {
+      "slide": 9,
+      "title": "Architecture Challenge",
+      "notes": "Small group activity"
+    },
+    {
+      "slide": 10,
+      "title": "Chapter Roadmap",
+      "notes": "FIG-012 preview"
+    }
+  ],
+  "figures": [
+    {
+      "figureId": "FIG-001",
+      "title": "Modern Enterprise Data Ecosystem",
+      "purpose": "Establish the textbook's foundational mental model connecting business, operational systems, databases, analytics, AI, and decisions.",
+      "layout": "Vertical stack, six layers, left labels, center flow arrows, Business Universe icons on right margin",
+      "caption": "Figure 1.1: From business events to decisions — the enterprise data ecosystem introduced in Chapter 1.",
+      "alt": "Diagram showing Business at top, then Operational Systems, Databases, Analytics, AI, and Business Decisions at bottom, connected by downward arrows.",
+      "animationNotes": "Reveal layers top-to-bottom; pulse AI layer when introduced; highlight feedback arrow from Decisions to Business.",
+      "referencedConcepts": [
+        "CONCEPT-001",
+        "CONCEPT-005"
+      ],
+      "referencedChapters": [
+        "CH-001"
+      ]
+    },
+    {
+      "figureId": "FIG-002",
+      "title": "Operational vs Analytical Data",
+      "purpose": "Distinguish systems optimized for transactions from systems optimized for analysis.",
+      "layout": "Two-column comparison with center divider; left OLTP icons, right OLAP icons",
+      "caption": "Figure 1.2: Operational data supports live transactions; analytical data supports questions across time.",
+      "alt": "Left column shows order placement and payment with millisecond latency; right column shows dashboards and trend charts with batch and interactive queries.",
+      "animationNotes": "Animate sample order on left; aggregate bars building on right.",
+      "referencedConcepts": [
+        "CONCEPT-002",
+        "CONCEPT-003"
+      ],
+      "referencedChapters": [
+        "CH-001"
+      ]
+    },
+    {
+      "figureId": "FIG-003",
+      "title": "Amazon Customer Order Journey",
+      "purpose": "Trace one customer order through website, operational database, warehouse, analytics, AI, and executive dashboard.",
+      "layout": "Horizontal swimlane: Customer, Website, Operational DB, ETL, Warehouse, ML, Dashboard",
+      "caption": "Figure 1.3: A single Amazon order generates operational records, analytical history, and recommendation signals.",
+      "alt": "Flow from customer click through MySQL order tables, nightly ETL to Snowflake, recommendation model, and executive KPI dashboard.",
+      "animationNotes": "Dot travels along path; labels appear at each system.",
+      "referencedConcepts": [
+        "CONCEPT-004",
+        "CONCEPT-005"
+      ],
+      "referencedChapters": [
+        "CH-001"
+      ]
+    },
+    {
+      "figureId": "FIG-004",
+      "title": "Organizational Data Lifecycle",
+      "purpose": "Show create, store, integrate, analyze, govern, and retire stages of enterprise data.",
+      "layout": "Circular lifecycle with six stages and governance ring overlay",
+      "caption": "Figure 1.4: Enterprise data lifecycle — from creation to archival with continuous governance.",
+      "alt": "Circular diagram with Create, Store, Integrate, Analyze, Decide, and Archive stages.",
+      "animationNotes": "Rotate highlight through stages; governance ring pulses on Store and Analyze.",
+      "referencedConcepts": [
+        "CONCEPT-004"
+      ],
+      "referencedChapters": [
+        "CH-001"
+      ]
+    },
+    {
+      "figureId": "FIG-005",
+      "title": "AI Models vs Enterprise Databases",
+      "purpose": "Clarify that language models reason over patterns while databases store authoritative organizational records.",
+      "layout": "Side-by-side panels: ChatGPT (ephemeral, probabilistic) vs Database (persistent, transactional)",
+      "caption": "Figure 1.5: AI models generate answers; databases store the records organizations must trust.",
+      "alt": "Left panel shows chat interface with probabilistic output; right panel shows tables with ACID properties and audit trail.",
+      "animationNotes": "Contrast checkmarks for persistence, concurrency, and audit on database side only.",
+      "referencedConcepts": [
+        "CONCEPT-006",
+        "CONCEPT-007"
+      ],
+      "referencedChapters": [
+        "CH-001"
+      ]
+    },
+    {
+      "figureId": "FIG-006",
+      "title": "Modern Data Architecture Overview",
+      "purpose": "Preview how multiple database technologies coexist in one architecture.",
+      "layout": "Hub architecture: sources → operational stores → integration → warehouse/lake → consumption (BI, AI)",
+      "caption": "Figure 1.6: No single database serves every workload — modern architectures combine specialized systems.",
+      "alt": "Architecture diagram with MySQL, MongoDB, Kafka, Snowflake, and vector search serving different layers.",
+      "animationNotes": "Highlight one technology at a time with workload label.",
+      "referencedConcepts": [
+        "CONCEPT-008"
+      ],
+      "referencedChapters": [
+        "CH-001",
+        "CH-003"
+      ]
+    },
+    {
+      "figureId": "FIG-007",
+      "title": "Technology Evolution Timeline",
+      "purpose": "Position Excel, relational databases, cloud databases, warehouses, vector databases, and AI on a timeline.",
+      "layout": "Horizontal timeline 1970–2026 with milestone markers",
+      "caption": "Figure 1.7: Enterprise data technologies evolved to match growing scale, variety, and intelligence requirements.",
+      "alt": "Timeline from spreadsheets through relational databases, cloud, warehouses, and vector databases to enterprise AI.",
+      "animationNotes": "Scroll timeline left-to-right; tooltip on each milestone.",
+      "referencedConcepts": [
+        "CONCEPT-008"
+      ],
+      "referencedChapters": [
+        "CH-001"
+      ]
+    },
+    {
+      "figureId": "FIG-008",
+      "title": "Chapter 1 Concept Map",
+      "purpose": "Summarize relationships among core concepts introduced in this chapter.",
+      "layout": "Radial concept map with Enterprise Data at center",
+      "caption": "Figure 1.8: Concept map — how foundational data ideas connect in Chapter 1.",
+      "alt": "Concept map linking enterprise data, operational data, analytical data, lifecycle, ecosystem, and AI complementarity.",
+      "animationNotes": "Expand from center node outward.",
+      "referencedConcepts": [
+        "CONCEPT-001",
+        "CONCEPT-002",
+        "CONCEPT-003",
+        "CONCEPT-004",
+        "CONCEPT-005",
+        "CONCEPT-006"
+      ],
+      "referencedChapters": [
+        "CH-001"
+      ]
+    },
+    {
+      "figureId": "FIG-009",
+      "title": "Chapter 1 Knowledge Graph",
+      "purpose": "Show CONCEPT and TECH nodes introduced in this chapter for adaptive learning paths.",
+      "layout": "Graph view: CH-001 connected to CONCEPT nodes and CASE nodes",
+      "caption": "Figure 1.9: Knowledge graph entry point for Module 1.",
+      "alt": "Graph with CH-001 node linked to Amazon, Netflix, Spotify cases and six concept nodes.",
+      "animationNotes": "Fade in nodes by category: concepts, cases, technologies.",
+      "referencedConcepts": [
+        "CONCEPT-001",
+        "CONCEPT-005",
+        "CONCEPT-008"
+      ],
+      "referencedChapters": [
+        "CH-001"
+      ]
+    },
+    {
+      "figureId": "FIG-010",
+      "title": "Startup Technology Comparison Matrix",
+      "purpose": "Support Technology Decision section comparing Excel through Snowflake.",
+      "layout": "Matrix: rows = criteria (scale, cost, skills, analytics, AI); columns = technologies",
+      "caption": "Figure 1.10: Comparison matrix — selecting data technology by business requirement.",
+      "alt": "Table comparing Excel, Access, MySQL, MongoDB, and Snowflake across five decision criteria.",
+      "animationNotes": "Highlight recommended cell per scenario.",
+      "referencedConcepts": [
+        "CONCEPT-008"
+      ],
+      "referencedChapters": [
+        "CH-001"
+      ]
+    },
+    {
+      "figureId": "FIG-011",
+      "title": "Architecture Decision Tree",
+      "purpose": "Guide startup architecture challenge with branching criteria.",
+      "layout": "Top-down decision tree: workload type → consistency needs → scale → recommendation",
+      "caption": "Figure 1.11: Decision tree for selecting operational, analytical, and AI data platforms.",
+      "alt": "Decision tree starting with transaction volume question and branching to database recommendations.",
+      "animationNotes": "Reveal branches on click; leaf nodes show technology icons.",
+      "referencedConcepts": [
+        "CONCEPT-008"
+      ],
+      "referencedChapters": [
+        "CH-001"
+      ]
+    },
+    {
+      "figureId": "FIG-012",
+      "title": "Textbook Chapter Roadmap",
+      "purpose": "Preview Modules 1–6 so students see where Chapter 1 fits in the learning journey.",
+      "layout": "Horizontal roadmap with Module 1 highlighted; chapter titles as milestones",
+      "caption": "Figure 1.12: Chapter 1 opens a journey from foundations through SQL, NoSQL, architecture, and AI.",
+      "alt": "Roadmap showing 34 chapters across six modules with Chapter 1 highlighted in Module 1.",
+      "animationNotes": "Pan right to preview future modules; return highlight to CH-001.",
+      "referencedConcepts": [
+        "CONCEPT-005"
+      ],
+      "referencedChapters": [
+        "CH-001",
+        "CH-002",
+        "CH-005",
+        "CH-015",
+        "CH-023"
+      ]
+    }
+  ],
+  "labs": [
+    {
+      "id": "LAB-001",
+      "title": "Data Classification Lab",
+      "learningObjectId": "LO-003"
+    }
+  ],
+  "datasets": [
+    {
+      "id": "classification-examples",
+      "format": "csv",
+      "rows": 30
+    }
+  ]
+}

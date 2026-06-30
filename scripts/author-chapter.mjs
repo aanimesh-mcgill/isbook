@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 /**
- * Generate all sections for a chapter via OpenAI API.
+ * Generate all sections for a chapter via OpenAI API (Constitution + optional chapter prompt).
  */
-import { existsSync, writeFileSync, mkdirSync, readFileSync } from 'fs';
-import { join, resolve } from 'path';
-import { fileURLToPath } from 'url';
-import OpenAI from 'openai';
+import { existsSync, writeFileSync, mkdirSync } from 'fs';
+import { join } from 'path';
 import {
   parseArgs,
   loadBookMeta,
@@ -16,63 +14,51 @@ import {
   loadBookCatalog,
   sectionFileName,
   buildAuthorPrompt,
-  stripCodeFences,
 } from './lib/book-catalog.mjs';
+import { loadChapterInstance } from './lib/tos.mjs';
+import { buildRepoContextBlock, updateBookBibleAfterWrite } from './lib/repo-context.mjs';
+import { generateManuscript, getModel } from './lib/openai-author.mjs';
 import { validateSection } from './lib/parse-section.mjs';
-
-const ROOT = resolve(fileURLToPath(new URL('..', import.meta.url)));
-
-function loadEnv() {
-  const envPath = join(ROOT, '.env');
-  if (!existsSync(envPath)) return;
-  for (const line of readFileSync(envPath, 'utf8').split('\n')) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const eq = trimmed.indexOf('=');
-    if (eq === -1) continue;
-    const key = trimmed.slice(0, eq).trim();
-    const value = trimmed.slice(eq + 1).trim();
-    if (!process.env[key]) process.env[key] = value;
-  }
-}
 
 const args = parseArgs(process.argv.slice(2));
 
-if (!args.book || !args.chapter) {
-  console.error('Usage: node scripts/author-chapter.mjs --book <slug> --chapter <dir> [--force] [--from N] [--to N]');
+const bookSlug = args.book ?? 'database-analytics-ai';
+
+if (!args.chapter) {
+  console.error(`
+Usage:
+  npm run author:chapter -- --book <slug> --chapter <dir> [--prompt <id>] [--from N] [--to N] [--force]
+
+Options:
+  --instance <id>         Chapter instance YAML
+  --prompt <id>           Alias for --instance (legacy)
+  --catalog tos           Use Pedagogy Engine experience blocks (15 blocks)
+  --from / --to             Section order range
+`);
   process.exit(1);
 }
 
-loadEnv();
-
-const apiKey = process.env.OPENAI_API_KEY;
-if (!apiKey || apiKey.includes('your-key')) {
-  console.error('Set OPENAI_API_KEY in .env');
-  process.exit(1);
-}
-
-const bookMeta = loadBookMeta(args.book);
-const chapterMeta = loadChapterMeta(args.book, args.chapter);
-const catalog = loadBookCatalog(args.book);
-const chapterDir = resolveChapterDir(args.book, args.chapter);
+const bookMeta = loadBookMeta(bookSlug);
+const chapterMeta = loadChapterMeta(bookSlug, args.chapter);
+const defaultCatalog = bookSlug === 'database-analytics-ai' ? 'v2' : 'section-catalog';
+const catalog = loadBookCatalog(bookSlug, { catalog: args.catalog ?? defaultCatalog });
+const chapterDir = resolveChapterDir(bookSlug, args.chapter);
 const sectionsDir = join(chapterDir, 'sections');
 mkdirSync(sectionsDir, { recursive: true });
+
+const instanceId = args.instance ?? args.prompt;
+const chapterInstance = instanceId ? loadChapterInstance(bookSlug, instanceId) : null;
+const model = getModel(args.model);
 
 const maxOrder = catalog.sections.length;
 const fromOrder = args.from ? Number(args.from) : 1;
 const toOrder = args.to ? Number(args.to) : maxOrder;
-const model = args.model ?? process.env.OPENAI_MODEL ?? 'gpt-4o';
-const openai = new OpenAI({ apiKey });
-
 const toGenerate = catalog.sections.filter((s) => s.order >= fromOrder && s.order <= toOrder);
-
-const systemRole =
-  bookMeta.slug === 'database-analytics-ai'
-    ? 'You are an expert author of database and analytics textbooks for graduate students. Output only the requested markdown file. Never output JSON or HTML.'
-    : 'You are an expert MIS textbook author. Output only the requested markdown file. Never output JSON or HTML.';
 
 console.log(`\nGenerating Chapter ${chapterMeta.chapterNumber}: ${chapterMeta.title}`);
 console.log(`  Book: ${bookMeta.title}`);
+console.log(`  Pedagogy Engine (TOS): loaded`);
+if (chapterInstance) console.log(`  Chapter instance: ${instanceId}`);
 console.log(`  Sections ${fromOrder}–${toOrder} (${toGenerate.length} total)\n`);
 
 let generated = 0;
@@ -84,7 +70,7 @@ for (const section of toGenerate) {
   const outPath = join(sectionsDir, fileName);
 
   if (existsSync(outPath) && !args.force) {
-    console.log(`  ⊘ ${fileName} — already exists (use --force to overwrite)`);
+    console.log(`  ⊘ ${fileName} — already exists (use --force)`);
     skipped++;
     continue;
   }
@@ -92,27 +78,31 @@ for (const section of toGenerate) {
   process.stdout.write(`  … ${fileName} `);
 
   try {
+    const repoContext = args['no-repo-context']
+      ? ''
+      : buildRepoContextBlock({
+          bookSlug,
+          chapterDir: args.chapter,
+          chapterMeta,
+          sectionOrder: section.order,
+          catalog,
+        });
+
     const prompt = buildAuthorPrompt({
       bookMeta,
       chapterMeta,
       section,
       catalog,
+      chapterPrompt: chapterInstance,
       extraInstructions: args.instructions ?? '',
+      repoContext,
     });
 
-    const response = await openai.chat.completions.create({
+    const { content: manuscript, usage } = await generateManuscript({
+      userPrompt: prompt,
       model,
-      temperature: 0.7,
-      messages: [
-        { role: 'system', content: systemRole },
-        { role: 'user', content: prompt },
-      ],
+      bookSlug,
     });
-
-    const raw = response.choices[0]?.message?.content;
-    if (!raw) throw new Error('empty response');
-
-    const manuscript = stripCodeFences(raw);
     const validation = validateSection(manuscript);
 
     if (!validation.valid) {
@@ -120,11 +110,17 @@ for (const section of toGenerate) {
     }
 
     writeFileSync(outPath, manuscript, 'utf8');
-    const tokens = response.usage?.total_tokens ?? '?';
-    console.log(`✓ (${tokens} tokens, ${validation.blocks?.length ?? 0} blocks)`);
+    updateBookBibleAfterWrite({
+      bookSlug,
+      chapterDir: args.chapter,
+      chapterMeta,
+      section,
+      outPath,
+      usage,
+    });
+    console.log(`✓ (${usage?.total_tokens ?? '?'} tokens)`);
     generated++;
-
-    await new Promise((r) => setTimeout(r, 1500));
+    await new Promise((r) => setTimeout(r, 8000));
   } catch (err) {
     console.log(`✗ ${err.message}`);
     failed++;
@@ -132,6 +128,6 @@ for (const section of toGenerate) {
 }
 
 console.log(`\nDone: ${generated} generated, ${skipped} skipped, ${failed} failed`);
-console.log(`  Manuscripts: books/${args.book}/chapters/${args.chapter}/sections/`);
+console.log(`  Next: npm run author:revise -- --book ${bookSlug} --chapter ${args.chapter}`);
 
 if (failed > 0) process.exit(1);

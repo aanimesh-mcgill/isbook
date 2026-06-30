@@ -1,0 +1,149 @@
+# v2 section catalog — Book Bible 22-section structure (20 experience blocks)
+# Use with: npm run author -- --catalog v2 --out chapter ...
+
+sections:
+  - order: 1
+    slug: opening-story
+    title: Opening Story
+    rules: |
+      Real business problem at a named company OR Meridian Retail Group.
+      Use :::case fence. 600–900 words. Story → Question → Business Problem.
+      End with why an analytics professional should care. Do NOT teach syntax.
+      v2 rewrite: use Priya Sharma (VP Data, Meridian) unless instructions say otherwise.
+
+  - order: 2
+    slug: think-first
+    title: Think First
+    rules: |
+      Challenging questions BEFORE teaching. Students predict and guess.
+      Use :::callout titled "Think First". Never reveal the answer yet.
+      Include 2–3 prediction prompts. 400–600 words.
+
+  - order: 3
+    slug: learning-objectives
+    title: Learning Objectives
+    rules: |
+      Use :::checklist with 4–6 business-oriented objectives.
+      Start with "After reading this chapter, you will be able to:"
+      Avoid purely technical wording. 150–250 words.
+
+  - order: 4
+    slug: executive-summary
+    title: Executive Summary
+    rules: |
+      What a busy manager needs in 90 seconds. Use :::manager block.
+      Plain language, no jargon. 200–350 words.
+
+  - order: 5
+    slug: why-this-matters
+    title: Why This Matters
+    rules: |
+      Explain why managers and analytics professionals should care.
+      Use :::manager block. Connect to real decisions (cost, speed, risk). 500–700 words.
+
+  - order: 6
+    slug: big-picture
+    title: Big Picture
+    rules: |
+      Show how today's concept fits the modern data ecosystem.
+      Reference previous chapters explicitly. Use a simple architecture diagram description.
+      FIGURE NEEDED: ecosystem placement diagram. 600–900 words.
+
+  - order: 7
+    slug: core-concepts
+    title: Core Concepts
+    rules: |
+      Teach from first principles. WHY before WHAT before WHEN before HOW.
+      Use :::callout for key insights. Build intuition before syntax. 800–1,200 words.
+      Register learning object refs in frontmatter when applicable.
+
+  - order: 8
+    slug: business-example
+    title: Business Example
+    rules: |
+      Worked scenario using Meridian Retail Group or a named company.
+      Show decision context, data context, and outcome. 700–1,000 words.
+
+  - order: 9
+    slug: technology-decision
+    title: Technology Decision
+    rules: |
+      When to use / when NOT to use. Comparison framework or decision tree.
+      Use :::callout titled "Architect's Decision". 500–800 words.
+
+  - order: 10
+    slug: architecture-challenge
+    title: Architecture Challenge
+    rules: |
+      Design exercise — sketch or defend an architecture.
+      Use :::exercise blocks. Students draw or describe components. 400–600 words.
+
+  - order: 11
+    slug: hands-on-activity
+    title: Hands-on Activity
+    rules: |
+      Step-by-step lab. Prefer cloud or local tools with free tiers.
+      Use :::exercise blocks. Realistic business case. 45–90 minutes. 800–1,200 words.
+
+  - order: 12
+    slug: ai-activity
+    title: AI Activity
+    rules: |
+      Show how ChatGPT/LLM could help, then critique limitations.
+      Use :::ai block. Include a flawed AI-generated answer students must fix.
+      Teach critical evaluation, not blind trust. 500–700 words.
+
+  - order: 13
+    slug: industry-insight
+    title: Industry Insight
+    rules: |
+      How real organizations use this concept. Use :::case or :::research.
+      Cite industry reports or official docs where possible. 500–800 words.
+
+  - order: 14
+    slug: manager-perspective
+    title: Manager Perspective
+    rules: |
+      What a VP, director, or analytics manager needs to decide.
+      Use :::manager block. Budget, team, timeline implications. 400–600 words.
+
+  - order: 15
+    slug: common-mistakes
+    title: Common Mistakes
+    rules: |
+      What teams get wrong and how to avoid it.
+      Use :::callout titled "Common Mistake". 3–5 mistakes with fixes. 400–600 words.
+
+  - order: 16
+    slug: continue-learning
+    title: Continue Learning
+    rules: |
+      Best YouTube videos, official docs, interactive labs, AI prompts, further reading.
+      Markdown lists with URLs. 300–500 words.
+
+  - order: 17
+    slug: summary
+    title: Summary
+    rules: |
+      Chapter recap in plain language. Reinforce mental model. 300–500 words.
+
+  - order: 18
+    slug: reflection
+    title: Reflection
+    rules: |
+      Ask: What surprised you? What assumptions changed? What would you do differently at work?
+      Use :::callout. 300–500 words of prompts for students.
+
+  - order: 19
+    slug: assessment
+    title: Assessment
+    rules: |
+      8–12 questions: conceptual, scenario-based, architecture decisions, predictions.
+      Use :::exercise or numbered list. Not memorization-only. 600–900 words.
+
+  - order: 20
+    slug: references
+    title: References
+    rules: |
+      Books, official documentation, papers, industry reports, videos, interactive resources.
+      Markdown list format. 10–15 high-quality sources. 200–400 words.

@@ -5,6 +5,8 @@ import { existsSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { load as loadYaml } from 'js-yaml';
 import { getBooksRoot } from './paths.mjs';
+import { buildChapterContextBlock, loadExperienceBlocksCatalog } from './tos.mjs';
+import { buildRepoContextBlock } from './repo-context.mjs';
 
 import {
   STANDARD_SECTIONS as IS_SECTIONS,
@@ -21,9 +23,23 @@ export const STANDARD_SECTIONS = IS_SECTIONS;
 /**
  * Load section catalog for a book. Falls back to IS textbook catalog.
  * @param {string} bookSlug
+ * @param {{ catalogName?: string }} [opts]
  */
-export function loadBookCatalog(bookSlug) {
-  const catalogPath = join(getBooksRoot(), bookSlug, 'section-catalog.yaml');
+export function loadBookCatalog(bookSlug, opts = {}) {
+  const catalogKey = opts.catalogName ?? opts.catalog ?? 'section-catalog';
+
+  if (catalogKey === 'tos' || catalogKey === 'constitution' || catalogKey === 'section-catalog-constitution') {
+    const tosCatalog = loadExperienceBlocksCatalog();
+    if (tosCatalog) return tosCatalog;
+  }
+
+  const catalogName =
+    catalogKey === 'constitution' || catalogKey === 'tos'
+      ? 'section-catalog-constitution'
+      : catalogKey === 'v2'
+        ? 'section-catalog-v2'
+        : catalogKey;
+  const catalogPath = join(getBooksRoot(), bookSlug, `${catalogName}.yaml`);
   if (!existsSync(catalogPath)) {
     return {
       sections: IS_SECTIONS,
@@ -57,7 +73,15 @@ export function resolveSection(catalog, input) {
   throw new Error(`Unknown section "${input}". Use slug or order number.`);
 }
 
-export function buildAuthorPrompt({ bookMeta, chapterMeta, section, catalog, extraInstructions = '' }) {
+export function buildAuthorPrompt({
+  bookMeta,
+  chapterMeta,
+  section,
+  catalog,
+  chapterPrompt,
+  extraInstructions = '',
+  repoContext = '',
+}) {
   const chapterNum = chapterMeta.chapterNumber;
   const sectionId = `${chapterNum}.${section.sectionNum ?? section.order}`;
   const fileName = sectionFileName(section);
@@ -72,13 +96,14 @@ export function buildAuthorPrompt({ bookMeta, chapterMeta, section, catalog, ext
   const authorVoice = bookMeta.authorVoice ?? 'Professional, evidence-based, managerial tone.';
   const chapterContext = chapterMeta.authorContext ?? chapterMeta.summary ?? '';
 
-  return `You are the Chief Author for "${bookMeta.title}".
-Audience: ${audience}
-Philosophy: ${philosophy}
-Author voice: ${authorVoice}
-Output canonical ISBX manuscript format — NOT JSON, NOT HTML, NOT Firestore.
+  let chapterBrief = '';
+  if (chapterPrompt) {
+    chapterBrief = buildChapterContextBlock(chapterPrompt);
+  }
 
-Write ONE section only:
+  return `Using the Book Bible and Pedagogy Engine already loaded as your system instructions,
+
+Write ONE experience block (section) for this learning experience:
 
 Book: ${bookMeta.title}
 Book slug: ${bookMeta.slug}
@@ -91,7 +116,7 @@ Section slug: ${section.slug}
 Chapter context (cover these topics across the full chapter):
 ${chapterContext}
 
-SECTION-SPECIFIC RULES:
+${chapterBrief ? `${chapterBrief}\n\n` : ''}${repoContext ? `${repoContext}\n\n` : ''}SECTION-SPECIFIC RULES:
 ${rules}
 
 OUTPUT: Return ONLY the complete markdown file content. No preamble, no explanation after.
@@ -114,13 +139,13 @@ researchStreams:
 ---
 
 WRITING RULES:
-- Practical analytics professional tone — "Which technology fits which problem?"
-- Use real companies and realistic examples
+- Follow TOS Pedagogy Engine rules (business problem before technology)
+- Use real companies and realistic examples with sample data tables before SQL
+- MySQL syntax unless comparing dialects
 - No HTML tags
 - No Firestore JSON
-- Target 500–1,500 words
+- Target 500–1,500 words (worked examples may be longer)
 - Use fenced blocks: :::case :::research :::manager :::ai :::exercise :::checklist :::quote :::callout
-- Include SQL or code examples in fenced code blocks where appropriate
 
 ${extraInstructions ? `ADDITIONAL INSTRUCTIONS:\n${extraInstructions}` : ''}`;
 }

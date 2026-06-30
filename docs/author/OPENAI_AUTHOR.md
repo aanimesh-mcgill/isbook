@@ -1,6 +1,28 @@
 # OpenAI Author — Step-by-Step Setup
 
-Generate textbook sections using **ChatGPT models (GPT-4o)** directly from Cursor's terminal.
+Generate textbook sections using **ChatGPT models (GPT-4o)** via the author pipeline.  
+For *Modern Data Systems for Analytics and AI* (v2), OpenAI reads the **Book Bible + repository manuscript** for consistency.
+
+---
+
+## v2 quick start (database-analytics-ai)
+
+```bash
+# One section → written directly to chapters/
+node scripts/author-section.mjs --book database-analytics-ai --catalog v2 --out chapter \
+  --chapter 01-why-data-still-matters --section opening-story
+
+# Shorthand npm script (pass args after --)
+npm run author:write -- --chapter 01-why-data-still-matters --section think-first
+
+# Overwrite existing file (use script --force, NOT npm --force)
+npm run author:write -- --chapter 01-why-data-still-matters --section opening-story --force
+```
+
+**System prompt:** all 4 files in `books/database-analytics-ai/00_BOOK_BIBLE/`  
+**User prompt:** section rules + prior sections in chapter + chapter index + learning objects
+
+See `books/database-analytics-ai/00_BOOK_BIBLE/README.md` and `.cursor/rules/book-bible.mdc`.
 
 ---
 

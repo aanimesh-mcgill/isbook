@@ -1,0 +1,13 @@
+permanentId: CH-001
+title: Why Data Still Matters in the Age of AI
+slug: why-data-still-matters
+chapterNumber: 1
+partNumber: 1
+partTitle: Data, Analytics and AI Foundations
+summary: >-
+  Introduces the modern enterprise data ecosystem and explains why databases,
+  warehouses, and governed data remain essential alongside AI systems such as
+  ChatGPT.
+order: 1
+status: published
+dependsOn: []
