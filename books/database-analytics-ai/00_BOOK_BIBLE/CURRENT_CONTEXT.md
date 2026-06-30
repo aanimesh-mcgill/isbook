@@ -3,23 +3,23 @@
 **Purpose:** What we're working on *right now*. Update at the start and end of every session.
 
 **Last updated:** 2026-06-30
-**Session focus:** Chapter 1 v2 first draft complete — 20 sections, ~10,825 words
+**Session focus:** Chapter 1 committed, published, deployed — live on site
 
 ---
 
 ## Active task
 
-**Chapter 1 v2 first draft — COMPLETE.** All 20 sections in `chapters/01-why-data-still-matters/sections/`. Ready for refinement.
+**Chapter 1 v2 is live.** Git commit `4788138`, Firestore published, Firebase deployed.
 
-Status: **Draft complete** — refine Chapter 1 or begin Chapter 2
+Status: **Published** — refine content or start Chapter 2
 
 ---
 
 ## Immediate next task
 
-1. **Refinement pass** on Chapter 1 (optional): `npm run author:revise -- --book database-analytics-ai --chapter 01-why-data-still-matters`
-2. **Chapter 2**: finalize catalog entry, then `npm run author:chapter -- --chapter 02-... --from 1 --to 20 --force`
-3. Create `chapters-catalog-v2.yaml` for Part I if not done
+1. **Optional:** Remove/archive old Chapter 1 slug `why-databases-still-matter-ai` from Firestore (duplicate in TOC)
+2. **Refinement pass** on Chapter 1: `npm run author:revise -- --book database-analytics-ai --chapter 01-why-data-still-matters`
+3. **Chapter 2**: create catalog entry + `npm run author:chapter -- --chapter 02-... --from 1 --to 20 --force`
 
 ---
 
@@ -30,7 +30,8 @@ Status: **Draft complete** — refine Chapter 1 or begin Chapter 2
 | Chapter | 1 — Why Data Still Matters in the Age of AI |
 | Slug | `01-why-data-still-matters` |
 | Part | I — Understanding Enterprise Data |
-| Status | v2 first draft complete — 20 sections, ~10,825 words |
+| Status | **published** — live on site |
+| Live URL | https://istextbook-e8a3b.web.app/read/database-analytics-ai/why-data-still-matters |
 | Next section to write | Chapter 2 (TBD) or refinement pass on Ch.1 |
 
 ---

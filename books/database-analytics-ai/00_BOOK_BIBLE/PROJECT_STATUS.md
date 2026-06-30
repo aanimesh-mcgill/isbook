@@ -2,8 +2,8 @@
 
 **Book:** Modern Data Systems for Analytics and AI  
 **Edition:** v2.0 (rewrite from scratch)  
-**Last updated:** 2026-06-30
-**Updated by:** Chief Author session — Book Bible architecture initialized
+**Last updated:** 2026-06-30  
+**Updated by:** Publish + deploy session
 
 ---
 
@@ -12,12 +12,12 @@
 | Metric | Target (v2) | Current |
 |--------|-------------|---------|
 | Parts | 4 | 4 planned (not finalized in catalog) |
-| Chapters | 40–45 | 0 v2-ready · 24 v1 legacy |
-| Pages | ~500 | ~0 v2 |
+| Chapters | 40–45 | 1 published (v2 Ch.1) · 24 v1 legacy in repo |
+| Pages | ~500 | ~10,825 words (Ch.1) |
 | Learning objects | TBD | 7+ in atlas (v1/v2 mixed) |
-| Book Bible | Complete | **Initialized** |
+| Book Bible | Complete | **Active** |
 
-**Phase:** Chapter 1 v2 first draft complete (~20 sections). Refinement pass next.
+**Phase:** Chapter 1 v2 **live on site**. Refinement or Chapter 2 next.
 
 ---
 
@@ -39,7 +39,7 @@
 
 | Ch | Title | Status | Words | Notes |
 |----|-------|--------|-------|-------|
-| 1 | Why Data Still Matters in the Age of AI | **draft (v2 complete)** | ~10,825 | All 20 v2 sections generated via OpenAI; refinement pending |
+| 1 | Why Data Still Matters in the Age of AI | **published (v2 live)** | ~10,825 | 20 sections · Git `4788138` · Firestore + Firebase deployed 2026-06-30 |
 | 2 | Data as a Business Asset | not started | — | |
 | 3 | The Enterprise Data Journey | not started | — | |
 | 4 | Types of Data Systems | not started | — | |
@@ -69,8 +69,8 @@ Not yet cataloged for v2. v1 chapters 5–24 in `books/database-analytics-ai/cha
 |------|--------|
 | Book Bible architecture | ✅ Created 2026-06-30 |
 | Cursor rule (`book-bible.mdc`) | ✅ Created |
-| OpenAI repo-context pipeline (`scripts/lib/repo-context.mjs`) | ✅ Created |
-| v2 section catalog (`section-catalog-v2.yaml`) | ✅ Created |
+| OpenAI repo-context pipeline | ✅ Live |
+| Chapter 1 on website | ✅ https://istextbook-e8a3b.web.app/read/database-analytics-ai/why-data-still-matters |
 | v2 chapters catalog YAML | ⬜ Not created |
 | Meridian Retail Group character bible | ⬜ Not created |
 | Part I chapter outline (detailed) | ⬜ Not created |
@@ -81,9 +81,7 @@ Not yet cataloged for v2. v1 chapters 5–24 in `books/database-analytics-ai/cha
 
 | Blocker | Owner | Notes |
 |---------|-------|-------|
-| v2 chapter catalog not finalized | Chief Author | Part I topics listed in SYSTEM_PROMPT §27; need full 40–45 chapter YAML |
-| v1 vs v2 coexistence | Chief Author | Decide: archive v1 chapters or keep as reference |
-| atlas-publisher rule conflict | Documented in AUTHOR_DECISIONS AD-015 — Book Bible author mode vs publisher-only mode |
+| Remove duplicate old Ch.1 (`why-databases-still-matter-ai`) from Firestore TOC | Chief Author | Old slug may still appear beside new v2 chapter |
 
 ---
 
@@ -96,7 +94,8 @@ Not yet cataloged for v2. v1 chapters 5–24 in `books/database-analytics-ai/cha
 | 2026-06-30 | OpenAI: `chapters/01-why-data-still-matters/sections/03-learning-objectives.md` (276 words) |
 | 2026-06-30 | OpenAI: `chapters/01-why-data-still-matters/sections/02-think-first.md` (494 words) |
 | 2026-06-30 | OpenAI: `chapters/01-why-data-still-matters/sections/01-opening-story.md` (530 words) |
-| 2026-06-30 | OpenAI repo-context pipeline + Ch1 `01-opening-story.md` v2 draft (530 words) |
+| 2026-06-30 | Committed, published, deployed Chapter 1 v2 (20 sections) |
+| 2026-06-30 | OpenAI repo-context pipeline + Ch1 first draft |
 
 ---
 
