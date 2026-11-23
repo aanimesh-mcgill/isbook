@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>See why nobody else can open it · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 4 of 16</p>
+    <h1 class="page-title" tabindex="-1">See why nobody else can open it</h1>
+    <p>The page works for you. It does not work for anyone else.</p>
+<section class="step"><h3>Try to share the address</h3>
+<p>Copy the <code>file:///</code> address and send it to another person, or open it on a phone that does not have this folder. It fails. That address points at a disk the other person does not have.</p></section>
+<section class="step"><h3>Why sending one file is not enough</h3>
+<p>If you email only <code>index.html</code>, the message does not include <code>style.css</code> or <code>mark.svg</code>. Their browser will show the words and a broken picture, without your colors. A page is a set of files that refer to each other by name.</p></section>
+<section class="panel why"><p>A public page has an address that starts with <code>https://</code>. A server keeps the files and sends them to any browser that requests that address. Putting the files on a server is called hosting. The next two chapters do that with Firebase Hosting.</p></section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Why does your file address fail on a classmate's phone?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="file:/// names a location on the computer that saved the file.">The address points at your computer's disk</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="file:/// names a location on the computer that saved the file.">HTML only works in one brand of browser</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="file:/// names a location on the computer that saved the file.">The title tag is too long</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. What does hosting provide?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="Hosting serves the files at an HTTPS address other people can open.">An HTTPS address that serves your files</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="Hosting serves the files at an HTTPS address other people can open.">A second copy of the code editor</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="Hosting serves the files at an HTTPS address other people can open.">A way to hide the HTML tags</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=iYM2zFP3Zn0" target="_blank" rel="noopener noreferrer">Video: HTTP Crash Course</a></li><li><a href="https://www.w3schools.com/whatis/whatis_http.asp" target="_blank" rel="noopener noreferrer">W3Schools: What is HTTP</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Howto/Web_mechanics/How_does_the_Internet_work" target="_blank" rel="noopener noreferrer">MDN: How the internet works</a></li></ul>
+    <label><input type="checkbox" class="done" value="only-you"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="03-browser.html">← Open the page in the browser</a><a class="action" href="05-firebase.html">Learn what Firebase Hosting does →</a></div>
+  </main>
+</div>
+</body>
+</html>

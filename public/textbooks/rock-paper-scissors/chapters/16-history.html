@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Show the recent rounds · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 16 of 16</p>
+    <h1 class="page-title" tabindex="-1">Show the recent rounds</h1>
+    <p>The totals do not say what just happened. Keep the last five rounds on the page, newest first.</p>
+<section class="panel why requirements"><p><strong>A player should see the recent pairs without a notebook.</strong></p>
+<dl><dt>Inputs</dt><dd>Each round's two moves and result, and the reset button.</dd>
+<dt>Expected output</dt><dd>A list of at most five rounds, newest at the top. Reset clears it.</dd>
+<dt>Rules</dt><dd>Build each list item in the script. Do not paste the player's text into the page as HTML.</dd></dl></section>
+<section class="step"><h3>The ideas this feature needs</h3>
+<p>An array can hold objects. Each object has <code>player</code>, <code>computer</code>, and <code>outcome</code>. <code>unshift</code> puts the new round at the front. <code>pop</code> removes the last item when the list is longer than five. <code>for...of</code> walks the array. <code>createElement("li")</code> makes a list item. <code>textContent</code> sets its words. <code>append</code> puts it in the <code>ol</code>. Clearing <code>innerHTML</code> before the loop redraws the list from the array, which is the source of truth. Reset sets <code>history.length = 0</code> and redraws.</p>
+<div class="codehead"><span>Add under the reset button</span><button class="copy" data-copy="history-html" type="button">Copy</button></div><pre><code id="history-html">&lt;h2>Recent rounds&lt;/h2>
+&lt;ol id="history">&lt;/ol></code></pre>
+<div class="codehead"><span>public/script.js · complete file</span><button class="copy" data-copy="history-js" type="button">Copy</button></div><pre><code id="history-js">const moves = ["rock", "paper", "scissors"];
+const result = document.querySelector("#result");
+const score = document.querySelector("#score");
+const historyList = document.querySelector("#history");
+let playerScore = 0;
+let computerScore = 0;
+let ties = 0;
+const history = [];
+
+function chooseComputerMove() {
+  const index = Math.floor(Math.random() * moves.length);
+  return moves[index];
+}
+
+function decideWinner(player, computer) {
+  if (player === computer) return "tie";
+  if (player === "rock" &amp;&amp; computer === "scissors") return "win";
+  if (player === "paper" &amp;&amp; computer === "rock") return "win";
+  if (player === "scissors" &amp;&amp; computer === "paper") return "win";
+  return "lose";
+}
+
+function renderScore() {
+  score.textContent = "You: " + playerScore + " · Computer: " + computerScore + " · Ties: " + ties;
+}
+
+function renderHistory() {
+  historyList.innerHTML = "";
+  for (const round of history) {
+    const item = document.createElement("li");
+    item.textContent = round.player + " vs. " + round.computer + " · " + round.outcome;
+    historyList.append(item);
+  }
+}
+
+for (const button of document.querySelectorAll("[data-move]")) {
+  button.addEventListener("click", () => {
+    const player = button.dataset.move;
+    const computer = chooseComputerMove();
+    const outcome = decideWinner(player, computer);
+    if (outcome === "win") playerScore += 1;
+    else if (outcome === "lose") computerScore += 1;
+    else ties += 1;
+    history.unshift({ player, computer, outcome });
+    if (history.length > 5) history.pop();
+    result.textContent = "You chose " + player + ". Computer chose " + computer + ". Result: " + outcome + ".";
+    renderScore();
+    renderHistory();
+  });
+}
+
+document.querySelector("#reset").addEventListener("click", () => {
+  playerScore = 0;
+  computerScore = 0;
+  ties = 0;
+  history.length = 0;
+  result.textContent = "Choose a move.";
+  renderScore();
+  renderHistory();
+});</code></pre>
+<p><a href="../versions/16-history/public/index.html">Open the finished game</a></p>
+<p>Play six rounds. The list shows five, and the oldest of the six is gone. Reset. The list is empty and the totals are zero. Commit, push, deploy, and open the Hosting URL on a phone.</p>
+<div class="codehead"><span>Terminal</span><button class="copy" data-copy="history-git" type="button">Copy</button></div><pre><code id="history-git">git add public/index.html public/script.js
+git commit -m "List the five most recent rounds"
+git push
+firebase deploy --only hosting --project YOUR_PROJECT_ID</code></pre>
+</section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Why is the new round unshifted rather than pushed?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="unshift inserts at the start, so the newest round is first.">So the newest round is at the top</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="unshift inserts at the start, so the newest round is first.">So the score ignores ties</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="unshift inserts at the start, so the newest round is first.">So Firebase skips the file</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. Why set textContent instead of building HTML from the move names?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="textContent inserts the words as text.">The move is text, not markup the page should interpret</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="textContent inserts the words as text.">textContent deploys the site</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="textContent inserts the words as text.">An ol cannot contain an li</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=7W4pQQ20nJg" target="_blank" rel="noopener noreferrer">Video: JavaScript arrays</a></li><li><a href="https://www.w3schools.com/js/js_arrays.asp" target="_blank" rel="noopener noreferrer">W3Schools: JavaScript arrays</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array" target="_blank" rel="noopener noreferrer">MDN: Array</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/createElement" target="_blank" rel="noopener noreferrer">MDN: createElement</a></li></ul>
+    <label><input type="checkbox" class="done" value="history"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="15-score.html">← Keep score</a><a class="action" href="../index.html">Back to contents →</a></div>
+  </main>
+</div>
+</body>
+</html>

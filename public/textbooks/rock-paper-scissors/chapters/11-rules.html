@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Put the game rules on the page · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 11 of 16</p>
+    <h1 class="page-title" tabindex="-1">Put the game rules on the page</h1>
+    <p>The hosted page announces an event. Turn that same page into the rules of rock-paper-scissors. Still no JavaScript. Commit the change with the loop from the previous chapter.</p>
+<section class="panel why requirements"><p><strong>A player needs the winning pairs before the first round.</strong></p>
+<dl><dt>Inputs</dt><dd>The three winning pairs and the tie rule.</dd>
+<dt>Expected output</dt><dd>A heading, one instruction, the picture, and a list of the three pairs.</dd>
+<dt>Rules</dt><dd>Keep the card styles. Do not invent a fourth move.</dd></dl></section>
+<div class="codehead"><span>public/index.html</span><button class="copy" data-copy="rules-html" type="button">Copy</button></div><pre><code id="rules-html">&lt;!doctype html>
+&lt;html lang="en">
+&lt;head>
+  &lt;meta charset="utf-8">
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1">
+  &lt;title>Rock · Paper · Scissors&lt;/title>
+  &lt;link rel="stylesheet" href="style.css">
+  
+&lt;/head>
+&lt;body>
+  &lt;main class="card">
+    &lt;h1>Rock · Paper · Scissors&lt;/h1>
+    &lt;p>Choose one move each round. Identical moves tie.&lt;/p>
+    &lt;img src="mark.svg" alt="The letters RPS on a dark card" width="160">
+    &lt;ul>
+      &lt;li>Rock beats scissors.&lt;/li>
+      &lt;li>Paper beats rock.&lt;/li>
+      &lt;li>Scissors beats paper.&lt;/li>
+    &lt;/ul>
+  &lt;/main>
+&lt;/body>
+&lt;/html></code></pre>
+<p><a href="../versions/11-rules/public/index.html">Open the rules checkpoint</a></p>
+<p>Check it locally. Then:</p>
+<div class="codehead"><span>Terminal</span><button class="copy" data-copy="rules-git" type="button">Copy</button></div><pre><code id="rules-git">git add public/index.html
+git commit -m "State the game rules"
+git push
+firebase deploy --only hosting --project YOUR_PROJECT_ID</code></pre>
+<p>Open the Hosting URL. The rules must be the ones in the commit you just pushed.</p>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Where does a tie get explained?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The instruction under the heading states that identical moves tie.">In the sentence under the heading</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The instruction under the heading states that identical moves tie.">In the image alt text only</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The instruction under the heading states that identical moves tie.">In firebase.json</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. Why is there still no script tag?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="This chapter only changes what the page says.">The page only has to show the rules</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="This chapter only changes what the page says.">Browsers cannot run JavaScript</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="This chapter only changes what the page says.">Git cannot store a script</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.w3schools.com/html/html_lists.asp" target="_blank" rel="noopener noreferrer">W3Schools: HTML lists</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/ul" target="_blank" rel="noopener noreferrer">MDN: the ul element</a></li></ul>
+    <label><input type="checkbox" class="done" value="rules"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="10-git-loop.html">← Change the project with Git</a><a class="action" href="12-choice.html">Read the player's click →</a></div>
+  </main>
+</div>
+</body>
+</html>

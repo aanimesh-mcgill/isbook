@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Read the player's click · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 12 of 16</p>
+    <h1 class="page-title" tabindex="-1">Read the player's click</h1>
+    <p>The page can state the rules. It cannot yet hear which move the player picked. That needs a script and a click.</p>
+<section class="panel why requirements"><p><strong>The player needs proof the page noticed their move.</strong></p>
+<dl><dt>Inputs</dt><dd>A click on Rock, Paper, or Scissors.</dd>
+<dt>Expected output</dt><dd>The status line names that move.</dd>
+<dt>Rules</dt><dd>The button's visible label is for the player. <code>data-move</code> is the value the script reads. The script must not run before the buttons exist.</dd></dl></section>
+<section class="step"><h3>The ideas this feature needs</h3>
+<p>A <code>button</code> is a control. <code>type="button"</code> means it does not submit a form. <code>script src="script.js" defer</code> loads the script and waits until the HTML has been read, so the buttons are findable. <code>querySelector</code> returns the first match. <code>querySelectorAll</code> returns every match. <code>addEventListener("click", ...)</code> runs a function when that button is clicked. <code>dataset.move</code> reads <code>data-move</code>. <code>textContent</code> replaces the words in an element and does not interpret them as HTML.</p>
+<div class="codehead"><span>public/index.html</span><button class="copy" data-copy="choice-html" type="button">Copy</button></div><pre><code id="choice-html">&lt;!doctype html>
+&lt;html lang="en">
+&lt;head>
+  &lt;meta charset="utf-8">
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1">
+  &lt;title>Rock · Paper · Scissors&lt;/title>
+  &lt;link rel="stylesheet" href="style.css">
+  &lt;script src="script.js" defer>&lt;/script>
+&lt;/head>
+&lt;body>
+  &lt;main class="card">
+    &lt;h1>Rock · Paper · Scissors&lt;/h1>
+    &lt;p>Choose one move each round. Identical moves tie.&lt;/p>
+    &lt;ul>
+      &lt;li>Rock beats scissors.&lt;/li>
+      &lt;li>Paper beats rock.&lt;/li>
+      &lt;li>Scissors beats paper.&lt;/li>
+    &lt;/ul>
+    &lt;p>
+      &lt;button type="button" data-move="rock">Rock&lt;/button>
+      &lt;button type="button" data-move="paper">Paper&lt;/button>
+      &lt;button type="button" data-move="scissors">Scissors&lt;/button>
+    &lt;/p>
+    &lt;p id="result" role="status">Choose a move.&lt;/p>
+  &lt;/main>
+&lt;/body>
+&lt;/html></code></pre>
+<div class="codehead"><span>public/script.js</span><button class="copy" data-copy="choice-js" type="button">Copy</button></div><pre><code id="choice-js">const result = document.querySelector("#result");
+
+for (const button of document.querySelectorAll("[data-move]")) {
+  button.addEventListener("click", () => {
+    const player = button.dataset.move;
+    result.textContent = "You chose " + player + ".";
+  });
+}</code></pre>
+<p><a href="../versions/12-choice/public/index.html">Open the click checkpoint</a></p>
+</section>
+<section class="step"><h3>Save it in Git and on the link</h3>
+<div class="codehead"><span>Terminal · after you click all three buttons locally</span><button class="copy" data-copy="choice-git" type="button">Copy</button></div><pre><code id="choice-git">git add public/index.html public/script.js
+git commit -m "Show the move the player clicked"
+git push
+firebase deploy --only hosting --project YOUR_PROJECT_ID</code></pre>
+</section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Why is defer on the script tag?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="defer waits until the buttons exist before the script looks for them.">So the script runs after the buttons are in the page</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="defer waits until the buttons exist before the script looks for them.">So the stylesheet is ignored</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="defer waits until the buttons exist before the script looks for them.">So Git skips the file</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. What does data-move hold?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The program reads data-move. The visible word is the button label.">The move name the script reads</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The program reads data-move. The visible word is the button label.">The CSS class of the card</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The program reads data-move. The visible word is the button label.">The Hosting URL</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=0ik6X4DJKCc" target="_blank" rel="noopener noreferrer">Video: JavaScript DOM Crash Course</a></li><li><a href="https://www.w3schools.com/js/js_htmldom_events.asp" target="_blank" rel="noopener noreferrer">W3Schools: HTML DOM events</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting/Events" target="_blank" rel="noopener noreferrer">MDN: Introduction to events</a></li></ul>
+    <label><input type="checkbox" class="done" value="choice"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="11-rules.html">← Put the game rules on the page</a><a class="action" href="13-computer.html">Let the computer choose →</a></div>
+  </main>
+</div>
+</body>
+</html>

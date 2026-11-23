@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Let the computer choose · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 13 of 16</p>
+    <h1 class="page-title" tabindex="-1">Let the computer choose</h1>
+    <p>The player can see their own move. The round still needs an opponent. A function can choose one of three names.</p>
+<section class="panel why requirements"><p><strong>Each click needs a computer move as well as the player's move.</strong></p>
+<dl><dt>Inputs</dt><dd>The player's click, and a random choice among the three moves.</dd>
+<dt>Expected output</dt><dd>The status line names both moves.</dd>
+<dt>Rules</dt><dd>The computer chooses only rock, paper, or scissors. The choice is a function the click handler calls.</dd></dl></section>
+<section class="step"><h3>The ideas this feature needs</h3>
+<p>A <strong>function</strong> is a named block you can run again. <code>return</code> sends a value back to the line that called it. An <strong>array</strong> is an ordered list. The first index is 0. <code>moves.length</code> is 3. <code>Math.random()</code> returns a number from 0 up to, but not including, 1. Multiply by the length and <code>Math.floor</code> cuts off the fraction, leaving 0, 1, or 2.</p>
+<div class="codehead"><span>public/script.js</span><button class="copy" data-copy="computer-js" type="button">Copy</button></div><pre><code id="computer-js">const moves = ["rock", "paper", "scissors"];
+const result = document.querySelector("#result");
+
+function chooseComputerMove() {
+  const index = Math.floor(Math.random() * moves.length);
+  return moves[index];
+}
+
+for (const button of document.querySelectorAll("[data-move]")) {
+  button.addEventListener("click", () => {
+    const player = button.dataset.move;
+    const computer = chooseComputerMove();
+    result.textContent = "You chose " + player + ". Computer chose " + computer + ".";
+  });
+}</code></pre>
+<p><a href="../versions/13-computer/public/index.html">Open the computer-move checkpoint</a></p>
+<p>Click several times. Both names must appear, and the computer's name must change across attempts. Then commit, push, and deploy.</p>
+<div class="codehead"><span>Terminal</span><button class="copy" data-copy="computer-git" type="button">Copy</button></div><pre><code id="computer-git">git add public/script.js
+git commit -m "Show a computer move for each click"
+git push
+firebase deploy --only hosting --project YOUR_PROJECT_ID</code></pre>
+</section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Why multiply Math.random() by moves.length?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The product lands in the range of the array indexes.">To land on an index the array actually has</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The product lands in the range of the array indexes.">To change the CSS color</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The product lands in the range of the array indexes.">To upload the file</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. What does return do inside chooseComputerMove?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="return hands the chosen name back to the click handler.">It hands the chosen move back to the caller</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="return hands the chosen name back to the click handler.">It writes the status line</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="return hands the chosen name back to the click handler.">It creates a Git commit</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=xUI5Tsl2JpY" target="_blank" rel="noopener noreferrer">Video: JavaScript functions</a></li><li><a href="https://www.w3schools.com/js/js_functions.asp" target="_blank" rel="noopener noreferrer">W3Schools: JavaScript functions</a></li><li><a href="https://www.w3schools.com/js/js_random.asp" target="_blank" rel="noopener noreferrer">W3Schools: JavaScript random</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random" target="_blank" rel="noopener noreferrer">MDN: Math.random</a></li></ul>
+    <label><input type="checkbox" class="done" value="computer"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="12-choice.html">← Read the player's click</a><a class="action" href="14-winner.html">Decide who won →</a></div>
+  </main>
+</div>
+</body>
+</html>

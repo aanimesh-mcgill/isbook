@@ -1,68 +1,103 @@
-const chapters = [...document.querySelectorAll(".chapter")];
-const landing = document.querySelector("#overview");
-const chapterIds = new Set(chapters.map(chapter => chapter.id));
+const chapters = [
+  ["01-editor.html", "Download an editor"],
+  ["02-html.html", "Write a page with HTML and CSS"],
+  ["03-browser.html", "Open the page in the browser"],
+  ["04-only-you.html", "See why nobody else can open it"],
+  ["05-firebase.html", "Learn what Firebase Hosting does"],
+  ["06-host.html", "Host the page and open the link"],
+  ["07-css.html", "Meet the CSS requirements"],
+  ["08-why-git.html", "See why the project needs Git"],
+  ["09-repo.html", "Create the repository"],
+  ["10-git-loop.html", "Change the project with Git"],
+  ["11-rules.html", "Put the game rules on the page"],
+  ["12-choice.html", "Read the player's click"],
+  ["13-computer.html", "Let the computer choose"],
+  ["14-winner.html", "Decide who won"],
+  ["15-score.html", "Keep score"],
+  ["16-history.html", "Show the recent rounds"],
+];
 
-function showPage(moveFocus = false) {
-  const requested = window.location.hash.slice(1);
-  const activeId = chapterIds.has(requested) ? requested : "overview";
-  landing.hidden = activeId !== "overview";
-  for (const chapter of chapters) {
-    chapter.hidden = chapter.id !== activeId;
-  }
-  for (const link of document.querySelectorAll(".nav")) {
-    const current = link.hash === "#" + activeId;
-    link.classList.toggle("active", current);
-    if (current) {
-      link.setAttribute("aria-current", "page");
-    } else {
-      link.removeAttribute("aria-current");
-    }
-  }
-  if (moveFocus) {
-    const heading = document.querySelector("#" + activeId + " .page-title");
-    heading.focus({ preventScroll: true });
-    window.scrollTo(0, 0);
-  }
+const inChapter = /\/chapters\//.test(location.pathname);
+const root = inChapter ? ".." : ".";
+
+if (/[?&]swbypass=1(?:&|$)/.test(location.search)) {
+  const query = location.search.replace(/([?&])swbypass=1&/, "$1").replace(/[?&]swbypass=1$/, "");
+  history.replaceState(null, "", location.pathname + query + location.hash);
 }
 
-function loadProgress() {
-  try {
-    const saved = JSON.parse(localStorage.getItem("rps-textbook-2026") || "[]");
-    return new Set(Array.isArray(saved) ? saved.filter(id => chapterIds.has(id)) : []);
-  } catch {
-    return new Set();
-  }
+function chapterHref(file) {
+  return inChapter ? file : `chapters/${file}`;
+}
+
+function currentFile() {
+  const name = location.pathname.split("/").pop() || "index.html";
+  return name === "" ? "index.html" : name;
+}
+
+const navHost = document.querySelector("[data-nav]");
+if (navHost) {
+  const here = currentFile();
+  const items = chapters
+    .map(([file, title], index) => {
+      const current = here === file;
+      const number = String(index + 1).padStart(2, "0");
+      return `<li><a class="nav${current ? " active" : ""}" href="${chapterHref(file)}"${current ? ' aria-current="page"' : ""}><small>${number}</small>${title}</a></li>`;
+    })
+    .join("");
+  navHost.innerHTML = `
+    <p class="brand">THE PRACTICAL WEB LAB</p>
+    <h2><a href="${root}/index.html">A page other<br>people can open</a></h2>
+    <progress id="progress" max="${chapters.length}" value="0" aria-label="Chapters marked complete"></progress>
+    <p id="progresslabel" class="muted" aria-live="polite"></p>
+    <details class="contents">
+      <summary>Chapters</summary>
+      <nav aria-label="Chapters"><ul>${items}</ul></nav>
+    </details>`;
+  const sidebar = navHost.querySelector(".contents");
+  if (window.matchMedia("(min-width:851px)").matches) sidebar.open = true;
+  sidebar.addEventListener("click", (event) => {
+    if (event.target.closest(".nav") && window.matchMedia("(max-width:850px)").matches) {
+      sidebar.open = false;
+    }
+  });
 }
 
 const complete = loadProgress();
 const progress = document.querySelector("#progress");
-function updateProgress() {
-  progress.value = complete.size;
-  document.querySelector("#progresslabel").textContent =
-    `${complete.size} of ${chapters.length} practice sets marked complete`;
+function loadProgress() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("rps-book-path-2026") || "[]");
+    const known = new Set(chapters.map(([file]) => file.replace(".html", "")));
+    return new Set(Array.isArray(saved) ? saved.filter((id) => known.has(id)) : []);
+  } catch {
+    return new Set();
+  }
 }
-
+function updateProgress() {
+  if (!progress) return;
+  progress.value = complete.size;
+  const label = document.querySelector("#progresslabel");
+  if (label) label.textContent = `${complete.size} of ${chapters.length} chapters marked complete`;
+}
 for (const checkbox of document.querySelectorAll(".done")) {
   checkbox.checked = complete.has(checkbox.value);
   checkbox.addEventListener("change", () => {
-    if (checkbox.checked) {
-      complete.add(checkbox.value);
-    } else {
-      complete.delete(checkbox.value);
-    }
+    if (checkbox.checked) complete.add(checkbox.value);
+    else complete.delete(checkbox.value);
     try {
-      localStorage.setItem("rps-textbook-2026", JSON.stringify([...complete]));
+      localStorage.setItem("rps-book-path-2026", JSON.stringify([...complete]));
     } catch {
-      // The current reading session still works when storage is unavailable.
+      // The chapter still works when storage is unavailable.
     }
     updateProgress();
   });
 }
+updateProgress();
 
 for (const quiz of document.querySelectorAll(".quiz")) {
   const questions = [...quiz.querySelectorAll("fieldset")];
   const summary = quiz.querySelector(".quiz-summary");
-  quiz.addEventListener("click", event => {
+  quiz.addEventListener("click", (event) => {
     const choice = event.target.closest(".option");
     if (!choice) return;
     const question = choice.closest("fieldset");
@@ -74,8 +109,8 @@ for (const quiz of document.querySelectorAll(".quiz")) {
     question.dataset.status = correct ? "correct" : "retry";
     const feedback = question.querySelector(".feedback");
     feedback.className = correct ? "feedback good" : "feedback bad";
-    feedback.textContent = (correct ? "Correct. " : "Try again. ") + choice.dataset.reason;
-    const score = questions.filter(item => item.dataset.status === "correct").length;
+    feedback.textContent = `${correct ? "Correct. " : "Try again. "}${choice.dataset.reason}`;
+    const score = questions.filter((item) => item.dataset.status === "correct").length;
     summary.textContent = `${score} of ${questions.length} correct`;
   });
   quiz.querySelector(".retry").addEventListener("click", () => {
@@ -89,17 +124,6 @@ for (const quiz of document.querySelectorAll(".quiz")) {
     }
     summary.textContent = "Choose an answer for each question.";
     questions[0].querySelector(".option").focus();
-  });
-}
-
-for (const trace of document.querySelectorAll(".trace")) {
-  const rows = [...trace.querySelectorAll("tbody tr")];
-  const output = trace.querySelector(".trace-status");
-  let step = -1;
-  trace.querySelector(".trace-next").addEventListener("click", () => {
-    step = (step + 1) % rows.length;
-    rows.forEach((row, index) => row.classList.toggle("highlight", index === step));
-    output.textContent = [...rows[step].cells].map(cell => cell.textContent).join(" · ");
   });
 }
 
@@ -119,16 +143,3 @@ for (const button of document.querySelectorAll(".copy")) {
     }
   });
 }
-
-const sidebar = document.querySelector(".contents");
-if (window.matchMedia("(min-width:851px)").matches) sidebar.open = true;
-sidebar.addEventListener("click", event => {
-  if (event.target.closest(".nav") && window.matchMedia("(max-width:850px)").matches) {
-    sidebar.open = false;
-  }
-});
-window.addEventListener("hashchange", () => {
-  if (window.location.hash !== "#main") showPage(true);
-});
-updateProgress();
-showPage();

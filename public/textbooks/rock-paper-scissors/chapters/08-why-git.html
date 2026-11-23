@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>See why the project needs Git · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 8 of 16</p>
+    <h1 class="page-title" tabindex="-1">See why the project needs Git</h1>
+    <p>You deployed a page, then you replaced it. The link shows the new card. It does not show the first version. If a classmate also edits <code>index.html</code>, one of you will overwrite the other.</p>
+<section class="step"><h3>What you need</h3>
+<p>You need a history of the files, with a sentence on each save that says what changed. You need a copy of that history that another person can download. Git stores the history on your computer. GitHub stores a copy your team can share.</p></section>
+<section class="step"><h3>The words</h3>
+<ul>
+<li>A <strong>repository</strong> is the project plus its history.</li>
+<li>A <strong>commit</strong> is one saved snapshot and the message you wrote for it.</li>
+<li>The <strong>working tree</strong> is the files as they are right now.</li>
+<li><strong>git status</strong> lists what changed since the last commit.</li>
+<li><strong>git diff</strong> shows the changed lines.</li>
+<li>The <strong>staging area</strong> is the set of changes you have chosen for the next commit. <strong>git add</strong> puts a file there.</li>
+<li>A <strong>remote</strong> is another repository. Yours will be named <code>origin</code> and will live on GitHub.</li>
+<li><strong>push</strong> sends your commits to the remote. <strong>pull</strong> brings commits from the remote into your copy.</li>
+<li>A <strong>branch</strong> is a name for a line of commits. This project uses <code>main</code>.</li>
+</ul></section>
+<section class="panel why"><p>Do not commit a password, a Firebase login token, or a service-account JSON file. Those are secrets. The <code>.gitignore</code> file in the next chapter keeps tool clutter out of the repository. It is not a place to hide a secret you already pasted into <code>public</code>.</p></section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. What is a commit?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="A commit records a chosen snapshot and a message.">A saved snapshot with a message</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A commit records a chosen snapshot and a message.">The public Hosting URL</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A commit records a chosen snapshot and a message.">A CSS class</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. Which command sends commits to GitHub?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="push sends commits to the remote. deploy sends files to Firebase.">git push</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="push sends commits to the remote. deploy sends files to Firebase.">firebase deploy</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="push sends commits to the remote. deploy sends files to Firebase.">git diff</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=RGOj5yH7evk" target="_blank" rel="noopener noreferrer">Video: Git and GitHub for Beginners</a></li><li><a href="https://www.w3schools.com/git/git_intro.asp" target="_blank" rel="noopener noreferrer">W3Schools: Git introduction</a></li><li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener noreferrer">Git tutorial</a></li></ul>
+    <label><input type="checkbox" class="done" value="why-git"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="07-css.html">← Meet the CSS requirements</a><a class="action" href="09-repo.html">Create the repository →</a></div>
+  </main>
+</div>
+</body>
+</html>

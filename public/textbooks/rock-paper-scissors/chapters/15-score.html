@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Keep score · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 15 of 16</p>
+    <h1 class="page-title" tabindex="-1">Keep score</h1>
+    <p>A single round is decided and then forgotten. The page needs numbers that survive until the next click, and a way to set them back to zero.</p>
+<section class="panel why requirements"><p><strong>The event needs a running score.</strong></p>
+<dl><dt>Inputs</dt><dd>Each result word, and a click on Reset score.</dd>
+<dt>Expected output</dt><dd>Three totals, starting at zero, changing after each round, and returning to zero on reset.</dd>
+<dt>Rules</dt><dd>A win adds one to the player. A loss adds one to the computer. A tie adds one to ties. Reset does not choose a move.</dd></dl></section>
+<section class="step"><h3>The ideas this feature needs</h3>
+<p><code>let</code> creates a variable you can assign again. <code>playerScore += 1</code> is a new value stored in the same variable. The variables live outside the click function, so the next click still sees them. A variable inside the click function would be thrown away when the click finished. <code>renderScore</code> writes the numbers into the page. The reset listener assigns 0 to each variable and writes the page again.</p>
+<div class="codehead"><span>Add under the status line in public/index.html</span><button class="copy" data-copy="score-html" type="button">Copy</button></div><pre><code id="score-html">&lt;p id="score">You: 0 · Computer: 0 · Ties: 0&lt;/p>
+&lt;p>&lt;button type="button" id="reset">Reset score&lt;/button>&lt;/p></code></pre>
+<div class="codehead"><span>public/script.js · complete file</span><button class="copy" data-copy="score-js" type="button">Copy</button></div><pre><code id="score-js">const moves = ["rock", "paper", "scissors"];
+const result = document.querySelector("#result");
+const score = document.querySelector("#score");
+let playerScore = 0;
+let computerScore = 0;
+let ties = 0;
+
+function chooseComputerMove() {
+  const index = Math.floor(Math.random() * moves.length);
+  return moves[index];
+}
+
+function decideWinner(player, computer) {
+  if (player === computer) return "tie";
+  if (player === "rock" &amp;&amp; computer === "scissors") return "win";
+  if (player === "paper" &amp;&amp; computer === "rock") return "win";
+  if (player === "scissors" &amp;&amp; computer === "paper") return "win";
+  return "lose";
+}
+
+function renderScore() {
+  score.textContent = "You: " + playerScore + " · Computer: " + computerScore + " · Ties: " + ties;
+}
+
+for (const button of document.querySelectorAll("[data-move]")) {
+  button.addEventListener("click", () => {
+    const player = button.dataset.move;
+    const computer = chooseComputerMove();
+    const outcome = decideWinner(player, computer);
+    if (outcome === "win") playerScore += 1;
+    else if (outcome === "lose") computerScore += 1;
+    else ties += 1;
+    result.textContent = "You chose " + player + ". Computer chose " + computer + ". Result: " + outcome + ".";
+    renderScore();
+  });
+}
+
+document.querySelector("#reset").addEventListener("click", () => {
+  playerScore = 0;
+  computerScore = 0;
+  ties = 0;
+  result.textContent = "Choose a move.";
+  renderScore();
+});</code></pre>
+<p><a href="../versions/15-score/public/index.html">Open the score checkpoint</a></p>
+<p>Win a round, lose a round, tie a round, then reset. The totals should return to zero and the status should say to choose a move. Commit, push, and deploy.</p>
+<div class="codehead"><span>Terminal</span><button class="copy" data-copy="score-git" type="button">Copy</button></div><pre><code id="score-git">git add public/index.html public/script.js
+git commit -m "Keep a score and let the player reset it"
+git push
+firebase deploy --only hosting --project YOUR_PROJECT_ID</code></pre>
+</section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Why are the score variables outside the click function?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="A variable inside the function would be discarded when the click ends.">So the next click still has the totals</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A variable inside the function would be discarded when the click ends.">So CSS can read them</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A variable inside the function would be discarded when the click ends.">So Git commits them as three files</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. What does reset change?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="Reset sets the totals back to zero and restores the instruction. It does not play a round.">The totals and the status line</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="Reset sets the totals back to zero and restores the instruction. It does not play a round.">The three winning pairs</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="Reset sets the totals back to zero and restores the instruction. It does not play a round.">The GitHub repository name</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=9WIJQDvt4Us" target="_blank" rel="noopener noreferrer">Video: var, let, and const</a></li><li><a href="https://www.w3schools.com/js/js_variables.asp" target="_blank" rel="noopener noreferrer">W3Schools: JavaScript variables</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types" target="_blank" rel="noopener noreferrer">MDN: Grammar and types</a></li></ul>
+    <label><input type="checkbox" class="done" value="score"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="14-winner.html">← Decide who won</a><a class="action" href="16-history.html">Show the recent rounds →</a></div>
+  </main>
+</div>
+</body>
+</html>

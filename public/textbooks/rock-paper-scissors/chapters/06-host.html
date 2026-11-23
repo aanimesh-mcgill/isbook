@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Host the page and open the link · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 6 of 16</p>
+    <h1 class="page-title" tabindex="-1">Host the page and open the link</h1>
+    <p>Put the page on your Firebase project, then open the address it prints. The test is whether another browser can see it.</p>
+<section class="step"><h3>Create the project</h3>
+<p>Sign in at the Firebase console. Add a project. A short name such as campus-game-night is enough. You can turn Google Analytics off for this exercise. Copy the project ID from Project settings. It is not always the same as the name you typed.</p></section>
+<section class="step"><h3>Install the tools and sign in</h3>
+<p>Install Node.js if the next command is not found. Then install the tools and sign in with the same Google account. The login command opens a browser. It does not ask you to paste a password into a project file.</p>
+<div class="codehead"><span>Terminal</span><button class="copy" data-copy="host-install" type="button">Copy</button></div><pre><code id="host-install">npm install -g firebase-tools
+firebase login</code></pre>
+</section>
+<section class="step"><h3>Deploy from the outer folder</h3>
+<p>Open a terminal in <code>campus-game</code>, the folder that contains <code>public</code>. Save <code>firebase.json</code> from the previous chapter there. Deploy only hosting.</p>
+<div class="codehead"><span>Terminal · in campus-game</span><button class="copy" data-copy="host-deploy" type="button">Copy</button></div><pre><code id="host-deploy">firebase deploy --only hosting --project YOUR_PROJECT_ID</code></pre>
+<p>If the command says you are in the wrong folder, you are probably inside <code>public</code>. Move up one level. If it asks to overwrite <code>index.html</code>, say no.</p></section>
+<section class="step"><h3>Test the link</h3>
+<p>Copy the Hosting URL the command prints. It ends in <code>web.app</code>. Open it in a private window, or send it to your phone. You are done with this chapter when all of these are true:</p>
+<ul>
+<li>The heading and the list match the file you saved.</li>
+<li>The image appears.</li>
+<li>The link opens.</li>
+<li>The colors from <code>style.css</code> are there.</li>
+<li>The address starts with <code>https://</code>, not <code>file:///</code>.</li>
+</ul>
+<p>If the image is missing, it is not in <code>public</code>, or <code>src</code> spells the name differently. Deploy again after you fix the file. The old link shows the new files after the new deploy finishes.</p></section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. How do you know a classmate can open the page?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="An HTTPS hosting URL serves the files to other browsers.">They can open the Hosting URL and see the page</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="An HTTPS hosting URL serves the files to other browsers.">The file opens from your desktop</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="An HTTPS hosting URL serves the files to other browsers.">The editor shows no red underline</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. You fixed a typo after the first deploy. What makes the public link change?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The live site changes when you deploy again.">Deploy again, then reload the Hosting URL</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The live site changes when you deploy again.">Save the file in the editor only</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The live site changes when you deploy again.">Rename the local folder</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://firebase.google.com/docs/hosting/quickstart" target="_blank" rel="noopener noreferrer">Firebase Hosting setup</a></li><li><a href="https://firebase.google.com/docs/cli" target="_blank" rel="noopener noreferrer">Firebase CLI reference</a></li><li><a href="https://www.youtube.com/watch?v=meofoNuK3vo" target="_blank" rel="noopener noreferrer">Video: Getting started with Firebase Hosting</a></li></ul>
+    <label><input type="checkbox" class="done" value="host"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="05-firebase.html">← Learn what Firebase Hosting does</a><a class="action" href="07-css.html">Meet the CSS requirements →</a></div>
+  </main>
+</div>
+</body>
+</html>

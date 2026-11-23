@@ -1,0 +1,16 @@
+body {
+  margin: 0;
+  background: #1a1c1f;
+  color: #f4efe8;
+  font-family: Georgia, serif;
+}
+
+main {
+  max-width: 36rem;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+a {
+  color: #ffb77d;
+}

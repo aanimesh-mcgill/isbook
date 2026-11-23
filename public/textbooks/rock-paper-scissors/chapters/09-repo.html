@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create the repository · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 9 of 16</p>
+    <h1 class="page-title" tabindex="-1">Create the repository</h1>
+    <p>Install Git, create the accounts, and put this project in a GitHub repository. The files you push should be the styled page you can already open on your Hosting URL.</p>
+<section class="step"><h3>Install and identify yourself</h3>
+<p>Install Git. Create a GitHub account if you do not have one. You already have the Google account you used for Firebase. Tell Git the name and email to write into each commit. Use the email on your GitHub account.</p>
+<div class="codehead"><span>Terminal</span><button class="copy" data-copy="repo-config" type="button">Copy</button></div><pre><code id="repo-config">git config --global user.name "Your Name"
+git config --global user.email "you@example.com"</code></pre>
+</section>
+<section class="step"><h3>Start the repository</h3>
+<p>In <code>campus-game</code>, start Git and look at the status. Create <code>.gitignore</code> before the first commit so tool files never enter the history.</p>
+<div class="codehead"><span>.gitignore</span><button class="copy" data-copy="repo-ignore" type="button">Copy</button></div><pre><code id="repo-ignore">node_modules/
+.firebase/
+firebase-debug.log*
+*.log</code></pre>
+<div class="codehead"><span>Terminal · in campus-game</span><button class="copy" data-copy="repo-init" type="button">Copy</button></div><pre><code id="repo-init">git init
+git status
+git add .
+git status
+git commit -m "Host the styled campus page"</code></pre>
+<p><code>git status</code> before <code>git add</code> should list your page, stylesheet, image, and <code>firebase.json</code>. It should not list a password. The second status should show those files staged.</p></section>
+<section class="step"><h3>Create the empty GitHub repository</h3>
+<p>On GitHub, create a new repository named <code>campus-game</code>. Leave it empty: no README, no license, and no generated gitignore. You already have the history locally. Copy the HTTPS address GitHub shows.</p>
+<div class="codehead"><span>Terminal · use your repository address</span><button class="copy" data-copy="repo-push" type="button">Copy</button></div><pre><code id="repo-push">git remote add origin https://github.com/YOUR_NAME/campus-game.git
+git branch -M main
+git push -u origin main</code></pre>
+<p>If Git asks you to sign in, use the browser prompt. Do not paste a token into a file in the project. Refresh the GitHub page. You should see <code>public/index.html</code>, <code>public/style.css</code>, <code>public/mark.svg</code>, and <code>firebase.json</code>.</p></section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Why is the GitHub repository created empty?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="You already made the first commit locally. A generated README would be a second, unrelated history.">The first commit already exists on your computer</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="You already made the first commit locally. A generated README would be a second, unrelated history.">GitHub cannot store HTML</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="You already made the first commit locally. A generated README would be a second, unrelated history.">Firebase creates the README later</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. What should you do with a login token?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="A token is a secret. It does not belong in the project files.">Use the sign-in prompt and keep it out of the project</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A token is a secret. It does not belong in the project files.">Commit it so your teammate can deploy</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A token is a secret. It does not belong in the project files.">Put it in public/index.html</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://git-scm.com/downloads" target="_blank" rel="noopener noreferrer">Download Git</a></li><li><a href="https://github.com/signup" target="_blank" rel="noopener noreferrer">Create a GitHub account</a></li><li><a href="https://www.w3schools.com/git/git_commit.asp" target="_blank" rel="noopener noreferrer">W3Schools: Git commit</a></li><li><a href="https://docs.github.com/en/get-started/quickstart/hello-world" target="_blank" rel="noopener noreferrer">GitHub: Hello World</a></li></ul>
+    <label><input type="checkbox" class="done" value="repo"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="08-why-git.html">← See why the project needs Git</a><a class="action" href="10-git-loop.html">Change the project with Git →</a></div>
+  </main>
+</div>
+</body>
+</html>

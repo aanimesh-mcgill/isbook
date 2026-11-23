@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learn what Firebase Hosting does · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 5 of 16</p>
+    <h1 class="page-title" tabindex="-1">Learn what Firebase Hosting does</h1>
+    <p>Firebase Hosting keeps a folder of files and answers browsers with those files over HTTPS. You do not write a server program for this page.</p>
+<section class="step"><h3>The accounts and tools</h3>
+<p>You need a Google account, a Firebase project that you create, and the Firebase command-line tools. The project has an ID. After a deploy, the site is at <code>https://YOUR_PROJECT_ID.web.app</code> unless you attach a different domain later.</p></section>
+<section class="step"><h3>What gets uploaded</h3>
+<p><code>firebase.json</code> names the folder. Yours will say the public folder is <code>public</code>. A deploy uploads the files in that folder: the HTML, the CSS, and the image. It does not upload the editor, and it does not upload a password. Do not put a service-account file or an API secret in <code>public</code>. Anything in that folder can be downloaded by anyone with the link.</p></section>
+<section class="step"><h3>What you will refuse</h3>
+<p>When the setup command asks whether this is a single-page app, answer no. This site has a real <code>index.html</code>. A rewrite would send every address to one file and hide a missing page.</p>
+<p>Create your own Firebase project for this exercise. Do not deploy it into a project that already hosts a class site.</p></section>
+<div class="codehead"><span>firebase.json · sits next to public, not inside it</span><button class="copy" data-copy="firebase-json" type="button">Copy</button></div><pre><code id="firebase-json">{
+  "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
+}</code></pre>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Which folder is uploaded?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="hosting.public names the folder Firebase uploads.">The folder named in hosting.public</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="hosting.public names the folder Firebase uploads.">Every folder on the computer</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="hosting.public names the folder Firebase uploads.">Only the CSS file</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. Why answer no to the single-page rewrite?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The page is a real index.html, and a rewrite would hide missing files.">The site already has a real index.html</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The page is a real index.html, and a rewrite would hide missing files.">Firebase cannot serve CSS</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The page is a real index.html, and a rewrite would hide missing files.">HTTPS requires a rewrite</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=meofoNuK3vo" target="_blank" rel="noopener noreferrer">Video: Getting started with Firebase Hosting</a></li><li><a href="https://firebase.google.com/docs/hosting" target="_blank" rel="noopener noreferrer">Firebase Hosting</a></li><li><a href="https://firebase.google.com/docs/hosting/quickstart" target="_blank" rel="noopener noreferrer">Firebase Hosting setup</a></li></ul>
+    <label><input type="checkbox" class="done" value="firebase"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="04-only-you.html">← See why nobody else can open it</a><a class="action" href="06-host.html">Host the page and open the link →</a></div>
+  </main>
+</div>
+</body>
+</html>

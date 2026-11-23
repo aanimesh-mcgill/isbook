@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Write a page with HTML and CSS · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 2 of 16</p>
+    <h1 class="page-title" tabindex="-1">Write a page with HTML and CSS</h1>
+    <p>Build one page a visitor could read: a heading, a sentence, a picture, a list, and a link. Put the colors in a second file.</p>
+<section class="panel why requirements"><p><strong>A classmate should understand the event from the page alone.</strong></p>
+<dl><dt>Inputs</dt><dd>The event name, one sentence, three things to bring, one image file, and one outside address.</dd>
+<dt>Expected output</dt><dd>A browser page with those parts, and colors that come from a stylesheet.</dd>
+<dt>Rules</dt><dd>Use the tags below for the jobs they actually do. The image needs alternative text. The link needs an address.</dd></dl></section>
+<h3>What the tags do</h3>
+<section class="step"><h4>The document</h4>
+<p><code>&lt;!doctype html&gt;</code> tells the browser to use current HTML rules. <code>html</code> wraps the whole document. <code>lang="en"</code> says the language is English. <code>head</code> holds information about the page. <code>title</code> is the words on the browser tab. <code>meta charset</code> makes punctuation reliable. <code>body</code> holds what a person sees.</p></section>
+<section class="step"><h4>The visible parts</h4>
+<p><code>h1</code> is the main heading. Use one. <code>p</code> is a paragraph. <code>ul</code> is a list, and each <code>li</code> is one item. <code>strong</code> marks words that matter. A tag usually has a start and an end. The words between them are the contents.</p></section>
+<section class="step"><h4>Links and images</h4>
+<p><code>a</code> is a link. <code>href</code> is the address it opens. The words between the start and end tags are what the person clicks. <code>img</code> is a picture and does not wrap other content, so it has no end tag. <code>src</code> is the image file, written relative to the HTML file. <code>alt</code> is the text if the image cannot be seen. <code>width</code> sets how wide it is drawn.</p></section>
+<section class="step"><h4>The stylesheet</h4>
+<p><code>link rel="stylesheet"</code> in <code>head</code> loads <code>style.css</code>. A CSS rule has a selector and declarations. <code>body</code> selects the body. <code>color</code> is the text color. <code>background</code> is the page color. <code>font-family</code> is the typeface. <code>margin</code> is the outer gap.</p>
+<div class="codehead"><span>public/index.html</span><button class="copy" data-copy="html-page" type="button">Copy</button></div><pre><code id="html-page">&lt;!doctype html>
+&lt;html lang="en">
+&lt;head>
+  &lt;meta charset="utf-8">
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1">
+  &lt;title>Campus game night&lt;/title>
+  &lt;link rel="stylesheet" href="style.css">
+&lt;/head>
+&lt;body>
+  &lt;main>
+    &lt;h1>Campus game night&lt;/h1>
+    &lt;p>One short game for people waiting between events.&lt;/p>
+    &lt;img src="mark.svg" alt="The letters RPS on a dark card" width="160">
+    &lt;h2>Bring&lt;/h2>
+    &lt;ul>
+      &lt;li>A phone with a browser&lt;/li>
+      &lt;li>A few minutes&lt;/li>
+    &lt;/ul>
+    &lt;p>The rules page will live &lt;strong>here&lt;/strong>. The link below leaves this page.&lt;/p>
+    &lt;p>&lt;a href="https://firebase.google.com/docs/hosting">What web hosting is&lt;/a>&lt;/p>
+  &lt;/main>
+&lt;/body>
+&lt;/html></code></pre>
+<div class="codehead"><span>public/style.css</span><button class="copy" data-copy="html-css" type="button">Copy</button></div><pre><code id="html-css">body {
+  margin: 0;
+  background: #1a1c1f;
+  color: #f4efe8;
+  font-family: Georgia, serif;
+}
+
+main {
+  max-width: 36rem;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+a {
+  color: #ffb77d;
+}</code></pre>
+<p>Save an image as <code>public/mark.svg</code>. The checkpoint below includes one you can copy. The <code>src</code> must match the file name, including the extension.</p>
+<p><a href="../versions/02-first-page/public/index.html">Open the finished first page</a> · <a href="../versions/02-first-page/public/mark.svg">Open the image file</a></p>
+</section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Which attribute is the address a link opens?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="href is the address. The text between the tags is the visible label.">href</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="href is the address. The text between the tags is the visible label.">alt</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="href is the address. The text between the tags is the visible label.">src</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. What is alt for?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="alt describes the image when it is not seen.">Text used when the image is not seen</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="alt describes the image when it is not seen.">The browser tab title</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="alt describes the image when it is not seen.">The CSS file name</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=UB1O30fR-EE" target="_blank" rel="noopener noreferrer">Video: HTML Crash Course For Absolute Beginners</a></li><li><a href="https://www.w3schools.com/html/html_intro.asp" target="_blank" rel="noopener noreferrer">W3Schools: HTML Introduction</a></li><li><a href="https://www.w3schools.com/tags/tag_img.asp" target="_blank" rel="noopener noreferrer">W3Schools: the img tag</a></li><li><a href="https://www.w3schools.com/tags/tag_a.asp" target="_blank" rel="noopener noreferrer">W3Schools: the a tag</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Structuring_content/Basic_HTML_syntax" target="_blank" rel="noopener noreferrer">MDN: Basic HTML syntax</a></li></ul>
+    <label><input type="checkbox" class="done" value="html"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="01-editor.html">← Download an editor</a><a class="action" href="03-browser.html">Open the page in the browser →</a></div>
+  </main>
+</div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meet the CSS requirements · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 7 of 16</p>
+    <h1 class="page-title" tabindex="-1">Meet the CSS requirements</h1>
+    <p>The public page is readable. It is not yet a page you would leave up at a crowded event. Meet a written list of CSS requirements, deploy again, and look at the same link.</p>
+<section class="panel why requirements"><p><strong>The page has to stay readable on a phone.</strong></p>
+<dl><dt>Inputs</dt><dd>The page you already hosted, and a window as narrow as 320 pixels.</dd>
+<dt>Expected output</dt><dd>A centered card, light text on a dark page, an image that stays inside the card, and no sideways scrolling.</dd>
+<dt>Rules</dt><dd>Do not remove the heading, list, image, or link. Change presentation in the stylesheet. Put <code>class="card"</code> on the <code>main</code> element.</dd></dl></section>
+<section class="step"><h3>What the new CSS is doing</h3>
+<p>A class selector starts with a dot. <code>.card</code> selects the element whose class is <code>card</code>. <code>max-width</code> stops the card growing wider than the text can stand. <code>margin: 2rem auto</code> puts space above the card and centers it, because <code>auto</code> shares the leftover width. <code>padding</code> is space inside the border. <code>border-radius</code> rounds the corners. <code>img { max-width: 100%; height: auto; }</code> lets the picture shrink with the card instead of forcing a sideways scroll.</p>
+<div class="codehead"><span>public/index.html · the main start tag</span><button class="copy" data-copy="css-html" type="button">Copy</button></div><pre><code id="css-html">&lt;main class="card"></code></pre>
+<div class="codehead"><span>public/style.css</span><button class="copy" data-copy="css-file" type="button">Copy</button></div><pre><code id="css-file">body {
+  margin: 0;
+  background: #141618;
+  color: #f4efe8;
+  font: 18px/1.5 system-ui, Segoe UI, sans-serif;
+}
+
+.card {
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #1e2126;
+  border: 1px solid #6b4d3c;
+  border-radius: 12px;
+}
+
+h1 {
+  font-family: Georgia, serif;
+  font-weight: normal;
+}
+
+a {
+  color: #ffb77d;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+button {
+  background: #e77937;
+  color: #17110c;
+  border: 0;
+  border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+  margin: 0.2rem 0.3rem 0.2rem 0;
+  font: inherit;
+  cursor: pointer;
+}</code></pre>
+<p><a href="../versions/07-styled/public/index.html">Open the styled checkpoint</a></p>
+</section>
+<section class="step"><h3>Deploy the same link again</h3>
+<div class="codehead"><span>Terminal · in campus-game</span><button class="copy" data-copy="css-deploy" type="button">Copy</button></div><pre><code id="css-deploy">firebase deploy --only hosting --project YOUR_PROJECT_ID</code></pre>
+<p>Reload the Hosting URL. Narrow the window until it is about the width of a phone. The card should wrap. The picture should stay inside it. Nothing should slide sideways.</p>
+<p>The first design is gone from that URL. Firebase is showing the latest deploy, not a stack of old ones you can open from the link. The next chapters exist because of that.</p></section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Which selector matches an element with class card?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="A class selector is a dot plus the class name.">.card</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A class selector is a dot plus the class name.">#card</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A class selector is a dot plus the class name.">card()</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. What keeps a wide image from causing sideways scrolling?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="max-width: 100% lets the image shrink to its container.">max-width: 100% and height: auto on the image</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="max-width: 100% lets the image shrink to its container.">Deleting the alt attribute</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="max-width: 100% lets the image shrink to its container.">Moving the image into the title tag</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=yfoY53QXEnI" target="_blank" rel="noopener noreferrer">Video: CSS Crash Course For Absolute Beginners</a></li><li><a href="https://www.w3schools.com/css/css_boxmodel.asp" target="_blank" rel="noopener noreferrer">W3Schools: CSS box model</a></li><li><a href="https://www.w3schools.com/css/css_selectors.asp" target="_blank" rel="noopener noreferrer">W3Schools: CSS selectors</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/What_is_CSS" target="_blank" rel="noopener noreferrer">MDN: What is CSS</a></li></ul>
+    <label><input type="checkbox" class="done" value="css"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="06-host.html">← Host the page and open the link</a><a class="action" href="08-why-git.html">See why the project needs Git →</a></div>
+  </main>
+</div>
+</body>
+</html>

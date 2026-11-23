@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Decide who won · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 14 of 16</p>
+    <h1 class="page-title" tabindex="-1">Decide who won</h1>
+    <p>Both moves are on the page. The page still does not say who won. A function can compare the two names and return one word.</p>
+<section class="panel why requirements"><p><strong>The player needs the result of the pair, not only the two names.</strong></p>
+<dl><dt>Inputs</dt><dd>The player's move and the computer's move.</dd>
+<dt>Expected output</dt><dd>The status line ends with win, lose, or tie.</dd>
+<dt>Rules</dt><dd>The same move ties. Rock beats scissors, paper beats rock, scissors beats paper. Anything else loses. The decision function does not change the page. The click handler does.</dd></dl></section>
+<section class="step"><h3>The ideas this feature needs</h3>
+<p><code>if</code> runs a block when a condition is true. <code>===</code> asks whether two values are the same. A condition can use <code>&amp;&amp;</code> to require both parts. The function returns <code>"tie"</code>, <code>"win"</code>, or <code>"lose"</code>. Returning a word keeps the rules testable without looking at the screen.</p>
+<div class="codehead"><span>decideWinner · inside public/script.js</span><button class="copy" data-copy="winner-fn" type="button">Copy</button></div><pre><code id="winner-fn">function decideWinner(player, computer) {
+  if (player === computer) return "tie";
+  if (player === "rock" &amp;&amp; computer === "scissors") return "win";
+  if (player === "paper" &amp;&amp; computer === "rock") return "win";
+  if (player === "scissors" &amp;&amp; computer === "paper") return "win";
+  return "lose";
+}</code></pre>
+<div class="codehead"><span>public/script.js · complete file</span><button class="copy" data-copy="winner-js" type="button">Copy</button></div><pre><code id="winner-js">const moves = ["rock", "paper", "scissors"];
+const result = document.querySelector("#result");
+
+function chooseComputerMove() {
+  const index = Math.floor(Math.random() * moves.length);
+  return moves[index];
+}
+
+function decideWinner(player, computer) {
+  if (player === computer) return "tie";
+  if (player === "rock" &amp;&amp; computer === "scissors") return "win";
+  if (player === "paper" &amp;&amp; computer === "rock") return "win";
+  if (player === "scissors" &amp;&amp; computer === "paper") return "win";
+  return "lose";
+}
+
+for (const button of document.querySelectorAll("[data-move]")) {
+  button.addEventListener("click", () => {
+    const player = button.dataset.move;
+    const computer = chooseComputerMove();
+    const outcome = decideWinner(player, computer);
+    result.textContent = "You chose " + player + ". Computer chose " + computer + ". Result: " + outcome + ".";
+  });
+}</code></pre>
+<p><a href="../versions/14-winner/public/index.html">Open the winner checkpoint</a></p>
+<p>Play rock against a few computer moves until you have seen more than one result word. Commit, push, and deploy.</p>
+<div class="codehead"><span>Terminal</span><button class="copy" data-copy="winner-git" type="button">Copy</button></div><pre><code id="winner-git">git add public/script.js
+git commit -m "Report win, lose, or tie"
+git push
+firebase deploy --only hosting --project YOUR_PROJECT_ID</code></pre>
+</section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Paper against rock returns what?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="Paper beats rock, so the player wins.">win</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="Paper beats rock, so the player wins.">tie</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="Paper beats rock, so the player wins.">lose</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. Why does decideWinner avoid textContent?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The function answers who won. The click handler writes the page.">So the rule can be used without drawing the page</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The function answers who won. The click handler writes the page.">Because textContent is illegal in a function</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The function answers who won. The click handler writes the page.">Because Git cannot store textContent</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=IsG4Xd6LlsM" target="_blank" rel="noopener noreferrer">Video: JavaScript if else</a></li><li><a href="https://www.w3schools.com/js/js_if_else.asp" target="_blank" rel="noopener noreferrer">W3Schools: JavaScript if, else, and else if</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Control_flow_and_error_handling" target="_blank" rel="noopener noreferrer">MDN: Control flow</a></li></ul>
+    <label><input type="checkbox" class="done" value="winner"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="13-computer.html">← Let the computer choose</a><a class="action" href="15-score.html">Keep score →</a></div>
+  </main>
+</div>
+</body>
+</html>

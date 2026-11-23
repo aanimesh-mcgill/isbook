@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Change the project with Git · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 10 of 16</p>
+    <h1 class="page-title" tabindex="-1">Change the project with Git</h1>
+    <p>Every change from here to the end of the book uses the same loop. Git is how the project moves forward. Firebase is how a visitor sees the commit you decided to publish.</p>
+<section class="step"><h3>The loop</h3>
+<ol>
+<li>Edit the files in <code>public</code>.</li>
+<li>Open <code>index.html</code> locally, or reload it, and check the behavior.</li>
+<li>Run <code>git status</code> and <code>git diff</code>. Read the lines.</li>
+<li><code>git add</code> only the files that belong in this change.</li>
+<li><code>git commit</code> with a sentence about the behavior, not a list of file names.</li>
+<li><code>git push</code>.</li>
+<li>When the public link should match, <code>firebase deploy --only hosting</code> and open that link.</li>
+</ol>
+<div class="codehead"><span>Terminal · after you have checked the page</span><button class="copy" data-copy="loop" type="button">Copy</button></div><pre><code id="loop">git status
+git diff
+git add public/index.html
+git commit -m "Rename the event heading"
+git push
+firebase deploy --only hosting --project YOUR_PROJECT_ID</code></pre>
+</section>
+<section class="step"><h3>Do it once on the heading</h3>
+<p>Change the <code>h1</code> text to <code>Campus game night</code> if you already renamed it, or to <code>Friday game night</code> if you have not. Follow the loop. On GitHub, open <code>public/index.html</code> and confirm the new heading. Then reload the Hosting URL and confirm the same heading.</p>
+<p>If <code>git diff</code> shows a change you did not mean, fix the file before you add it. A commit records what you staged, not what you hoped you staged.</p></section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. What do you read before git add?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="diff shows the lines you are about to save.">git diff</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="diff shows the lines you are about to save.">The Firebase project name only</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="diff shows the lines you are about to save.">The browser tab title after deploy</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. A commit message should say what?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The message names the behavior you saved.">What the visitor can now do or see</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The message names the behavior you saved.">The list of every CSS property</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The message names the behavior you saved.">Your Firebase password</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=RGOj5yH7evk" target="_blank" rel="noopener noreferrer">Video: Git and GitHub for Beginners</a></li><li><a href="https://www.w3schools.com/git/git_commit.asp" target="_blank" rel="noopener noreferrer">W3Schools: Git commit</a></li><li><a href="https://git-scm.com/docs/git-diff" target="_blank" rel="noopener noreferrer">Git: git diff</a></li></ul>
+    <label><input type="checkbox" class="done" value="git-loop"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="09-repo.html">← Create the repository</a><a class="action" href="11-rules.html">Put the game rules on the page →</a></div>
+  </main>
+</div>
+</body>
+</html>
