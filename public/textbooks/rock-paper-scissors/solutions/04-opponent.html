@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Give the computer a move</title>
+  <link rel="stylesheet" href="../assets/book.css">
+</head>
+<body>
+<main class="main standalone"><p><a href="../index.html">Back to the textbook</a></p><h1>Give the computer a move</h1><h2>Exercise solution</h2><pre>const computer = chooseComputerMove(() =&gt; 0.9);
+After the check, restore chooseComputerMove().</pre><h2>Debugging solution</h2><p>0.9 × 3 is 2.7. Rounding to the nearest integer gives 3, which is outside the array. Restore Math.floor to obtain index 2.</p><p><a href="../exercises/04-opponent.html">Back to the practice set</a></p></main>
+</body>
+</html>

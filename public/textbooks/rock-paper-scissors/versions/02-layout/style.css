@@ -1,0 +1,31 @@
+* { box-sizing: border-box; }
+body {
+  background: #111315;
+  color: #f4eee8;
+  margin: 0;
+  padding: 1rem;
+  font: 1rem/1.55 system-ui, sans-serif;
+}
+.game {
+  max-width: 40rem;
+  margin: 1rem auto;
+  padding: clamp(1rem, 5vw, 2rem);
+  background: #1c1e22;
+  border: 1px solid #625347;
+  border-radius: 0.75rem;
+}
+h1, h2 { font-family: Georgia, serif; }
+.choices { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+button {
+  font: inherit;
+  color: #20140e;
+  background: #ffad73;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+}
+button:hover { background: #ffd1ac; }
+:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+#score { font-weight: bold; }
+li { margin-block: 0.25rem; }

@@ -10,6 +10,49 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <title>IS Textbook</title>
+    <script>
+      (function () {
+        var path = location.pathname;
+        var staticPath =
+          path.indexOf('/textbooks/') === 0 ||
+          path.indexOf('/course/') === 0 ||
+          path.indexOf('/books/') === 0;
+        if (!staticPath) return;
+        if (/[?&]swbypass=1(?:&|$)/.test(location.search)) return;
+        document.documentElement.hidden = true;
+        if (navigator.serviceWorker) {
+          navigator.serviceWorker.register = function () {
+            return Promise.resolve();
+          };
+        }
+        var sep = location.search ? '&' : '?';
+        var next = path + location.search + sep + 'swbypass=1' + location.hash;
+        var go = function () {
+          location.replace(next);
+        };
+        var clear = navigator.serviceWorker
+          ? navigator.serviceWorker.getRegistrations().then(function (list) {
+              return Promise.all(
+                list.map(function (registration) {
+                  return registration.unregister();
+                }),
+              );
+            })
+          : Promise.resolve();
+        clear
+          .then(function () {
+            if (!window.caches || !caches.keys) return;
+            return caches.keys().then(function (keys) {
+              return Promise.all(
+                keys.map(function (key) {
+                  return caches.delete(key);
+                }),
+              );
+            });
+          })
+          .then(go, go);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

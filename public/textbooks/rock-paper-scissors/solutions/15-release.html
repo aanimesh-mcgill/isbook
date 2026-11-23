@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Run a campus game-night release</title>
+  <link rel="stylesheet" href="../assets/book.css">
+</head>
+<body>
+<main class="main standalone"><p><a href="../index.html">Back to the textbook</a></p><h1>Run a campus game-night release</h1><h2>Exercise solution</h2><pre>Use playerScore + computerScore + ties as the total. Append it to the template in renderScore and start the HTML at zero. Sample handoff: “Added a rounds-played total. The rule suite passed. Six moves showed six rounds and five history rows. Reset and the next move showed one round and one row. Preview: [URL]. Commit: [hash]. Review: [name]. Scores are per tab.”</pre><h2>Debugging solution</h2><p>The code is using history.length, which is capped at five. Use the sum of the three counters, then verify six rounds and reset.</p><p><a href="../exercises/15-release.html">Back to the practice set</a></p></main>
+</body>
+</html>

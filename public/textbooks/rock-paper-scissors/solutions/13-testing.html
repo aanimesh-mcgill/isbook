@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Make rule checks repeatable</title>
+  <link rel="stylesheet" href="../assets/book.css">
+</head>
+<body>
+<main class="main standalone"><p><a href="../index.html">Back to the textbook</a></p><h1>Make rule checks repeatable</h1><h2>Exercise solution</h2><pre>The rock/paper and rock/scissors cases fail. Restore the winning pair and use assert.equal(chooseComputerMove(() =&gt; 0.75), &quot;scissors&quot;); in a new test.</pre><h2>Debugging solution</h2><p>Restore defer for both scripts in load order. The unit checks exercise rule functions, so a browser check must catch missing registration.</p><p><a href="../exercises/13-testing.html">Back to the practice set</a></p></main>
+</body>
+</html>

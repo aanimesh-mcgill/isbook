@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Capture and confirm a player’s choice</title>
+  <link rel="stylesheet" href="../assets/book.css">
+</head>
+<body>
+<main class="main standalone"><p><a href="../index.html">Back to the textbook</a></p><h1>Capture and confirm a player’s choice</h1><h2>Exercise solution</h2><pre>&lt;button type=&quot;button&quot; id=&quot;clear&quot;&gt;Clear choice&lt;/button&gt;
+
+document.querySelector(&quot;#clear&quot;).addEventListener(&quot;click&quot;, function () {
+  result.textContent = &quot;Choose a move.&quot;;
+});</pre><h2>Debugging solution</h2><p>Restore id=&quot;result&quot; or change the selector to #message. In the Console, document.querySelector(&quot;#result&quot;) should return the paragraph when using the original ID.</p><p><a href="../exercises/03-input.html">Back to the practice set</a></p></main>
+</body>
+</html>

@@ -28,6 +28,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        globIgnores: ['**/textbooks/**', 'sw-static-routes.js'],
+        importScripts: ['sw-static-routes.js'],
+        navigateFallbackDenylist: [/^\/course\//, /^\/textbooks\//, /^\/books\//],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/firestore\.googleapis\.com\/.*/i,
