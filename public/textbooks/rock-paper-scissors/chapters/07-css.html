@@ -20,8 +20,39 @@
 <dt>Expected output</dt><dd>A centered card, light text on a dark page, an image that stays inside the card, and no sideways scrolling.</dd>
 <dt>Rules</dt><dd>Do not remove the heading, list, image, or link. Change presentation in the stylesheet. Put <code>class="card"</code> on the <code>main</code> element.</dd></dl></section>
 <section class="step"><h3>What the new CSS is doing</h3>
-<p>A class selector starts with a dot. <code>.card</code> selects the element whose class is <code>card</code>. <code>max-width</code> stops the card growing wider than the text can stand. <code>margin: 2rem auto</code> puts space above the card and centers it, because <code>auto</code> shares the leftover width. <code>padding</code> is space inside the border. <code>border-radius</code> rounds the corners. <code>img { max-width: 100%; height: auto; }</code> lets the picture shrink with the card instead of forcing a sideways scroll.</p>
+<p>Change the page one rule at a time. Paste a block into <code>public/style.css</code>, save, deploy or reload the local file, and check the result named under the block. The complete stylesheet is at the end.</p>
+<h4>A class selects one element</h4>
+<p>A class selector starts with a dot. <code>.card</code> selects the element whose <code>class</code> is <code>card</code>. Change the <code>main</code> start tag first. Then paste the rule. Reload. Only the main area should sit on a lighter panel. The rest of the page stays the darker body color.</p>
 <div class="codehead"><span>public/index.html · the main start tag</span><button class="copy" data-copy="css-html" type="button">Copy</button></div><pre><code id="css-html">&lt;main class="card"></code></pre>
+<div class="codehead"><span>Add to public/style.css</span><button class="copy" data-copy="css-card" type="button">Copy</button></div><pre><code id="css-card">.card {
+  background: #1e2126;
+  border: 1px solid #6b4d3c;
+}</code></pre>
+<h4>max-width and auto margins</h4>
+<p><code>max-width</code> stops the card growing wider than the text can stand. <code>margin: 2rem auto</code> puts space above the card and centers it, because <code>auto</code> shares the leftover width. Paste this in place of the <code>.card</code> rule. Reload and widen the window. The panel should stay centered and stop growing.</p>
+<div class="codehead"><span>Replace the .card rule</span><button class="copy" data-copy="css-width" type="button">Copy</button></div><pre><code id="css-width">.card {
+  max-width: 40rem;
+  margin: 2rem auto;
+  background: #1e2126;
+  border: 1px solid #6b4d3c;
+}</code></pre>
+<h4>padding and rounded corners</h4>
+<p><code>padding</code> is space inside the border. <code>border-radius</code> rounds the corners. Paste this in place of the <code>.card</code> rule. Reload. The heading should sit in from the border, and the corners should be curved.</p>
+<div class="codehead"><span>Replace the .card rule</span><button class="copy" data-copy="css-pad" type="button">Copy</button></div><pre><code id="css-pad">.card {
+  max-width: 40rem;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #1e2126;
+  border: 1px solid #6b4d3c;
+  border-radius: 12px;
+}</code></pre>
+<h4>Keep the picture inside the card</h4>
+<p><code>img { max-width: 100%; height: auto; }</code> lets the picture shrink with the card. Paste this under the card rule. Narrow the window to about a phone width. The picture should shrink. The page should not grow a sideways scrollbar.</p>
+<div class="codehead"><span>Add under the .card rule</span><button class="copy" data-copy="css-img" type="button">Copy</button></div><pre><code id="css-img">img {
+  max-width: 100%;
+  height: auto;
+}</code></pre>
+<p>The rest of the file sets the page color, the heading typeface, the link color, and the button shape. Paste the whole stylesheet when the pieces above already look right, or if you want to skip ahead.</p>
 <div class="codehead"><span>public/style.css</span><button class="copy" data-copy="css-file" type="button">Copy</button></div><pre><code id="css-file">body {
   margin: 0;
   background: #141618;

@@ -20,7 +20,20 @@
 <dt>Expected output</dt><dd>Three totals, starting at zero, changing after each round, and returning to zero on reset.</dd>
 <dt>Rules</dt><dd>A win adds one to the player. A loss adds one to the computer. A tie adds one to ties. Reset does not choose a move.</dd></dl></section>
 <section class="step"><h3>The ideas this feature needs</h3>
-<p><code>let</code> creates a variable you can assign again. <code>playerScore += 1</code> is a new value stored in the same variable. The variables live outside the click function, so the next click still sees them. A variable inside the click function would be thrown away when the click finished. <code>renderScore</code> writes the numbers into the page. The reset listener assigns 0 to each variable and writes the page again.</p>
+<p><code>let</code> creates a variable you can assign again. <code>playerScore += 1</code> is a new value stored in the same variable. The variables live outside the click function, so the next click still sees them. A variable declared inside the click function would be thrown away when the click finished. <code>renderScore</code> writes the numbers into the page. The reset listener assigns 0 to each variable and writes the page again.</p>
+<p>Paste the score markup under the status line. Paste the three <code>let</code> lines and <code>renderScore</code> at the top of <code>script.js</code>, outside the click handler. Inside the click handler, after you know the result word, paste the three <code>if</code> lines and the call to <code>renderScore</code>. Reload, click until you win, and the You total should become 1. Click Reset score. All three numbers should return to 0.</p>
+<div class="codehead"><span>Top of public/script.js · outside the click handler</span><button class="copy" data-copy="score-let" type="button">Copy</button></div><pre><code id="score-let">const score = document.querySelector("#score");
+let playerScore = 0;
+let computerScore = 0;
+let ties = 0;
+
+function renderScore() {
+  score.textContent = "You: " + playerScore + " · Computer: " + computerScore + " · Ties: " + ties;
+}</code></pre>
+<div class="codehead"><span>Inside the click handler, after outcome is known</span><button class="copy" data-copy="score-if" type="button">Copy</button></div><pre><code id="score-if">if (outcome === "win") playerScore += 1;
+if (outcome === "lose") computerScore += 1;
+if (outcome === "tie") ties += 1;
+renderScore();</code></pre>
 <div class="codehead"><span>Add under the status line in public/index.html</span><button class="copy" data-copy="score-html" type="button">Copy</button></div><pre><code id="score-html">&lt;p id="score">You: 0 · Computer: 0 · Ties: 0&lt;/p>
 &lt;p>&lt;button type="button" id="reset">Reset score&lt;/button>&lt;/p></code></pre>
 <div class="codehead"><span>public/script.js · complete file</span><button class="copy" data-copy="score-js" type="button">Copy</button></div><pre><code id="score-js">const moves = ["rock", "paper", "scissors"];

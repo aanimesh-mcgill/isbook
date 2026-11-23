@@ -21,6 +21,8 @@
 <dt>Rules</dt><dd>The same move ties. Rock beats scissors, paper beats rock, scissors beats paper. Anything else loses. The decision function does not change the page. The click handler does.</dd></dl></section>
 <section class="step"><h3>The ideas this feature needs</h3>
 <p><code>if</code> runs a block when a condition is true. <code>===</code> asks whether two values are the same. A condition can use <code>&amp;&amp;</code> to require both parts. The function returns <code>"tie"</code>, <code>"win"</code>, or <code>"lose"</code>. Returning a word keeps the rules testable without looking at the screen.</p>
+<p>Paste the function into <code>script.js</code>. Then, for one reload only, replace the status line inside the click handler with the test. Reload and click any button. The status line should say win, because rock beats scissors. Change the test to <code>decideWinner("rock", "rock")</code>, reload, and click again. It should say tie. Change it to <code>decideWinner("rock", "paper")</code>. It should say lose. Then use the complete file so the real moves are compared.</p>
+<div class="codehead"><span>Temporary test · inside the click handler</span><button class="copy" data-copy="winner-test" type="button">Copy</button></div><pre><code id="winner-test">result.textContent = decideWinner("rock", "scissors");</code></pre>
 <div class="codehead"><span>decideWinner · inside public/script.js</span><button class="copy" data-copy="winner-fn" type="button">Copy</button></div><pre><code id="winner-fn">function decideWinner(player, computer) {
   if (player === computer) return "tie";
   if (player === "rock" &amp;&amp; computer === "scissors") return "win";

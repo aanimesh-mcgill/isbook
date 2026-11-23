@@ -20,7 +20,32 @@
 <dt>Expected output</dt><dd>The status line names that move.</dd>
 <dt>Rules</dt><dd>The button's visible label is for the player. <code>data-move</code> is the value the script reads. The script must not run before the buttons exist.</dd></dl></section>
 <section class="step"><h3>The ideas this feature needs</h3>
-<p>A <code>button</code> is a control. <code>type="button"</code> means it does not submit a form. <code>script src="script.js" defer</code> loads the script and waits until the HTML has been read, so the buttons are findable. <code>querySelector</code> returns the first match. <code>querySelectorAll</code> returns every match. <code>addEventListener("click", ...)</code> runs a function when that button is clicked. <code>dataset.move</code> reads <code>data-move</code>. <code>textContent</code> replaces the words in an element and does not interpret them as HTML.</p>
+<p>Add one piece, save, and reload. The complete files are after these tests.</p>
+<h4>A button the player can press</h4>
+<p>A <code>button</code> is a control. <code>type="button"</code> means it does not submit a form. <code>data-move</code> is the value the script will read. The words between the tags are the label the player sees. Paste this inside <code>main</code>, under the rules list. Reload. You should see three buttons. Clicking them does nothing yet.</p>
+<div class="codehead"><span>Inside main</span><button class="copy" data-copy="choice-buttons" type="button">Copy</button></div><pre><code id="choice-buttons">&lt;p>
+  &lt;button type="button" data-move="rock">Rock&lt;/button>
+  &lt;button type="button" data-move="paper">Paper&lt;/button>
+  &lt;button type="button" data-move="scissors">Scissors&lt;/button>
+&lt;/p>
+&lt;p id="result">Choose a move.&lt;/p></code></pre>
+<h4>Load a script after the buttons exist</h4>
+<p><code>script src="script.js" defer</code> loads the script and waits until the HTML has been read. Paste this in <code>head</code>. Then save <code>public/script.js</code> with the test below. Reload. The status line should say The script ran. If it still says Choose a move, the <code>src</code> does not match the file name, or the script tag is missing <code>defer</code>.</p>
+<div class="codehead"><span>Inside head</span><button class="copy" data-copy="choice-script" type="button">Copy</button></div><pre><code id="choice-script">&lt;script src="script.js" defer>&lt;/script></code></pre>
+<div class="codehead"><span>public/script.js · first test</span><button class="copy" data-copy="choice-ran" type="button">Copy</button></div><pre><code id="choice-ran">const result = document.querySelector("#result");
+result.textContent = "The script ran.";</code></pre>
+<p><code>querySelector</code> returns the first element that matches the selector. <code>#result</code> means the element whose <code>id</code> is <code>result</code>. <code>textContent</code> replaces the words in that element. It does not treat the words as HTML.</p>
+<h4>Hear the click</h4>
+<p><code>querySelectorAll</code> returns every match. <code>[data-move]</code> means every element that has that attribute. <code>addEventListener("click", ...)</code> runs a function when that button is clicked. <code>dataset.move</code> reads <code>data-move</code>. Replace <code>script.js</code> with this, reload, and click Rock. The status line should say You chose rock.</p>
+<div class="codehead"><span>public/script.js · click test</span><button class="copy" data-copy="choice-click" type="button">Copy</button></div><pre><code id="choice-click">const result = document.querySelector("#result");
+
+for (const button of document.querySelectorAll("[data-move]")) {
+  button.addEventListener("click", () => {
+    const player = button.dataset.move;
+    result.textContent = "You chose " + player + ".";
+  });
+}</code></pre>
+<p>Click Paper and Scissors too. The sentence should change to the move on the button you pressed. The complete page is below if you want every line in one paste.</p>
 <div class="codehead"><span>public/index.html</span><button class="copy" data-copy="choice-html" type="button">Copy</button></div><pre><code id="choice-html">&lt;!doctype html>
 &lt;html lang="en">
 &lt;head>

@@ -20,14 +20,68 @@
 <dt>Expected output</dt><dd>A browser page with those parts, and colors that come from a stylesheet.</dd>
 <dt>Rules</dt><dd>Use the tags below for the jobs they actually do. The image needs alternative text. The link needs an address.</dd></dl></section>
 <h3>What the tags do</h3>
-<section class="step"><h4>The document</h4>
-<p><code>&lt;!doctype html&gt;</code> tells the browser to use current HTML rules. <code>html</code> wraps the whole document. <code>lang="en"</code> says the language is English. <code>head</code> holds information about the page. <code>title</code> is the words on the browser tab. <code>meta charset</code> makes punctuation reliable. <code>body</code> holds what a person sees.</p></section>
+<p>Work in <code>public/index.html</code> unless a block says otherwise. If you do not want to type, use Copy, paste, save, and reload the browser. Each block is enough to test that one idea. The complete files are at the end if you want them in one paste.</p>
+<section class="step"><h4>Start the document</h4>
+<p><code>&lt;!doctype html&gt;</code> is the first line. It tells the browser to use current HTML rules. It is not a pair. Paste it once, at the top.</p>
+<div class="codehead"><span>First line of public/index.html</span><button class="copy" data-copy="tag-doctype" type="button">Copy</button></div><pre><code id="tag-doctype">&lt;!doctype html&gt;</code></pre>
+<p><code>html</code> wraps everything else. <code>lang="en"</code> says the words are English. <code>head</code> is information about the page, not the article. <code>title</code> is the text on the browser tab. <code>body</code> is what a person sees. Paste this under the doctype, save, and reload. The tab should say Campus game night, and the page should show the heading.</p>
+<div class="codehead"><span>public/index.html · document shell</span><button class="copy" data-copy="tag-shell" type="button">Copy</button></div><pre><code id="tag-shell">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8"&gt;
+  &lt;title&gt;Campus game night&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Campus game night&lt;/h1&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p><code>meta charset</code> tells the browser how letters and punctuation are stored. Leave it in <code>head</code>. Without it, an apostrophe or an accent can turn into the wrong character. <code>viewport</code> tells a phone to use the device width. Paste it under the charset line. On a narrow window the page should fit instead of looking like a tiny desktop page.</p>
+<div class="codehead"><span>Inside head, under the charset line</span><button class="copy" data-copy="tag-viewport" type="button">Copy</button></div><pre><code id="tag-viewport">&lt;meta name="viewport" content="width=device-width, initial-scale=1"&gt;</code></pre></section>
 <section class="step"><h4>The visible parts</h4>
-<p><code>h1</code> is the main heading. Use one. <code>p</code> is a paragraph. <code>ul</code> is a list, and each <code>li</code> is one item. <code>strong</code> marks words that matter. A tag usually has a start and an end. The words between them are the contents.</p></section>
+<p><code>h1</code> is the main heading. Use one on the page. The words go between the start tag and the end tag.</p>
+<div class="codehead"><span>Inside body</span><button class="copy" data-copy="tag-h1" type="button">Copy</button></div><pre><code id="tag-h1">&lt;h1&gt;Campus game night&lt;/h1&gt;</code></pre>
+<p><code>p</code> is a paragraph. Paste it under the heading. Reload. You should see a sentence under the heading, in a smaller size.</p>
+<div class="codehead"><span>Under the h1</span><button class="copy" data-copy="tag-p" type="button">Copy</button></div><pre><code id="tag-p">&lt;p&gt;One short game for people waiting between events.&lt;/p&gt;</code></pre>
+<p><code>h2</code> is a heading under the main one. Paste it when a section needs its own title. Reload. It should be smaller than the <code>h1</code> and larger than the paragraph.</p>
+<div class="codehead"><span>Under the paragraph</span><button class="copy" data-copy="tag-h2" type="button">Copy</button></div><pre><code id="tag-h2">&lt;h2&gt;Bring&lt;/h2&gt;</code></pre>
+<p><code>ul</code> is a list. Each <code>li</code> is one item. The items sit inside the list, not beside it. Paste this under the <code>h2</code>. Reload. You should see two bullets.</p>
+<div class="codehead"><span>Under the paragraph</span><button class="copy" data-copy="tag-ul" type="button">Copy</button></div><pre><code id="tag-ul">&lt;ul&gt;
+  &lt;li&gt;A phone with a browser&lt;/li&gt;
+  &lt;li&gt;A few minutes&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+<p><code>strong</code> marks words that matter. It does not make a new paragraph. Paste this as another paragraph. The word “here” should look heavier than the rest of the sentence.</p>
+<div class="codehead"><span>Another paragraph</span><button class="copy" data-copy="tag-strong" type="button">Copy</button></div><pre><code id="tag-strong">&lt;p&gt;The rules page will live &lt;strong&gt;here&lt;/strong&gt;.&lt;/p&gt;</code></pre></section>
 <section class="step"><h4>Links and images</h4>
-<p><code>a</code> is a link. <code>href</code> is the address it opens. The words between the start and end tags are what the person clicks. <code>img</code> is a picture and does not wrap other content, so it has no end tag. <code>src</code> is the image file, written relative to the HTML file. <code>alt</code> is the text if the image cannot be seen. <code>width</code> sets how wide it is drawn.</p></section>
+<p><code>a</code> is a link. <code>href</code> is the address it opens. The words between the tags are what the person clicks. Paste this, reload, and click the words. The browser should leave your page. Use Back to return.</p>
+<div class="codehead"><span>A link</span><button class="copy" data-copy="tag-a" type="button">Copy</button></div><pre><code id="tag-a">&lt;p&gt;&lt;a href="https://firebase.google.com/docs/hosting"&gt;What web hosting is&lt;/a&gt;&lt;/p&gt;</code></pre>
+<p><code>img</code> is a picture. It does not wrap other content, so it has no end tag. <code>src</code> is the file, written relative to <code>index.html</code>. <code>alt</code> is the text if the picture cannot be seen. <code>width</code> is how wide to draw it, in pixels. Save the image file first, then paste the tag, then reload. You should see the picture. If you see a broken icon, the file name in <code>src</code> does not match the file next to <code>index.html</code>.</p>
+<div class="codehead"><span>public/mark.svg · save this file, then use the img tag</span><button class="copy" data-copy="tag-svg" type="button">Copy</button></div><pre><code id="tag-svg">&lt;svg xmlns="http://www.w3.org/2000/svg" width="160" height="80" viewBox="0 0 160 80"&gt;
+  &lt;rect width="160" height="80" rx="8" fill="#2a211c"/&gt;
+  &lt;text x="80" y="48" text-anchor="middle" fill="#ffb77d" font-family="Georgia, serif" font-size="28"&gt;RPS&lt;/text&gt;
+&lt;/svg&gt;</code></pre>
+<div class="codehead"><span>Inside body, above the list</span><button class="copy" data-copy="tag-img" type="button">Copy</button></div><pre><code id="tag-img">&lt;img src="mark.svg" alt="The letters RPS on a dark card" width="160"&gt;</code></pre></section>
 <section class="step"><h4>The stylesheet</h4>
-<p><code>link rel="stylesheet"</code> in <code>head</code> loads <code>style.css</code>. A CSS rule has a selector and declarations. <code>body</code> selects the body. <code>color</code> is the text color. <code>background</code> is the page color. <code>font-family</code> is the typeface. <code>margin</code> is the outer gap.</p>
+<p><code>link rel="stylesheet"</code> in <code>head</code> loads <code>style.css</code>. Paste the link line into <code>head</code>, then save the CSS file. A CSS rule has a selector and declarations. <code>body</code> selects the body. <code>color</code> is the text color. <code>background</code> is the page color. <code>font-family</code> is the typeface. <code>margin</code> is space outside the element. <code>max-width</code> caps how wide it can grow. Reload. The page background should turn dark and the heading should be light.</p>
+<div class="codehead"><span>Inside head</span><button class="copy" data-copy="tag-link" type="button">Copy</button></div><pre><code id="tag-link">&lt;link rel="stylesheet" href="style.css"&gt;</code></pre>
+<div class="codehead"><span>public/style.css · paste, save, reload</span><button class="copy" data-copy="tag-css" type="button">Copy</button></div><pre><code id="tag-css">body {
+  margin: 0;
+  background: #1a1c1f;
+  color: #f4efe8;
+  font-family: Georgia, serif;
+}
+
+main {
+  max-width: 36rem;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+a {
+  color: #ffb77d;
+}</code></pre>
+<p>The <code>a</code> rule changes only links. After you reload, the hosting link should be a different color from the paragraph.</p></section>
+<section class="step"><h3>Or paste the whole page</h3>
+<p>If the pieces above are already in place, you can skip this. If you want one paste that includes every tag from this chapter, replace <code>public/index.html</code> and <code>public/style.css</code> with these files, save <code>mark.svg</code>, and reload.</p>
 <div class="codehead"><span>public/index.html</span><button class="copy" data-copy="html-page" type="button">Copy</button></div><pre><code id="html-page">&lt;!doctype html>
 &lt;html lang="en">
 &lt;head>

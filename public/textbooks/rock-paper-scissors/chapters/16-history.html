@@ -20,7 +20,22 @@
 <dt>Expected output</dt><dd>A list of at most five rounds, newest at the top. Reset clears it.</dd>
 <dt>Rules</dt><dd>Build each list item in the script. Do not paste the player's text into the page as HTML.</dd></dl></section>
 <section class="step"><h3>The ideas this feature needs</h3>
-<p>An array can hold objects. Each object has <code>player</code>, <code>computer</code>, and <code>outcome</code>. <code>unshift</code> puts the new round at the front. <code>pop</code> removes the last item when the list is longer than five. <code>for...of</code> walks the array. <code>createElement("li")</code> makes a list item. <code>textContent</code> sets its words. <code>append</code> puts it in the <code>ol</code>. Clearing <code>innerHTML</code> before the loop redraws the list from the array, which is the source of truth. Reset sets <code>history.length = 0</code> and redraws.</p>
+<p>An array can hold objects. Each object has <code>player</code>, <code>computer</code>, and <code>outcome</code>. <code>unshift</code> puts the new round at the front. <code>pop</code> removes the last item when the list is longer than five. <code>for...of</code> walks the array. <code>createElement("li")</code> makes a list item. <code>textContent</code> sets its words as text, so a move name cannot become a tag. <code>append</code> puts the item in the <code>ol</code>. Clearing <code>innerHTML</code> before the loop redraws the list from the array, which is the source of truth. Reset sets <code>history.length = 0</code> and redraws.</p>
+<p>Paste the heading and empty list under the reset button. Paste <code>history</code> and <code>renderHistory</code> into <code>script.js</code>. Inside the click handler, after the score updates, paste the three lines that record the round. Reload and click once. One numbered line should appear, with your move first. Click six times. The list should stay at five lines, and the newest round should be number 1. Click Reset score. The list should be empty.</p>
+<div class="codehead"><span>Add to public/script.js</span><button class="copy" data-copy="history-fn" type="button">Copy</button></div><pre><code id="history-fn">const historyList = document.querySelector("#history");
+const history = [];
+
+function renderHistory() {
+  historyList.innerHTML = "";
+  for (const round of history) {
+    const item = document.createElement("li");
+    item.textContent = round.player + " vs " + round.computer + " — " + round.outcome;
+    historyList.append(item);
+  }
+}</code></pre>
+<div class="codehead"><span>Inside the click handler, after renderScore()</span><button class="copy" data-copy="history-push" type="button">Copy</button></div><pre><code id="history-push">history.unshift({ player, computer, outcome });
+if (history.length > 5) history.pop();
+renderHistory();</code></pre>
 <div class="codehead"><span>Add under the reset button</span><button class="copy" data-copy="history-html" type="button">Copy</button></div><pre><code id="history-html">&lt;h2>Recent rounds&lt;/h2>
 &lt;ol id="history">&lt;/ol></code></pre>
 <div class="codehead"><span>public/script.js · complete file</span><button class="copy" data-copy="history-js" type="button">Copy</button></div><pre><code id="history-js">const moves = ["rock", "paper", "scissors"];

@@ -21,6 +21,15 @@
 <dt>Rules</dt><dd>The computer chooses only rock, paper, or scissors. The choice is a function the click handler calls.</dd></dl></section>
 <section class="step"><h3>The ideas this feature needs</h3>
 <p>A <strong>function</strong> is a named block you can run again. <code>return</code> sends a value back to the line that called it. An <strong>array</strong> is an ordered list. The first index is 0. <code>moves.length</code> is 3. <code>Math.random()</code> returns a number from 0 up to, but not including, 1. Multiply by the length and <code>Math.floor</code> cuts off the fraction, leaving 0, 1, or 2.</p>
+<p>Paste this function at the top of <code>public/script.js</code>, and paste the one test line where the click handler sets the status text. Save and reload several times. The status line should be rock, paper, or scissors, and it should not stay the same every time.</p>
+<div class="codehead"><span>Add to public/script.js</span><button class="copy" data-copy="computer-fn" type="button">Copy</button></div><pre><code id="computer-fn">const moves = ["rock", "paper", "scissors"];
+
+function chooseComputerMove() {
+  const index = Math.floor(Math.random() * moves.length);
+  return moves[index];
+}</code></pre>
+<div class="codehead"><span>Temporary test · replace the click handler body</span><button class="copy" data-copy="computer-test" type="button">Copy</button></div><pre><code id="computer-test">result.textContent = chooseComputerMove();</code></pre>
+<p>When that changes on each reload, put the function call back inside the click handler so a click reports both names. The complete file is below.</p>
 <div class="codehead"><span>public/script.js</span><button class="copy" data-copy="computer-js" type="button">Copy</button></div><pre><code id="computer-js">const moves = ["rock", "paper", "scissors"];
 const result = document.querySelector("#result");
 
