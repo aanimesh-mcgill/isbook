@@ -35,6 +35,9 @@ summary { cursor:pointer; color:#ffd0a8; }
 .pager a { text-decoration:none; }
 .version-list a { white-space:normal; }
 .resources li { margin:.4rem 0; }
+.shot { margin: 0.35rem 0 1.25rem; }
+.shot img { display: block; width: 100%; max-width: 760px; height: auto; background: #fff; border: 1px solid #3c4046; border-radius: 8px; }
+.shot figcaption { color: #b9b3ac; font-size: 0.92rem; line-height: 1.45; margin-top: 0.35rem; }
 @media(max-width:650px) {
   .side { max-height:none; padding:14px 18px; }
   .side h2 { margin:.3rem 0; }
