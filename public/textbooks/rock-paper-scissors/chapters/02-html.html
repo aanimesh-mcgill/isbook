@@ -145,6 +145,7 @@
 <p>Put the plain heading back, save, and reload, so the next step can change the heading.</p>
 <h4>In the same file</h4>
 <p>A <code>style</code> element in <code>head</code> holds rules for this page only. The crash course uses this. Paste it under the title, save, and reload. The page background should turn dark, the text light, and the link a different color. The words in the HTML did not change.</p>
+<p><code>rem</code> is a length. The name is short for root em, and one <code>rem</code> is the font size of the <code>html</code> element, the root of the page. A browser starts that size at 16 pixels, so <code>1rem</code> is 16 pixels, <code>2rem</code> is 32 pixels, and <code>36rem</code> is 576 pixels, until a rule or the reader’s settings change the root size. In the block below, <code>margin: 2rem auto</code> puts two of those root sizes above and below <code>main</code>, <code>padding: 1rem</code> puts one root size of space inside the border, and <code>max-width: 36rem</code> stops the column at 36 root sizes. When a reader enlarges the root text, these lengths enlarge with it, so the space stays in step with the words.</p>
 <div class="codehead"><span>Inside head, under the title · for one reload</span><button class="copy" data-copy="tag-style" type="button">Copy</button></div><pre><code id="tag-style">&lt;style&gt;
 body {
   margin: 0;
