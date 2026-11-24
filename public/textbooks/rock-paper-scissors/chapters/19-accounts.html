@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Save a public record and a private note · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 18 of 18</p>
+    <h1>Save a public record and a private note</h1>
+    <p class="requirements"><strong>Requirements:</strong> A round shows itself as JSON text, and reading that text back names the outcome. On your own Firebase project, a round sends one Analytics event, a signed-in player gets a public win total, and a private note stays visible only to that player. Do not deploy this into the class project.</p>
+    <p>The last chapter could open the game with no network, and a reload still cleared the score. Those totals lived in variables. This chapter keeps two different copies in Cloud Firestore: a public board of names and win counts, and a private note plus the last move. Google Analytics counts how rounds end. It does not store the note.</p>
+
+    <h2>An object, then JSON</h2>
+    <p>The history list already stores each round as an object: a set of names and values. <code>player</code>, <code>computer</code>, and <code>outcome</code> are the names. <code>round.outcome</code> and <code>round["outcome"]</code> read the same value. When the variable name and the property name match, <code>{ player, computer, outcome }</code> is the short way to write the object. The long way spells the names out, which is easier to check:</p>
+    <div class="codehead"><span>One round</span><button class="copy" data-copy="obj-round" type="button">Copy</button></div><pre><code id="obj-round">const round = {
+  player: player,
+  computer: computer,
+  outcome: outcome,
+  wins: playerScore,
+  losses: computerScore,
+  ties: ties
+};</code></pre>
+    <p>JSON is that object written as text. Keys and strings use double quotes. Numbers stay numbers. JSON has no comments, no functions, and no single quotes. <code>JSON.stringify(round, null, 2)</code> makes the text, with line breaks. <code>JSON.parse</code> reads the text and returns an object again. Firestore stores the object. The box on the page shows the text, so you can see the shape before anything is saved.</p>
+    <p>Add this inside the Play section, after the reset button.</p>
+    <div class="codehead"><span>Play section, after the reset button</span><button class="copy" data-copy="json-html" type="button">Copy</button></div><pre><code id="json-html">&lt;h2&gt;This round as JSON&lt;/h2&gt;
+&lt;pre id="json"&gt;{"player":"","computer":"","outcome":"none","wins":0,"losses":0,"ties":0}&lt;/pre&gt;
+&lt;p&gt;&lt;button type="button" id="parse"&gt;Read that JSON&lt;/button&gt;&lt;/p&gt;
+&lt;p id="parsed"&gt;&lt;/p&gt;</code></pre>
+    <p>Inside the move-button click handler, after the history list is updated, build the object, show the text, and hand the object to <code>recordRound</code> when that function exists. It will not exist until the account script loads, and the game still plays without it.</p>
+    <div class="codehead"><span>Inside the move click, after history.pop()</span><button class="copy" data-copy="json-js" type="button">Copy</button></div><pre><code id="json-js">const round = {
+  player: player,
+  computer: computer,
+  outcome: outcome,
+  wins: playerScore,
+  losses: computerScore,
+  ties: ties
+};
+document.querySelector("#json").textContent = JSON.stringify(round, null, 2);
+if (window.recordRound) window.recordRound(round);</code></pre>
+    <p>The parse button reads the box. Paste this at the bottom of <code>script.js</code>.</p>
+    <div class="codehead"><span>Bottom of script.js</span><button class="copy" data-copy="json-parse" type="button">Copy</button></div><pre><code id="json-parse">document.querySelector("#parse").addEventListener("click", () => {
+  const jsonBox = document.querySelector("#json");
+  const parsed = document.querySelector("#parsed");
+  try {
+    const round = JSON.parse(jsonBox.textContent);
+    parsed.textContent = "Parsed outcome: " + round.outcome;
+  } catch (error) {
+    parsed.textContent = "That text is not JSON.";
+  }
+});</code></pre>
+    <p>Reload, play Rock, and the box should show <code>"outcome": "win"</code>, <code>"lose"</code>, or <code>"tie"</code> with a number for <code>wins</code>. Click Read that JSON. The line under the box should name that same outcome. The quotes are part of the text. The parsed <code>outcome</code> is a JavaScript string again.</p>
+
+    <h2>Two scripts and one shared function</h2>
+    <p><code>script.js</code> is an ordinary script. <code>account.js</code> will be a module, loaded with <code>type="module"</code>. A module keeps its variables private. The game cannot call a function declared inside the module. Assigning <code>window.recordRound</code> puts the function on the page's shared object, which both files can see. The click handler calls it after each round.</p>
+    <p>A module can <code>await import("...")</code> to load a library at that moment. This page waits until the config is a real web config, so the textbook copy still plays before you paste keys.</p>
+
+    <h2>The web config object</h2>
+    <p>Firebase gives you another object: the web configuration. In the Firebase console open Project settings, Your apps. Add a web app if the project does not have one, and enable Google Analytics for that project so the object includes <code>measurementId</code>. Copy the whole object into <code>account.js</code> in place of the placeholder below.</p>
+    <p>The <code>apiKey</code> in that object is an identifier for browser code. It is safe to commit <code>account.js</code> with that object in it. The lock is the Firestore rules later in this chapter, plus Authentication. The service-account JSON is a different file. That one is a server key. Do not download it into <code>public/</code>, and do not commit it.</p>
+    <p>Use your own project. The class site is not the place to create accounts or write documents.</p>
+
+    <h2>Google Analytics</h2>
+    <p>Analytics counts events. It is not the database, and it is not the score. <code>logEvent</code> sends a name and a small object of parameters. This game sends <code>round_played</code> and the <code>outcome</code> only. Do not send the email, the password, the private note, or the player's moves. Those are not counts.</p>
+    <p>The single-page game does not load a new document when you open Rules or Account, so a page view is a poor count of play. The custom event fires once per round, which is the count you want. In the Firebase console, Analytics, the event appears after a real visit to your Hosting URL. DebugView is faster than the main reports while you are testing.</p>
+    <p>If the config has no <code>measurementId</code>, sign-in can still work. The script leaves Analytics off when the browser cannot start it.</p>
+
+    <h2>Sign in</h2>
+    <p>In the console open Authentication, Sign-in method, and enable Email/Password. A password has to be at least 6 characters. Firebase keeps the password. Your script must not write it into Firestore, and it must not put it in an Analytics event.</p>
+    <p><code>createUserWithEmailAndPassword</code> and <code>signInWithEmailAndPassword</code> return a promise: a result that arrives after the network answers. <code>await</code> pauses an <code>async</code> function until that result arrives. <code>onAuthStateChanged</code> runs when someone signs in or out and hands you the current user. <code>user.uid</code> is the id you will use as the document name. Sign out sets the user back to empty.</p>
+
+    <h2>A public document and a private document</h2>
+    <p>A collection is a set of documents. A document id plus its fields is an object. This game uses two collections.</p>
+    <ul>
+      <li><code>profiles/{uid}</code> is public. The fields are <code>name</code>, <code>wins</code>, <code>losses</code>, and <code>ties</code>. Anyone may read the board. Only a signed-in user may write the document whose id is their own <code>uid</code>.</li>
+      <li><code>private/{uid}</code> is private. The fields are <code>note</code> and <code>lastRound</code>. <code>lastRound</code> is a nested object with the move names. Only that same <code>uid</code> may read or write it.</li>
+    </ul>
+    <p><code>setDoc(..., { merge: true })</code> updates the fields you send and leaves the others in place. A round writes the public totals and the private last move. It does not send <code>note</code>, so a saved note stays. The Save private note button writes <code>note</code> and does not send the totals.</p>
+    <p>The score line on the Play view still starts at 0 after a reload. Those variables are memory. The public board is the saved copy, and it comes back only while the page is online and the rules allow the read.</p>
+    <p>Create the database from the Firestore page. Choose production mode. Production mode starts closed, which matches the rules you are about to deploy. Test mode leaves the database open for a limited time. Do not use test mode.</p>
+    <p>Save this as <code>firestore.rules</code> beside <code>firebase.json</code>, not inside <code>public/</code>.</p>
+    <div class="codehead"><span>firestore.rules</span><button class="copy" data-copy="rules" type="button">Copy</button></div><pre><code id="rules">rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /profiles/{uid} {
+      allow read: if true;
+      allow create, update: if request.auth != null
+        &amp;&amp; request.auth.uid == uid
+        &amp;&amp; request.resource.data.keys().hasOnly(["name", "wins", "losses", "ties"])
+        &amp;&amp; request.resource.data.name is string
+        &amp;&amp; request.resource.data.name.size() &lt;= 40
+        &amp;&amp; request.resource.data.wins is number
+        &amp;&amp; request.resource.data.losses is number
+        &amp;&amp; request.resource.data.ties is number;
+      allow delete: if false;
+    }
+    match /private/{uid} {
+      allow read, write: if request.auth != null &amp;&amp; request.auth.uid == uid;
+    }
+  }
+}</code></pre>
+    <p><code>request.auth.uid == uid</code> is the check that stops you writing <code>profiles/someone-else</code>. <code>hasOnly</code> stops a public document from growing an email or a note. The private match has no <code>read: if true</code>, so a classmate who can see the board still cannot open your note.</p>
+    <p>Add the <code>firestore</code> block to <code>firebase.json</code>. Keep the hosting block you already have.</p>
+    <div class="codehead"><span>firebase.json</span><button class="copy" data-copy="firebase-json" type="button">Copy</button></div><pre><code id="firebase-json">{
+  "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  },
+  "firestore": {
+    "rules": "firestore.rules"
+  }
+}</code></pre>
+
+    <h2>The account page</h2>
+    <p>Add an Account link in the nav, and allow that hash in <code>viewFromHash</code>.</p>
+    <div class="codehead"><span>Nav</span><button class="copy" data-copy="nav-link" type="button">Copy</button></div><pre><code id="nav-link">&lt;a href="#account"&gt;Account&lt;/a&gt;</code></pre>
+    <div class="codehead"><span>viewFromHash</span><button class="copy" data-copy="hash-line" type="button">Copy</button></div><pre><code id="hash-line">if (name === "rules" || name === "rounds" || name === "account") return name;</code></pre>
+    <p>Add this section after the rounds section.</p>
+    <div class="codehead"><span>Account section</span><button class="copy" data-copy="account-html" type="button">Copy</button></div><pre><code id="account-html">&lt;section id="account" data-view="account" hidden&gt;
+  &lt;h2&gt;Account&lt;/h2&gt;
+  &lt;p id="account-status"&gt;Paste your web app config to turn on sign-in.&lt;/p&gt;
+  &lt;label&gt;Email &lt;input id="email" type="email" autocomplete="username"&gt;&lt;/label&gt;
+  &lt;label&gt;Password &lt;input id="password" type="password" autocomplete="current-password"&gt;&lt;/label&gt;
+  &lt;p&gt;
+    &lt;button type="button" id="create"&gt;Create account&lt;/button&gt;
+    &lt;button type="button" id="signin"&gt;Sign in&lt;/button&gt;
+    &lt;button type="button" id="signout"&gt;Sign out&lt;/button&gt;
+  &lt;/p&gt;
+  &lt;label&gt;Public name &lt;input id="name" type="text" maxlength="40"&gt;&lt;/label&gt;
+  &lt;h2&gt;Public board&lt;/h2&gt;
+  &lt;ul id="board"&gt;&lt;/ul&gt;
+  &lt;label&gt;Private note &lt;textarea id="note" rows="3"&gt;&lt;/textarea&gt;&lt;/label&gt;
+  &lt;p&gt;&lt;button type="button" id="save-note"&gt;Save private note&lt;/button&gt;&lt;/p&gt;
+&lt;/section&gt;</code></pre>
+    <p>Add this to <code>style.css</code> so the fields are readable on the dark card.</p>
+    <div class="codehead"><span>style.css</span><button class="copy" data-copy="account-css" type="button">Copy</button></div><pre><code id="account-css">nav {
+  flex-wrap: wrap;
+}
+
+label {
+  display: block;
+  margin-top: 0.6rem;
+}
+
+input, textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0.35rem 0 0.8rem;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  color: #17110c;
+  background: #f4efe8;
+  border: 0;
+  border-radius: 6px;
+}
+
+pre {
+  background: #141618;
+  padding: 0.75rem;
+  border-radius: 8px;
+  overflow-x: auto;
+}</code></pre>
+    <p>In <code>index.html</code>, load the module next to the game script.</p>
+    <div class="codehead"><span>Next to script.js</span><button class="copy" data-copy="module-tag" type="button">Copy</button></div><pre><code id="module-tag">&lt;script src="account.js" type="module"&gt;&lt;/script&gt;</code></pre>
+    <p>Create <code>public/account.js</code> with this file. Replace <code>firebaseConfig</code> with the object from your project settings. Leave the placeholder in place until you are ready: the JSON box works either way, and the account buttons tell you the config is still missing.</p>
+    <div class="codehead"><span>public/account.js</span><button class="copy" data-copy="account-js" type="button">Copy</button></div><pre><code id="account-js">const status = document.querySelector("#account-status");
+const board = document.querySelector("#board");
+const emailInput = document.querySelector("#email");
+const passwordInput = document.querySelector("#password");
+const nameInput = document.querySelector("#name");
+const noteInput = document.querySelector("#note");
+
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
+  appId: "YOUR_APP_ID",
+  measurementId: "G-XXXXXXXX"
+};
+
+const ready = firebaseConfig.apiKey.startsWith("AIza");
+const sdk = "https://www.gstatic.com/firebasejs/13.4.0/";
+let auth = null;
+let db = null;
+let analytics = null;
+let user = null;
+let logEvent = null;
+let setDoc = null;
+let doc = null;
+let stopNote = null;
+
+window.recordRound = function (round) {
+  if (analytics &amp;&amp; logEvent) {
+    logEvent(analytics, "round_played", { outcome: round.outcome });
+  }
+  if (!user || !db) return;
+  setDoc(doc(db, "profiles", user.uid), {
+    name: nameInput.value || "Player",
+    wins: round.wins,
+    losses: round.losses,
+    ties: round.ties
+  }, { merge: true });
+  setDoc(doc(db, "private", user.uid), {
+    lastRound: {
+      player: round.player,
+      computer: round.computer,
+      outcome: round.outcome
+    }
+  }, { merge: true });
+};
+
+function needConfig() {
+  status.textContent = "Paste your web app config in account.js, then deploy to your own project.";
+}
+
+document.querySelector("#create").addEventListener("click", async () => {
+  if (!auth) return needConfig();
+  const { createUserWithEmailAndPassword } = await import(sdk + "firebase-auth.js");
+  try {
+    await createUserWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+  } catch (error) {
+    status.textContent = error.message;
+  }
+});
+
+document.querySelector("#signin").addEventListener("click", async () => {
+  if (!auth) return needConfig();
+  const { signInWithEmailAndPassword } = await import(sdk + "firebase-auth.js");
+  try {
+    await signInWithEmailAndPassword(auth, emailInput.value, passwordInput.value);
+  } catch (error) {
+    status.textContent = error.message;
+  }
+});
+
+document.querySelector("#signout").addEventListener("click", async () => {
+  if (!auth) return needConfig();
+  const { signOut } = await import(sdk + "firebase-auth.js");
+  await signOut(auth);
+});
+
+document.querySelector("#save-note").addEventListener("click", async () => {
+  if (!user || !db) {
+    status.textContent = "Sign in before saving a private note.";
+    return;
+  }
+  await setDoc(doc(db, "private", user.uid), { note: noteInput.value }, { merge: true });
+  status.textContent = "Private note saved.";
+});
+
+async function start() {
+  if (!ready) {
+    needConfig();
+    return;
+  }
+  const { initializeApp } = await import(sdk + "firebase-app.js");
+  const { getAuth, onAuthStateChanged } = await import(sdk + "firebase-auth.js");
+  const firestore = await import(sdk + "firebase-firestore.js");
+  const analyticsSdk = await import(sdk + "firebase-analytics.js");
+  const app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = firestore.getFirestore(app);
+  setDoc = firestore.setDoc;
+  doc = firestore.doc;
+  try {
+    if (await analyticsSdk.isSupported()) analytics = analyticsSdk.getAnalytics(app);
+  } catch (error) {
+    analytics = null;
+  }
+  logEvent = analyticsSdk.logEvent;
+  firestore.onSnapshot(firestore.collection(db, "profiles"), (snap) =&gt; {
+    board.innerHTML = "";
+    snap.forEach((item) =&gt; {
+      const data = item.data();
+      const row = document.createElement("li");
+      row.textContent = (data.name || "Player") + " · " + data.wins + " wins";
+      board.append(row);
+    });
+  });
+  onAuthStateChanged(auth, (next) =&gt; {
+    user = next;
+    if (stopNote) {
+      stopNote();
+      stopNote = null;
+    }
+    if (!user) {
+      status.textContent = "Signed out.";
+      noteInput.value = "";
+      return;
+    }
+    status.textContent = "Signed in.";
+    stopNote = firestore.onSnapshot(firestore.doc(db, "private", user.uid), (snap) =&gt; {
+      if (snap.exists() &amp;&amp; typeof snap.data().note === "string") {
+        noteInput.value = snap.data().note;
+      }
+    });
+  });
+}
+
+start();</code></pre>
+    <p>If <code>sw.js</code> from the last chapter is still in the project, add <code>"./account.js"</code> to its file list and change <code>CACHE</code> to <code>campus-game-v3</code> before you deploy. The worker stores files, not Firestore documents. Offline play can still use the cached game. The board and the note need the network. The Analytics library is loaded from <code>gstatic.com</code>, which the worker leaves on the network.</p>
+    <p>Deploy hosting and the rules together, to your project id:</p>
+    <div class="codehead"><span>Terminal, from campus-game</span><button class="copy" data-copy="deploy-cmd" type="button">Copy</button></div><pre><code id="deploy-cmd">firebase deploy --only hosting,firestore:rules --project YOUR_PROJECT_ID</code></pre>
+    <p>On your Hosting URL, create an account, type a public name, and play a round. Open Account. The board should list that name and a win count. Type a note, save it, reload, and sign in again. The note should return. The Play score can read 0 again. That is the in-memory copy. In the Firestore console you should see <code>profiles</code> and, while you are that user, the private document. A second account sees the board and does not see the first note. In Analytics, DebugView should show <code>round_played</code> with an outcome and without the note.</p>
+    <p><a href="../versions/19-accounts/public/index.html">Open the game with the JSON box and the account form</a>. That copy still has <code>YOUR_API_KEY</code>, so the JSON line works here and sign-in waits until you paste a config in your own project.</p>
+
+    <h3>Check your understanding</h3>
+    <div class="quiz">
+      <fieldset class="question">
+        <legend>1. What does JSON.stringify do with a round?</legend>
+        <button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The object stays in memory. stringify writes the quoted text you can store in the box or read back with JSON.parse.">It turns the object into text</button>
+        <button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The object stays in memory. stringify writes the quoted text you can store in the box or read back with JSON.parse.">It saves the note in Firestore</button>
+        <button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The object stays in memory. stringify writes the quoted text you can store in the box or read back with JSON.parse.">It signs the player in</button>
+        <p class="feedback" role="status"></p>
+      </fieldset>
+      <fieldset class="question">
+        <legend>2. Which fields should the Analytics event include?</legend>
+        <button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="round_played carries the outcome so you can count wins, losses, and ties. The note, the email, and the password are not counts.">The outcome only</button>
+        <button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="round_played carries the outcome so you can count wins, losses, and ties. The note, the email, and the password are not counts.">The private note and the password</button>
+        <button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="round_played carries the outcome so you can count wins, losses, and ties. The note, the email, and the password are not counts.">The whole private document</button>
+        <p class="feedback" role="status"></p>
+      </fieldset>
+      <fieldset class="question">
+        <legend>3. Who can read private/your-uid?</legend>
+        <button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The private rule allows read and write only when request.auth.uid equals the document id. The public board is the collection with read: if true.">Only the signed-in user with that uid</button>
+        <button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The private rule allows read and write only when request.auth.uid equals the document id. The public board is the collection with read: if true.">Anyone who can see the public board</button>
+        <button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The private rule allows read and write only when request.auth.uid equals the document id. The public board is the collection with read: if true.">Anyone who has the web apiKey, even signed out</button>
+        <p class="feedback" role="status"></p>
+      </fieldset>
+      <p class="quiz-summary" role="status">Choose an answer for each question.</p>
+      <button type="button" class="ghost retry">Try quiz again</button>
+    </div>
+    <h3>Go further</h3>
+    <ul class="resources">
+      <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON" target="_blank" rel="noopener noreferrer">MDN: JSON</a></li>
+      <li><a href="https://firebase.google.com/docs/web/alt-setup" target="_blank" rel="noopener noreferrer">Firebase: add the web SDK from the CDN</a></li>
+      <li><a href="https://firebase.google.com/docs/analytics/get-started?platform=web" target="_blank" rel="noopener noreferrer">Firebase: get started with Google Analytics</a></li>
+      <li><a href="https://firebase.google.com/docs/auth/web/password-auth" target="_blank" rel="noopener noreferrer">Firebase: email and password sign-in</a></li>
+      <li><a href="https://firebase.google.com/docs/firestore/security/get-started" target="_blank" rel="noopener noreferrer">Firebase: Firestore security rules</a></li>
+    </ul>
+    <label><input type="checkbox" class="done" value="accounts"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="18-pwa.html">← Let the game install and open offline</a><a class="action" href="../index.html">Back to contents →</a></div>
+  </main>
+</div>
+</body>
+</html>
