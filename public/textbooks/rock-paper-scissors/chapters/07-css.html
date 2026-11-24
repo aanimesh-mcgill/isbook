@@ -131,8 +131,22 @@
   border-radius: 12px;
 }</code></pre>
 <h4>Keep the picture inside the card</h4>
-<p><code>img { max-width: 100%; height: auto; }</code> lets the picture shrink with the card. Paste this under the card rule. Narrow the window to about a phone width. The picture should shrink. The page should not grow a sideways scrollbar.</p>
-<div class="codehead"><span>Add under the .card rule</span><button class="copy" data-copy="css-img" type="button">Copy</button></div><pre><code id="css-img">img {
+<p><code>img { max-width: 100%; height: auto; }</code> lets every picture shrink with the element that contains it. <code>.card</code> styles any element whose class is <code>card</code>. <code>img</code> styles every image, including images inside the card. These two rules set different properties on different elements, so the picture shrinks the same way if the <code>img</code> rule sits above <code>.card</code> or below it. Paste it anywhere in <code>public/style.css</code>. Narrow the window to about a phone width. The picture should shrink. The page should not grow a sideways scrollbar.</p>
+<p>Order matters when two equally specific rules set the same property on the same element. A later <code>img</code> rule replaces an earlier one for the properties it names:</p>
+<div class="codehead"><span>The second img rule wins</span><button class="copy" data-copy="css-img-order" type="button">Copy</button></div><pre><code id="css-img-order">img {
+  max-width: 100%;
+}
+
+img {
+  max-width: 50%;
+}</code></pre>
+<p>Both rules match every image. They are equally specific, and the second comes later, so the pictures stop at half the width of their container. Delete that pair after you have seen it, and keep a single <code>img</code> rule at <code>100%</code>.</p>
+<p>To style only the images inside a card, name that path. <code>.card img</code> is the descendant selector from earlier in this chapter: an <code>img</code> anywhere inside an element with class <code>card</code>. An image outside the card would keep its own size. On this page every picture is inside <code>main</code>, and <code>main</code> is the card, so <code>img</code> and <code>.card img</code> match the same pictures. The finished file uses <code>img</code>, which is enough while every picture lives in the card.</p>
+<div class="codehead"><span>Only images inside the card</span><button class="copy" data-copy="css-card-img" type="button">Copy</button></div><pre><code id="css-card-img">.card img {
+  max-width: 100%;
+  height: auto;
+}</code></pre>
+<div class="codehead"><span>Add to public/style.css</span><button class="copy" data-copy="css-img" type="button">Copy</button></div><pre><code id="css-img">img {
   max-width: 100%;
   height: auto;
 }</code></pre>
