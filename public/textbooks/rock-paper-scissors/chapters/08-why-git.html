@@ -6,6 +6,35 @@
   <title>See why the project needs Git · Learn the Web</title>
   <link rel="stylesheet" href="../assets/book.css">
   <script src="../assets/book.js" defer></script>
+  <style>
+    .gitflow { border: 1px solid #424045; border-radius: 12px; background: #1c1e22; padding: 16px; margin: 14px 0 8px; }
+    .flowboard { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .lane { min-height: 8.5rem; border: 1px solid #3c4046; border-radius: 8px; padding: 8px; background: #16181c; }
+    .lane strong { display: block; color: #ffd0a8; font-size: 0.92rem; }
+    .chip { position: absolute; top: 2.7rem; width: 22%; margin: 0; padding: 6px 8px; background: #2a241f; border: 1px solid #e77937; border-radius: 8px; color: #f4efe8; font: 13px/1.4 ui-monospace, Consolas, monospace; transition: left .45s ease, opacity .3s ease; }
+    .chip[data-col="1"] { left: 1.5%; }
+    .chip[data-col="2"] { left: 26.5%; }
+    .chip[data-col="3"] { left: 51.5%; }
+    .chip[data-col="4"] { left: 76.5%; }
+    .chip.gone { opacity: 0; }
+    .lane p.hint { margin: 0.25rem 0 0; color: #b9b3ac; font-size: 0.85rem; }
+    .mini { margin: 3.1rem 0 0; color: #ffb77d; font-size: 0.92rem; }
+    .mini small { display: block; color: #b9b3ac; }
+    .minidiff { margin: 10px 0 0; padding: 10px 12px; }
+    .minidiff .old { color: #ffb4b0; }
+    .minidiff .new { color: #b4f0c4; }
+    .git-caption { min-height: 4.6rem; margin: 12px 0 0; color: #d2d0cf; }
+    .branch-fig { margin: 0.35rem 0 1.25rem; }
+    .branch-fig svg { display: block; width: 100%; max-width: 680px; height: auto; background: #16181c; border: 1px solid #3c4046; border-radius: 8px; }
+    .branch-fig figcaption { color: #b9b3ac; font-size: 0.92rem; line-height: 1.45; margin-top: 0.35rem; }
+    @media (prefers-reduced-motion: reduce) {
+      .chip { transition: none; }
+    }
+    @media (max-width: 700px) {
+      .flowboard { grid-template-columns: 1fr 1fr; }
+      .chip { position: static; width: auto; grid-column: 1 / -1; }
+    }
+  </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to reading pane</a>
@@ -18,27 +47,149 @@
 <section class="step"><h3>What you need</h3>
 <p>Source control means keeping a record of the files as they change. Git is the program that keeps that record on your computer. GitHub is a website that hosts a copy of the record so another person can download it. You can make commits with Git before you have a GitHub account. A commit does not upload anything.</p>
 <p>Visual Studio Code and the terminal read the same repository. A commit you make with the check mark in the editor is the same commit <code>git log</code> would list. You do not import or sync the editor and the terminal. They are two doors into one history.</p></section>
-<section class="step"><h3>The words</h3>
-<ul>
-<li>A <strong>repository</strong> is the project plus its history.</li>
-<li>A <strong>commit</strong> is one saved snapshot and the message you wrote for it.</li>
-<li>The <strong>working tree</strong> is the files as they are right now.</li>
-<li><strong>git status</strong> lists what changed since the last commit.</li>
-<li><strong>git diff</strong> shows the changed lines.</li>
-<li>The <strong>staging area</strong> is the set of changes you have chosen for the next commit. <strong>git add</strong> puts a file there.</li>
-<li>A <strong>remote</strong> is another repository. Yours will be named <code>origin</code> and will live on GitHub.</li>
-<li><strong>push</strong> sends your commits to the remote. <strong>pull</strong> brings commits from the remote into your copy.</li>
-<li>A <strong>branch</strong> is a name for a line of commits. This project uses <code>main</code>. A feature branch is a second line you can merge back into <code>main</code>.</li>
-<li><strong>U</strong> beside a file means untracked: Git has never saved it. <strong>A</strong> means you staged a new file. <strong>M</strong> means a file that was committed before and has been edited since.</li>
-<li>The <strong>gutter</strong> is the strip just to the left of the line numbers. Green marks a new line, blue marks a changed line, and a red arrow marks a deleted line.</li>
-<li><strong>Sync</strong> pulls other people’s commits, then pushes yours. <strong>Clone</strong> downloads a repository you do not have yet.</li>
-</ul></section>
+<section class="step"><h3>One heading, four places</h3>
+<p>The words below all describe one edit. In <code>public/index.html</code> the heading changes from <strong>Campus game night</strong> to <strong>Friday game night</strong>. The next two chapters do that edit on your computer. This chapter shows where the heading sits while you do it.</p>
+<p>A <strong>repository</strong> is the project plus that history. The <strong>working tree</strong> is the files as they are right now. The <strong>staging area</strong> is the set of changes you have chosen for the next snapshot. A <strong>commit</strong> is one snapshot plus the message you wrote for it. A commit is stored on this computer. It does not upload the page, and it is not only a list of edited lines. The older snapshot is still there, so you can return to Campus game night later.</p>
+<p>Git is the program that keeps the record. GitHub is a website. Your copy of the repository on GitHub will be named <code>origin</code>. That other copy is a <strong>remote</strong>. Most Git actions never leave this computer. <strong>Push</strong>, <strong>pull</strong>, and <strong>clone</strong> are the actions that talk to a remote.</p>
+<div class="gitflow" id="git-flow">
+  <div class="flowboard">
+    <div class="lane"><strong>Working tree</strong><p class="hint">The files on disk</p></div>
+    <div class="lane"><strong>Staging</strong><p class="hint">Chosen for the next commit</p></div>
+    <div class="lane"><strong>Commit</strong><p class="mini" id="git-local" hidden>Rename the event heading<small>snapshot on this computer</small></p></div>
+    <div class="lane"><strong>origin</strong><p class="mini" id="git-origin" hidden>Rename the event heading<small>the same snapshot on GitHub</small></p></div>
+    <p class="chip gone" id="git-chip" data-col="1">M index.html</p>
+  </div>
+  <pre class="minidiff" id="git-diff-mini" hidden><code><span class="old">- Campus game night</span>
+<span class="new">+ Friday game night</span></code></pre>
+  <p class="git-caption" id="git-caption" aria-live="polite"></p>
+  <div class="trace-controls">
+    <button type="button" class="ghost" id="git-play">Play</button>
+    <button type="button" class="ghost" id="git-next">Next</button>
+  </div>
+</div>
+<h4>The order you will follow</h4>
+<ol>
+<li>Turn the folder into a repository. In Source Control, click <strong>Initialize Repository</strong>, or run <code>git init</code> in the terminal. Both doors open the same record. The files do not move. Git has a history only after the first commit. You do that in the next chapter.</li>
+<li>Edit the heading. The new text is in the working tree. <code>git status</code> lists <code>public/index.html</code>. The letter is <strong>M</strong>, because that file was committed before and has been edited since.</li>
+<li>Read the changed lines before you keep them. Click the file in Source Control, or run <code>git diff</code>. You should see Campus game night removed and Friday game night added. If the diff shows some other edit, leave that file out.</li>
+<li>Stage the heading. Click the plus beside the file, or run <code>git add public/index.html</code>. The staging area now holds that change and nothing you left unstaged. The next commit will match what you staged.</li>
+<li>Commit. Write <code>Rename the event heading</code> and click the check mark, or run <code>git commit</code> with that message. The snapshot is on this computer. The public link is unchanged. GitHub does not have this commit yet.</li>
+<li>Send it. <strong>Push</strong> uploads commits to origin. <strong>Pull</strong> downloads commits that are on the remote and not on this computer. <strong>Sync</strong> pulls first, then pushes, which is what you want when another developer on the team has pushed while you were editing. Firebase still shows the old page until you deploy. Push and deploy are different.</li>
+</ol>
+</section>
+<section class="step"><h3>Letters beside the file</h3>
+<p>Source Control and <code>git status</code> use the same three letters. <strong>U</strong> means untracked: Git has never saved that file. <strong>A</strong> means you staged a new file, so the next commit will add it. <strong>M</strong> means a file that already has a commit and has been edited since. The heading edit is an M. A new <code>notes.txt</code> that you have never committed is a U until you stage it, and then an A.</p>
+<figure class="shot"><img src="../assets/shots/08-git-uam.png" alt="Source Control lists U notes.txt, A public/mark.svg, and M public/index.html." width="420"><figcaption>U has never been saved. A is a new file you staged. M is a file from an older commit that you have edited.</figcaption></figure>
+</section>
+<section class="step"><h3>Colors in the gutter</h3>
+<p>The <strong>gutter</strong> is the strip just to the left of the line numbers. It marks the working tree against the last commit. Green marks a new line. Blue marks a changed line. A red arrow marks a deleted line. The Friday heading is a blue line if you rewrote the old heading. Bring a phone is green if that line is new. A red arrow on the next line means a line that used to be there is gone.</p>
+<figure class="shot"><img src="../assets/shots/08-git-gutter.png" alt="Line 8 has a blue gutter, line 9 a green gutter, and line 10 a red arrow." width="520"><figcaption>Blue is a changed line. Green is a new line. The red arrow is a deleted line.</figcaption></figure>
+<p><code>git diff</code> prints the same fact as text. A minus line is what the last commit had. A plus line is what the working tree has now. In the editor, open the file from the Source Control list and you get the same two lines side by side.</p>
+<figure class="shot"><img src="../assets/shots/08-git-diff.png" alt="A diff of public/index.html with Campus game night removed and Friday game night added." width="560"><figcaption>Read this before you stage. The only change you want in this commit is the heading.</figcaption></figure>
+</section>
+<section class="step"><h3>Two snapshots, newest first</h3>
+<p>After you commit the heading, the history has two snapshots. The newer message sits above the older one. <code>git log</code> prints that list. The first snapshot still says Campus game night. The second says Friday game night and carries the message Rename the event heading. Neither snapshot is on GitHub until you push.</p>
+<figure class="shot"><img src="../assets/shots/08-git-commits.png" alt="A newer commit, Rename the event heading, stacked above an older commit, Host the styled campus page." width="440"><figcaption>Each card is a snapshot plus its message. The top card is the latest one on this computer.</figcaption></figure>
+</section>
+<section class="step"><h3>A second line of commits</h3>
+<p>A <strong>branch</strong> is a name for a line of commits. This project uses <code>main</code>. A feature branch is a second line. You commit Friday game night there, leave <code>main</code> on Campus game night, and merge the second line back when the heading is ready. The status bar in the editor shows the branch name. If two people edit the same lines, Git stops and writes conflict markers into the file. After the repository exists, you will put this heading on a branch named <code>heading</code> and then merge it.</p>
+<figure class="branch-fig"><svg viewBox="0 0 680 200" role="img" aria-labelledby="branch-title branch-desc">
+<title id="branch-title">A heading branch leaves main and merges back</title>
+<desc id="branch-desc">main stays on Campus game night. A heading branch adds Friday game night, then merges into main.</desc>
+<line x1="70" y1="58" x2="610" y2="58" stroke="#6b4d3c" stroke-width="3"/>
+<path d="M190 58 C 240 58, 250 128, 310 128 L 430 128 C 490 128, 500 58, 540 58" fill="none" stroke="#e77937" stroke-width="3"/>
+<circle cx="90" cy="58" r="8" fill="#e77937"/>
+<circle cx="190" cy="58" r="8" fill="#e77937"/>
+<circle cx="370" cy="128" r="8" fill="#e77937"/>
+<circle cx="560" cy="58" r="8" fill="#e77937"/>
+<text x="90" y="34" text-anchor="middle" fill="#ffd0a8" font-size="14" font-family="Segoe UI, sans-serif">main</text>
+<text x="90" y="88" text-anchor="middle" fill="#d2d0cf" font-size="13" font-family="Segoe UI, sans-serif">Campus game night</text>
+<text x="370" y="158" text-anchor="middle" fill="#ffb77d" font-size="14" font-family="Segoe UI, sans-serif">heading</text>
+<text x="370" y="178" text-anchor="middle" fill="#d2d0cf" font-size="13" font-family="Segoe UI, sans-serif">Friday game night</text>
+<text x="560" y="34" text-anchor="middle" fill="#ffd0a8" font-size="14" font-family="Segoe UI, sans-serif">merge</text>
+<text x="560" y="88" text-anchor="middle" fill="#d2d0cf" font-size="13" font-family="Segoe UI, sans-serif">both lines on main</text>
+</svg><figcaption>main can stay on the snapshot you already published. The heading lives on a second line until you merge it.</figcaption></figure>
+</section>
+<section class="step"><h3>Clone is the first download</h3>
+<p><strong>Clone</strong> copies a repository you do not have yet, history included. A new developer on the team clones once. After that, pull brings in commits other people pushed. Sync is that pull, then your push. You do not clone again for each change, and you do not need a second remote command if you already published the branch from the editor.</p>
+</section>
 <section class="panel why"><p>Do not commit a password, a Firebase login token, or a service-account JSON file. Those are secrets. The <code>.gitignore</code> file in the next chapter keeps tool clutter out of the repository. It is not a place to hide a secret you already pasted into <code>public</code>.</p></section>
-<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. What is a commit?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="A commit records a chosen snapshot and a message.">A saved snapshot with a message</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A commit records a chosen snapshot and a message.">The public Hosting URL</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A commit records a chosen snapshot and a message.">A CSS class</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. Which command sends commits to GitHub?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="push sends commits to the remote. deploy sends files to Firebase.">git push</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="push sends commits to the remote. deploy sends files to Firebase.">firebase deploy</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="push sends commits to the remote. deploy sends files to Firebase.">git diff</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>3. You click the check mark and write a commit message. Where is that commit?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="A commit is stored in the repository on this computer. Publish or push uploads it.">Only on this computer, until you publish or push</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A commit is stored in the repository on this computer. Publish or push uploads it.">On GitHub immediately</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A commit is stored in the repository on this computer. Publish or push uploads it.">On the Firebase Hosting URL</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. What is a commit?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="A commit records a chosen snapshot and a message.">A saved snapshot with a message</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A commit records a chosen snapshot and a message.">The public Hosting URL</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A commit records a chosen snapshot and a message.">A CSS class</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. Which command sends commits to GitHub?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="push sends commits to the remote. deploy sends files to Firebase.">git push</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="push sends commits to the remote. deploy sends files to Firebase.">firebase deploy</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="push sends commits to the remote. deploy sends files to Firebase.">git diff</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>3. You click the check mark and write a commit message. Where is that commit?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="A commit is stored in the repository on this computer. Publish or push uploads it.">Only on this computer, until you publish or push</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A commit is stored in the repository on this computer. Publish or push uploads it.">On GitHub immediately</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A commit is stored in the repository on this computer. Publish or push uploads it.">On the Firebase Hosting URL</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>4. A file shows the letter U. What does that mean?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="U means untracked. Git has never saved that file.">Git has never saved that file</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="U means untracked. Git has never saved that file.">The file is already on GitHub</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="U means untracked. Git has never saved that file.">The file is a CSS class</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>5. What does Sync do?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="Sync pulls commits from the remote, then pushes yours.">Pull, then push</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="Sync pulls commits from the remote, then pushes yours.">Deploy the page to Firebase</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="Sync pulls commits from the remote, then pushes yours.">Delete the working tree</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
 <h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=i_23KUAEtUM" target="_blank" rel="noopener noreferrer">Video: Using Git with Visual Studio Code</a></li><li><a href="https://code.visualstudio.com/docs/sourcecontrol/overview" target="_blank" rel="noopener noreferrer">Visual Studio Code: source control overview</a></li><li><a href="https://www.youtube.com/watch?v=RGOj5yH7evk" target="_blank" rel="noopener noreferrer">Video: Git and GitHub for Beginners</a></li><li><a href="https://www.w3schools.com/git/git_intro.asp" target="_blank" rel="noopener noreferrer">W3Schools: Git introduction</a></li><li><a href="https://git-scm.com/docs/gittutorial" target="_blank" rel="noopener noreferrer">Git tutorial</a></li></ul>
     <label><input type="checkbox" class="done" value="why-git"> Mark this chapter complete</label>
     <div class="pager"><a class="ghost" href="07-css.html">← Meet the CSS requirements</a><a class="action" href="09-repo.html">Create the repository →</a></div>
   </main>
 </div>
+<script>
+(function () {
+  var chip = document.getElementById("git-chip");
+  var caption = document.getElementById("git-caption");
+  var play = document.getElementById("git-play");
+  var next = document.getElementById("git-next");
+  var localCard = document.getElementById("git-local");
+  var originCard = document.getElementById("git-origin");
+  var diff = document.getElementById("git-diff-mini");
+  if (!chip || !play || !next) return;
+  var steps = [
+    { col: "1", chip: false, diff: false, local: false, origin: false, text: "The last snapshot still says Campus game night. The file on disk matches it, so Git has nothing new to list." },
+    { col: "1", chip: true, diff: false, local: false, origin: false, text: "You change the heading to Friday game night. That edit is in the working tree. git status lists the file with M, because this file was committed before." },
+    { col: "1", chip: true, diff: true, local: false, origin: false, text: "git diff, or a click on the file in Source Control, shows the old heading and the new one. The change is still only in the working tree." },
+    { col: "2", chip: true, diff: true, local: false, origin: false, text: "git add, or the plus beside the file, puts that heading into the staging area. The next commit includes this change and leaves out anything you did not stage." },
+    { col: "3", chip: false, diff: false, local: true, origin: false, text: "The check mark stores a snapshot on this computer with the message Rename the event heading. origin does not have it yet. The public page does not change." },
+    { col: "4", chip: false, diff: false, local: true, origin: true, text: "Push sends that snapshot to origin. Sync pulls other people’s commits first, then pushes yours. Pull alone only downloads." }
+  ];
+  var index = 0;
+  var timer = 0;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function show(n) {
+    var step = steps[n];
+    chip.setAttribute("data-col", step.col);
+    chip.classList.toggle("gone", !step.chip);
+    diff.hidden = !step.diff;
+    localCard.hidden = !step.local;
+    originCard.hidden = !step.origin;
+    caption.textContent = step.text;
+    next.disabled = n === steps.length - 1;
+  }
+  function stop() {
+    if (timer) window.clearInterval(timer);
+    timer = 0;
+    play.textContent = "Play";
+  }
+  function advance() {
+    if (index >= steps.length - 1) {
+      stop();
+      return;
+    }
+    index += 1;
+    show(index);
+    if (index >= steps.length - 1) stop();
+  }
+  play.addEventListener("click", function () {
+    if (timer) {
+      stop();
+      return;
+    }
+    if (reduce) {
+      if (index >= steps.length - 1) index = 0;
+      else index += 1;
+      show(index);
+      return;
+    }
+    if (index >= steps.length - 1) {
+      index = 0;
+      show(index);
+    }
+    play.textContent = "Pause";
+    advance();
+    timer = window.setInterval(advance, 2400);
+  });
+  next.addEventListener("click", function () {
+    stop();
+    advance();
+  });
+  show(0);
+})();
+</script>
 </body>
 </html>
