@@ -2,6 +2,13 @@
   "hosting": {
     "public": "dist",
     "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "redirects": [
+      {
+        "source": "/textbooks/rock-paper-scissors/chapters/03-browser.html",
+        "destination": "/textbooks/rock-paper-scissors/chapters/04-only-you.html",
+        "type": 301
+      }
+    ],
     "rewrites": [
       {
         "source": "**",

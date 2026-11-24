@@ -1,7 +1,6 @@
 const chapters = [
   ["01-editor.html", "Download an editor"],
   ["02-html.html", "Write a page with HTML and CSS"],
-  ["03-browser.html", "Open the page in the browser"],
   ["04-only-you.html", "See why nobody else can open it"],
   ["05-firebase.html", "Learn what Firebase Hosting does"],
   ["06-host.html", "Host the page and open the link"],
