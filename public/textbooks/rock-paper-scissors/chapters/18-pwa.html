@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Let the game install and open offline · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 17 of 17</p>
+    <h1 class="page-title" tabindex="-1">Let the game install and open offline</h1>
+    <p>The single-page game already plays in the browser. A PWA adds a name, an icon, and a cache so the phone can open that same game with no signal.</p>
+<section class="panel why requirements"><p><strong>A player who already visited can open the game offline.</strong></p>
+<dl><dt>Inputs</dt><dd>The SPA from the previous chapter, two PNG icons, and the HTTPS hosting URL.</dd>
+<dt>Expected output</dt><dd>The browser offers to install the game. After one online visit, a reload with the network off still shows the buttons and accepts a move.</dd>
+<dt>Rules</dt><dd>Cache the game's own files. Leave every other address to the network. Change the cache name when the files change.</dd></dl></section>
+<section class="step"><h3>What you are adding</h3>
+<p>A manifest is a small JSON file. It tells the browser the name, the icon, the start URL, and that the installed window should hide the browser chrome (<code>display: standalone</code>).</p>
+<p>A service worker is a script the browser keeps after the tab closes. On the first visit it stores the files you list. On the next visit it can answer from that cache before the network does.</p>
+<p><strong>Use this</strong> for the finished game. The rules and the winner logic are already in the script. The phone does not need a server to pick rock, paper, or scissors.</p>
+<p><strong>Skip this</strong> while you are still saving a new version every few minutes. The cache will keep the old files until the cache name changes, and you will think the deploy failed. Skip it for a page whose words must come from a server at the moment someone opens it. Also skip it on a <code>file:///</code> address. A service worker registers on HTTPS, or on <code>localhost</code>. Test it on the Hosting URL.</p></section>
+<section class="step"><h3>Name the app</h3>
+<p>Save two square PNGs beside <code>index.html</code>: <code>icon-192.png</code> and <code>icon-512.png</code>. Any picture you export at those sizes is enough. Then save the manifest and point the page at it.</p>
+<div class="codehead"><span>public/manifest.webmanifest</span><button class="copy" data-copy="pwa-manifest" type="button">Copy</button></div><pre><code id="pwa-manifest">{
+  "name": "Campus game night",
+  "short_name": "Game night",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#141618",
+  "theme_color": "#e77937",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}</code></pre>
+<div class="codehead"><span>Inside head</span><button class="copy" data-copy="pwa-link" type="button">Copy</button></div><pre><code id="pwa-link">&lt;meta name="theme-color" content="#e77937"&gt;
+&lt;link rel="manifest" href="manifest.webmanifest"&gt;</code></pre></section>
+<section class="step"><h3>Cache the game's files</h3>
+<p>Save this as <code>public/sw.js</code>. <code>install</code> stores the list. <code>activate</code> deletes caches from older names. <code>fetch</code> answers with the cache when the file is there, and with the network otherwise. A request to another site, such as a picture on a different host, is left alone.</p>
+<div class="codehead"><span>public/sw.js</span><button class="copy" data-copy="pwa-sw" type="button">Copy</button></div><pre><code id="pwa-sw">const CACHE = "campus-game-v1";
+const FILES = [
+  "./",
+  "./index.html",
+  "./style.css",
+  "./script.js",
+  "./manifest.webmanifest",
+  "./icon-192.png",
+  "./icon-512.png"
+];
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(FILES)));
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(keys.filter((key) => key !== CACHE).map((key) => caches.delete(key)))
+    )
+  );
+});
+
+self.addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url);
+  if (url.origin !== location.origin) return;
+  event.respondWith(
+    caches.match(event.request).then((cached) => cached || fetch(event.request))
+  );
+});</code></pre>
+<p>Register it from the page. Paste this just before <code>&lt;/body&gt;</code>.</p>
+<div class="codehead"><span>Before the closing body tag</span><button class="copy" data-copy="pwa-register" type="button">Copy</button></div><pre><code id="pwa-register">&lt;script&gt;
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js");
+  }
+&lt;/script&gt;</code></pre>
+<p>Deploy, then open the Hosting URL. In Chrome, F12, Application, you should see the manifest and a service worker whose status becomes activated. The install icon in the address bar, or Install app in the menu, should offer to add it. Install it and open it from the home screen or the start menu. The window should show the game without the usual browser toolbar.</p>
+<p>Visit once while online so the cache fills. Then in the Network tab choose Offline and reload. The buttons should still be there, and a click should still pick a winner. The score from before the reload is gone: it lived in memory, and the cache stores files, not the score.</p>
+<p>When you change <code>script.js</code> or the CSS, change <code>CACHE</code> to <code>campus-game-v2</code> before you deploy. The new name makes <code>activate</code> drop the old cache. Leave the name alone and the phone will keep playing the previous script.</p>
+<p><a href="../versions/18-pwa/public/index.html">Open the installable game</a>. On this textbook's address the service worker belongs to the class site, so use your own Hosting URL to install your copy.</p></section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. What does the service worker store?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The cache holds the files listed in sw.js. The score is a variable and disappears on reload.">The game's files, so a later visit can open them offline</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The cache holds the files listed in sw.js. The score is a variable and disappears on reload.">The player's score, on Firebase</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The cache holds the files listed in sw.js. The score is a variable and disappears on reload.">Every page the phone has ever opened</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. You deployed a new script and the phone still runs the old one. What do you change?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="activate deletes caches whose names are not the current CACHE value. A new name drops the old files.">The CACHE name in sw.js, then deploy again</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="activate deletes caches whose names are not the current CACHE value. A new name drops the old files.">The heading text only</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="activate deletes caches whose names are not the current CACHE value. A new name drops the old files.">The file:// address</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps" target="_blank" rel="noopener noreferrer">MDN: Progressive web apps</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API" target="_blank" rel="noopener noreferrer">MDN: Service Worker API</a></li><li><a href="https://web.dev/learn/pwa" target="_blank" rel="noopener noreferrer">web.dev: Learn PWA</a></li></ul>
+    <label><input type="checkbox" class="done" value="pwa"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="17-spa.html">← Make the game one page with three views</a><a class="action" href="../index.html">Back to contents →</a></div>
+  </main>
+</div>
+</body>
+</html>

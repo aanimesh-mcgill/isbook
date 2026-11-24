@@ -14,6 +14,8 @@ const chapters = [
   ["14-winner.html", "Decide who won"],
   ["15-score.html", "Keep score"],
   ["16-history.html", "Show the recent rounds"],
+  ["17-spa.html", "Make the game one page with three views"],
+  ["18-pwa.html", "Let the game install and open offline"],
 ];
 
 const inChapter = /\/chapters\//.test(location.pathname);

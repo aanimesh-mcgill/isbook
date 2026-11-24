@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Make the game one page with three views · Learn the Web</title>
+  <link rel="stylesheet" href="../assets/book.css">
+  <script src="../assets/book.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to reading pane</a>
+<div class="shell">
+  <aside class="side" data-nav></aside>
+  <main class="main" id="main" tabindex="-1">
+    <p class="kicker">Chapter 16 of 17</p>
+    <h1 class="page-title" tabindex="-1">Make the game one page with three views</h1>
+    <p>The game is one scrolling page. Rules, play, and recent rounds share one score. An SPA keeps that sharing and shows one view at a time, without asking the server for a new HTML file.</p>
+<section class="panel why requirements"><p><strong>The score must survive a look at the rules.</strong></p>
+<dl><dt>Inputs</dt><dd>The finished game, and three names: rules, play, rounds.</dd>
+<dt>Expected output</dt><dd>A nav. One view visible. The address ends in <code>#play</code>, <code>#rules</code>, or <code>#rounds</code>. Back returns to the previous view. The score is unchanged.</dd>
+<dt>Rules</dt><dd>Do not add a Firebase rewrite. The hash stays in the browser. The server still receives a request for <code>index.html</code>.</dd></dl></section>
+<section class="step"><h3>What changes, and what stays</h3>
+<p>A multi-page version would be <code>rules.html</code>, <code>play.html</code>, and <code>rounds.html</code>. Each click would be a new request, a new document, and a new run of the script. <code>playerScore</code> would start at 0 again.</p>
+<p>An SPA is one document. The script keeps running. You hide two sections and show one. The server's job does not change: it still sends <code>index.html</code>, <code>style.css</code>, and <code>script.js</code>.</p>
+<p><strong>Use this</strong> for the game. The three views are one activity.</p>
+<p><strong>Leave the textbook as separate files.</strong> A chapter link should open that chapter even when the script does not run. One broken script in an SPA takes every view with it. The first download is also the whole app, which is fine for three short views and a poor trade for a long book.</p></section>
+<section class="step"><h3>Add the nav and the three sections</h3>
+<p>Put a nav under the heading. Wrap the rules, the buttons, and the round list in sections. <code>hidden</code> on play and rounds means the first paint, before the script runs, shows the rules. The script then shows the view named in the hash, and play when the hash is empty.</p>
+<div class="codehead"><span>public/index.html · replace the inside of main</span><button class="copy" data-copy="spa-html" type="button">Copy</button></div><pre><code id="spa-html">&lt;h1&gt;Rock · Paper · Scissors&lt;/h1&gt;
+&lt;nav&gt;
+  &lt;a href="#rules"&gt;Rules&lt;/a&gt;
+  &lt;a href="#play"&gt;Play&lt;/a&gt;
+  &lt;a href="#rounds"&gt;Rounds&lt;/a&gt;
+&lt;/nav&gt;
+&lt;section id="rules" data-view="rules"&gt;
+  &lt;p&gt;Choose one move each round. Identical moves tie.&lt;/p&gt;
+  &lt;ul&gt;
+    &lt;li&gt;Rock beats scissors.&lt;/li&gt;
+    &lt;li&gt;Paper beats rock.&lt;/li&gt;
+    &lt;li&gt;Scissors beats paper.&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/section&gt;
+&lt;section id="play" data-view="play" hidden&gt;
+  &lt;p&gt;
+    &lt;button type="button" data-move="rock"&gt;Rock&lt;/button&gt;
+    &lt;button type="button" data-move="paper"&gt;Paper&lt;/button&gt;
+    &lt;button type="button" data-move="scissors"&gt;Scissors&lt;/button&gt;
+  &lt;/p&gt;
+  &lt;p id="result" role="status"&gt;Choose a move.&lt;/p&gt;
+  &lt;p id="score"&gt;You: 0 · Computer: 0 · Ties: 0&lt;/p&gt;
+  &lt;p&gt;&lt;button type="button" id="reset"&gt;Reset score&lt;/button&gt;&lt;/p&gt;
+&lt;/section&gt;
+&lt;section id="rounds" data-view="rounds" hidden&gt;
+  &lt;h2&gt;Recent rounds&lt;/h2&gt;
+  &lt;ol id="history"&gt;&lt;/ol&gt;
+&lt;/section&gt;</code></pre>
+<p>Add this to <code>style.css</code> so the current view is marked and the links sit in a row.</p>
+<div class="codehead"><span>Add to public/style.css</span><button class="copy" data-copy="spa-css" type="button">Copy</button></div><pre><code id="spa-css">nav {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+nav a[aria-current="page"] {
+  text-decoration: none;
+  border-bottom: 2px solid #e77937;
+}</code></pre></section>
+<section class="step"><h3>Swap the view when the hash changes</h3>
+<p>Paste this above the click listeners. <code>href="#play"</code> does not request a new file. The browser updates the hash and fires <code>hashchange</code>. <code>showView</code> sets <code>hidden</code> on the other sections. The score variables sit outside that function, so they stay.</p>
+<div class="codehead"><span>Add to public/script.js, above the click listeners</span><button class="copy" data-copy="spa-js" type="button">Copy</button></div><pre><code id="spa-js">function showView(name) {
+  for (const view of document.querySelectorAll("[data-view]")) {
+    const on = view.dataset.view === name;
+    view.hidden = !on;
+  }
+  for (const link of document.querySelectorAll("nav a")) {
+    const on = link.getAttribute("href") === "#" + name;
+    if (on) link.setAttribute("aria-current", "page");
+    else link.removeAttribute("aria-current");
+  }
+}
+
+function viewFromHash() {
+  const name = location.hash.replace("#", "");
+  if (name === "rules" || name === "rounds") return name;
+  return "play";
+}
+
+window.addEventListener("hashchange", () => showView(viewFromHash()));
+showView(viewFromHash());</code></pre>
+<p>Reload. The address should end in <code>#play</code>, and the buttons should be the only view. Click Rules. The hash becomes <code>#rules</code>, the buttons disappear, and no new document loads. Play a round, open Rules, then Play again. The score should still be there. Use the browser Back button. The previous view should return.</p>
+<p>A path such as <code>/play</code> would need the Firebase rewrite you turned off. The hash avoids that. A missing <code>style.css</code> is still a 404.</p>
+<p><a href="../versions/17-spa/public/index.html">Open the single-page game</a></p></section>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Why does the score survive a trip to the rules?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The same document stays open, so the script's variables stay. A new HTML file would start the script again.">The same page stays loaded, so the variables stay</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The same document stays open, so the script's variables stay. A new HTML file would start the script again.">Firebase stores the score in the URL</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The same document stays open, so the script's variables stay. A new HTML file would start the script again.">The hash is sent to the server and saved</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. Why does this chapter leave the Firebase rewrite off?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The hash is handled in the browser. The server still sends index.html for the page, and a missing file can still 404.">The hash never becomes a new path on the server</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The hash is handled in the browser. The server still sends index.html for the page, and a missing file can still 404.">An SPA cannot be hosted</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The hash is handled in the browser. The server still sends index.html for the page, and a missing file can still 404.">HTTPS requires one HTML file per view</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://developer.mozilla.org/en-US/docs/Glossary/SPA" target="_blank" rel="noopener noreferrer">MDN: SPA</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/hashchange_event" target="_blank" rel="noopener noreferrer">MDN: hashchange</a></li></ul>
+    <label><input type="checkbox" class="done" value="spa"> Mark this chapter complete</label>
+    <div class="pager"><a class="ghost" href="16-history.html">← Show the recent rounds</a><a class="action" href="18-pwa.html">Let the game install and open offline →</a></div>
+  </main>
+</div>
+</body>
+</html>
