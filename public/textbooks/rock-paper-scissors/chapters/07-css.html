@@ -21,13 +21,97 @@
 <dt>Rules</dt><dd>Do not remove the heading, list, image, or link. Change presentation in the stylesheet. Put <code>class="card"</code> on the <code>main</code> element.</dd></dl></section>
 <section class="step"><h3>What the new CSS is doing</h3>
 <p>Change the page one rule at a time. Paste a block into <code>public/style.css</code>, save, deploy or reload the local file, and check the result named under the block. The complete stylesheet is at the end.</p>
-<h4>A class selects one element</h4>
-<p>A class selector starts with a dot. <code>.card</code> selects the element whose <code>class</code> is <code>card</code>. Change the <code>main</code> start tag first. Then paste the rule. Reload. Only the main area should sit on a lighter panel. The rest of the page stays the darker body color.</p>
+<p>A selector is the part of a rule that names which elements to paint. Paste one test at the bottom of <code>public/style.css</code>, save, and reload the page you already have open. Then delete that test before the next one. The <code>.card</code> rule is the one that stays.</p>
+<h4>A type selector names a tag</h4>
+<p><code>h2</code> matches every <code>h2</code>. <code>body</code> and <code>a</code> in your file are already type selectors. Paste this and reload. The word Bring turns orange. The main heading stays cream, because it is an <code>h1</code>.</p>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-type" type="button">Copy</button></div><pre><code id="sel-type">h2 {
+  color: #e77937;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-type.png" alt="The heading Bring is orange. The main heading stays cream." width="720"><figcaption>h2 paints every second-level heading. The h1 is a different tag, so this rule leaves it alone.</figcaption></figure>
+<h4>A class selects one kind of element</h4>
+<p>A class selector starts with a dot. <code>.card</code> selects the element whose <code>class</code> is <code>card</code>. A class is a label you can put on more than one element. Change the <code>main</code> start tag first. Then paste the rule. Reload. Only the main area should sit on a lighter panel. The rest of the page stays the darker body color. Leave this rule in the file.</p>
 <div class="codehead"><span>public/index.html · the main start tag</span><button class="copy" data-copy="css-html" type="button">Copy</button></div><pre><code id="css-html">&lt;main class="card"></code></pre>
 <div class="codehead"><span>Add to public/style.css</span><button class="copy" data-copy="css-card" type="button">Copy</button></div><pre><code id="css-card">.card {
   background: #1e2126;
   border: 1px solid #6b4d3c;
 }</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-class.png" alt="The main column sits on a lighter panel with a thin brown border." width="720"><figcaption>.card paints the element you labeled card. The dark page around that panel is still the body rule.</figcaption></figure>
+<h4>An id selects a single element</h4>
+<p>An id selector starts with <code>#</code>. An id has to be unique on the page, so <code>#title</code> can match only one element. Put <code>id="title"</code> on the <code>h1</code>. Paste the rule. The main heading turns tan. Bring stays cream. You can leave the id in the HTML. The card stays a class, because that label is a kind of box rather than the name of one heading.</p>
+<div class="codehead"><span>The h1 start tag</span><button class="copy" data-copy="sel-id-html" type="button">Copy</button></div><pre><code id="sel-id-html">&lt;h1 id="title"&gt;Campus game night&lt;/h1&gt;</code></pre>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-id" type="button">Copy</button></div><pre><code id="sel-id">#title {
+  color: #ffb77d;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-id.png" alt="The main heading is tan. Bring stays cream." width="720"><figcaption>#title paints the one heading with that id. A second element with the same id would be invalid HTML.</figcaption></figure>
+<h4>The universal selector matches every element</h4>
+<p><code>*</code> matches every element. An outline draws a line that does not move the text, so you can see each box. Paste this, reload, and look at the boxes around the heading, the picture, each list item, and the words <code>strong</code> and <code>em</code> wrap. Then delete the rule. A page of outlines is a test, not the event look.</p>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-all" type="button">Copy</button></div><pre><code id="sel-all">* {
+  outline: 1px solid #e77937;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-all.png" alt="Every heading, paragraph, picture, and list item has an orange outline." width="720"><figcaption>* draws a box around every element, including the strong and em inside the sentence.</figcaption></figure>
+<h4>A comma groups selectors</h4>
+<p><code>h1, h2</code> is two selectors that share one rule. Both headings turn orange. A comma means or. Without the comma, <code>h1 h2</code> would mean an h2 inside an h1, which this page does not have.</p>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-group" type="button">Copy</button></div><pre><code id="sel-group">h1, h2 {
+  color: #e77937;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-group.png" alt="Both Campus game night and Bring are orange." width="720"><figcaption>The comma gives the same color to the h1 and the h2.</figcaption></figure>
+<h4>A space selects a descendant</h4>
+<p><code>main strong</code> matches a <code>strong</code> anywhere inside <code>main</code>. On this page the word here sits inside a paragraph, and that paragraph sits inside main. The space still matches it. Paste the rule. The word here turns orange. The rest of the sentence stays cream.</p>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-descendant" type="button">Copy</button></div><pre><code id="sel-descendant">main strong {
+  color: #e77937;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-descendant.png" alt="In the sentence about the rules page, the word here is orange." width="720"><figcaption>main strong reaches the word here through the paragraph.</figcaption></figure>
+<h4>A child combinator stops at one level</h4>
+<p><code>main &gt; p</code> matches a paragraph that is a direct child of main. The <code>&gt;</code> means the next level only. Each paragraph on this page is written directly inside main, so each one gets an orange bar. <code>main &gt; strong</code> would match nothing here: the <code>strong</code> is inside the paragraph, so it is a grandchild of main. The descendant rule above is the one that reaches it.</p>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-child" type="button">Copy</button></div><pre><code id="sel-child">main &gt; p {
+  border-left: 3px solid #e77937;
+  padding-left: 0.6rem;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-child.png" alt="Each paragraph has an orange bar on its left. The lists do not." width="720"><figcaption>main &gt; p paints paragraphs one level under main. The lists are ul and ol, so they get no bar.</figcaption></figure>
+<h4>A plus sign selects the next sibling</h4>
+<p><code>h1 + p</code> matches the one paragraph that comes immediately after the <code>h1</code>. They have to share the same parent. Paste the rule. The first paragraph turns orange. The later paragraph, the one with the word here, stays cream.</p>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-adjacent" type="button">Copy</button></div><pre><code id="sel-adjacent">h1 + p {
+  color: #e77937;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-adjacent.png" alt="The first paragraph under the heading is orange. The later paragraph stays cream." width="720"><figcaption>h1 + p paints only the next sibling. The paragraph after the lists is not next.</figcaption></figure>
+<h4>A tilde selects the later siblings</h4>
+<p><code>h1 ~ p</code> matches every paragraph that follows the <code>h1</code> and shares its parent. Other elements may sit between them. Both paragraphs turn orange. The link keeps the color from the <code>a</code> rule, because that rule paints the link text itself.</p>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-sibling" type="button">Copy</button></div><pre><code id="sel-sibling">h1 ~ p {
+  color: #e77937;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-sibling.png" alt="Both paragraphs are orange. Bring and the lists stay cream." width="720"><figcaption>h1 ~ p paints every later paragraph, including the one after the lists.</figcaption></figure>
+<h4>Brackets select an attribute</h4>
+<p><code>a[target="_blank"]</code> matches a link whose <code>target</code> is that value. The hosting link is the one that opens in a new tab, so it sits on a brown patch. These are the other shapes, and they work the same way:</p>
+<ul>
+<li><code>a[target]</code> matches a link that has the attribute, whatever the value.</li>
+<li><code>a[href^="https"]</code> matches an address that starts with <code>https</code>.</li>
+<li><code>img[src$=".jpg"]</code> matches a picture address that ends in <code>.jpg</code>.</li>
+<li><code>img[alt*="flower"]</code> matches an alt that contains <code>flower</code>.</li>
+</ul>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-attr" type="button">Copy</button></div><pre><code id="sel-attr">a[target="_blank"] {
+  background: #3a2a22;
+  padding: 0.15rem 0.4rem;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-attr.png" alt="The hosting link sits on a small brown rectangle." width="720"><figcaption>The brown patch is only on the link that has target="_blank".</figcaption></figure>
+<h4>A pseudo-class selects a state or a position</h4>
+<p>A pseudo-class starts with one colon. It matches an element that is in a state, or that sits in a certain position, without an extra class in the HTML. <code>li:first-child</code> is the first child of its parent. Each list has its own first item, so the first bullet and the first numbered step turn orange. The second items stay cream.</p>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-first" type="button">Copy</button></div><pre><code id="sel-first">li:first-child {
+  color: #e77937;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-first.png" alt="The first bullet and the first numbered step are orange. The second items stay cream." width="720"><figcaption>li:first-child paints the first item of each list.</figcaption></figure>
+<p><code>:hover</code> matches the element while the pointer is on it. <code>:focus</code> matches the element you have reached with the keyboard. <code>:last-child</code> is the last child. <code>:nth-child(2)</code> is the second child. Paste the hover rule, reload, and move the pointer onto the hosting link. The link turns white and returns to tan when the pointer leaves.</p>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-hover" type="button">Copy</button></div><pre><code id="sel-hover">a:hover {
+  color: #ffffff;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-hover.png" alt="The hosting link is white." width="720"><figcaption>The link is white while the pointer is on it. Move the pointer away and the a rule paints it tan again.</figcaption></figure>
+<h4>A pseudo-element selects a piece of an element</h4>
+<p>A pseudo-element starts with two colons. <code>h1::first-letter</code> styles the first letter of the heading. The C turns orange and grows. The rest of the words stay as they were. <code>::first-line</code> is the first line. <code>::before</code> and <code>::after</code> insert an extra box before or after the element. This page does not need an inserted box.</p>
+<div class="codehead"><span>Test, then delete</span><button class="copy" data-copy="sel-letter" type="button">Copy</button></div><pre><code id="sel-letter">h1::first-letter {
+  color: #e77937;
+  font-size: 1.5em;
+}</code></pre>
+<figure class="shot"><img src="../assets/shots/07-sel-letter.png" alt="The C in Campus is large and orange. The rest of the heading is cream." width="720"><figcaption>h1::first-letter paints one letter. It does not need a tag around that letter.</figcaption></figure>
+<p>Delete the test rules. Keep <code>.card</code>. The next sections replace that rule with a longer one, and the finished stylesheet at the end of this chapter is the file to keep.</p>
 <h4>max-width and auto margins</h4>
 <p><code>max-width</code> stops the card growing wider than the text can stand. <code>margin: 2rem auto</code> puts space above the card and centers it, because <code>auto</code> shares the leftover width. Paste this in place of the <code>.card</code> rule. Reload and widen the window. The panel should stay centered and stop growing.</p>
 <div class="codehead"><span>Replace the .card rule</span><button class="copy" data-copy="css-width" type="button">Copy</button></div><pre><code id="css-width">.card {
@@ -99,8 +183,8 @@ button {
 <div class="codehead"><span>Terminal · in campus-game</span><button class="copy" data-copy="css-deploy" type="button">Copy</button></div><pre><code id="css-deploy">firebase deploy --only hosting --project YOUR_PROJECT_ID</code></pre>
 <p>Reload the Hosting URL. Narrow the window until it is about the width of a phone. The card should wrap. The picture should stay inside it. Nothing should slide sideways.</p>
 <p>The first design is gone from that URL. Firebase is showing the latest deploy, not a stack of old ones you can open from the link. The next chapters exist because of that.</p></section>
-<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Which selector matches an element with class card?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="A class selector is a dot plus the class name.">.card</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A class selector is a dot plus the class name.">#card</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A class selector is a dot plus the class name.">card()</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. What keeps a wide image from causing sideways scrolling?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="max-width: 100% lets the image shrink to its container.">max-width: 100% and height: auto on the image</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="max-width: 100% lets the image shrink to its container.">Deleting the alt attribute</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="max-width: 100% lets the image shrink to its container.">Moving the image into the title tag</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
-<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=yfoY53QXEnI" target="_blank" rel="noopener noreferrer">Video: CSS Crash Course For Absolute Beginners</a></li><li><a href="https://www.w3schools.com/css/css_boxmodel.asp" target="_blank" rel="noopener noreferrer">W3Schools: CSS box model</a></li><li><a href="https://www.w3schools.com/css/css_selectors.asp" target="_blank" rel="noopener noreferrer">W3Schools: CSS selectors</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/What_is_CSS" target="_blank" rel="noopener noreferrer">MDN: What is CSS</a></li></ul>
+<h3>Check your understanding</h3><div class="quiz"><fieldset class="question"><legend>1. Which selector matches an element with class card?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="A class selector is a dot plus the class name.">.card</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A class selector is a dot plus the class name.">#card</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="A class selector is a dot plus the class name.">card()</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>2. What keeps a wide image from causing sideways scrolling?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="max-width: 100% lets the image shrink to its container.">max-width: 100% and height: auto on the image</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="max-width: 100% lets the image shrink to its container.">Deleting the alt attribute</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="max-width: 100% lets the image shrink to its container.">Moving the image into the title tag</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>3. Which rule paints only the paragraph immediately after the h1?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The plus sign matches the next sibling only. The tilde matches every later sibling.">h1 + p</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The plus sign matches the next sibling only. The tilde matches every later sibling.">h1 ~ p</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The plus sign matches the next sibling only. The tilde matches every later sibling.">h1 p</button><p class="feedback" role="status"></p></fieldset><fieldset class="question"><legend>4. Why does main &gt; strong leave the word here unchanged?</legend><button class="option" type="button" aria-pressed="false" data-correct="true" data-reason="The strong sits inside a paragraph, so it is not a direct child of main. main strong is the selector that reaches it.">The strong is inside a paragraph, not directly inside main</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The strong sits inside a paragraph, so it is not a direct child of main. main strong is the selector that reaches it.">A strong cannot be styled</button><button class="option" type="button" aria-pressed="false" data-correct="false" data-reason="The strong sits inside a paragraph, so it is not a direct child of main. main strong is the selector that reaches it.">The &gt; character is a comment</button><p class="feedback" role="status"></p></fieldset><p class="quiz-summary" role="status">Choose an answer for each question.</p><button type="button" class="ghost retry">Try quiz again</button></div>
+<h3>Go further</h3><ul class="resources"><li><a href="https://www.youtube.com/watch?v=yfoY53QXEnI" target="_blank" rel="noopener noreferrer">Video: CSS Crash Course For Absolute Beginners</a></li><li><a href="https://www.w3schools.com/css/css_boxmodel.asp" target="_blank" rel="noopener noreferrer">W3Schools: CSS box model</a></li><li><a href="https://www.w3schools.com/css/css_selectors.asp" target="_blank" rel="noopener noreferrer">W3Schools: CSS selectors</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Basic_selectors" target="_blank" rel="noopener noreferrer">MDN: basic selectors</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/Combinators" target="_blank" rel="noopener noreferrer">MDN: combinators</a></li><li><a href="https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Styling_basics/What_is_CSS" target="_blank" rel="noopener noreferrer">MDN: What is CSS</a></li></ul>
     <label><input type="checkbox" class="done" value="css"> Mark this chapter complete</label>
     <div class="pager"><a class="ghost" href="06-host.html">← Host the page and open the link</a><a class="action" href="08-why-git.html">See why the project needs Git →</a></div>
   </main>
